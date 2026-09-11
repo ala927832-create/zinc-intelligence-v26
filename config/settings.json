@@ -1,5 +1,5 @@
 {
-  "model_version": "2.6.0",
+  "model_version": "2.6.1",
   "timezone_display": "Asia/Taipei",
   "timezone_exchange": "Europe/London",
   "lme_lot_tonnes": 25.0,
@@ -65,5 +65,11 @@
   },
   "privacy": {
     "public_dashboard_include_procurement_details": false
+  },
+  "data_providers": {
+    "lme_prices": "LME_XML_OFS -> generic API -> manual",
+    "lme_warehouse": "LME_XML_WSM -> official/licensed warehouse report -> generic API -> manual",
+    "tc": "TC_API -> data/tc_manual.csv -> generic API/manual fallback",
+    "candles": "licensed/official OHLC URL -> local OHLC file; no synthetic candles"
   }
 }
