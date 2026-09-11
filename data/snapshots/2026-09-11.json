@@ -1,0 +1,173 @@
+{
+  "run_time": "2026-09-11T07:34:37.490052+00:00",
+  "run_date": "2026-09-11",
+  "model_version": "2.6.0",
+  "market": {
+    "lme_cash": null,
+    "lme_3m": null,
+    "lme_inventory_t": null,
+    "cancelled_warrants_t": null,
+    "tc_usd_t": null,
+    "physical_premium_usd_t": null,
+    "smelter_margin_usd_t": null,
+    "china_demand_yoy_pct": null,
+    "global_balance_kt": null,
+    "smelter_utilization_pct": null,
+    "as_of": "2026-09-11T07:34:37.490862+00:00",
+    "source": "manual",
+    "cash_3m": null,
+    "cancelled_ratio_pct": null,
+    "api_error": null
+  },
+  "macro": {
+    "Brent Oil": {
+      "value": null,
+      "change_pct": null,
+      "ticker": "BZ=F",
+      "status": "MISSING",
+      "error": "yfinance not installed"
+    },
+    "Natural Gas": {
+      "value": null,
+      "change_pct": null,
+      "ticker": "NG=F",
+      "status": "MISSING",
+      "error": "yfinance not installed"
+    },
+    "DXY": {
+      "value": null,
+      "change_pct": null,
+      "ticker": "DX-Y.NYB",
+      "status": "MISSING",
+      "error": "yfinance not installed"
+    },
+    "Copper": {
+      "value": null,
+      "change_pct": null,
+      "ticker": "HG=F",
+      "status": "MISSING",
+      "error": "yfinance not installed"
+    },
+    "Aluminium Proxy": {
+      "value": null,
+      "change_pct": null,
+      "ticker": "ALI=F",
+      "status": "MISSING",
+      "error": "yfinance not installed"
+    },
+    "USD/TWD": {
+      "value": null,
+      "change_pct": null,
+      "ticker": "TWD=X",
+      "status": "MISSING",
+      "error": "yfinance not installed"
+    },
+    "Silver": {
+      "value": null,
+      "change_pct": null,
+      "ticker": "SI=F",
+      "status": "MISSING",
+      "error": "yfinance not installed"
+    }
+  },
+  "event_overlay": {
+    "level": "NONE",
+    "confidence_penalty": 0,
+    "active_events": []
+  },
+  "candle_sources": {
+    "daily": "missing",
+    "1h": "missing",
+    "15m": "missing"
+  },
+  "indicators": {},
+  "components": {
+    "market_structure": null,
+    "supply_demand": null,
+    "smelter_economics": null,
+    "physical_market": null,
+    "macro": null,
+    "technical": null
+  },
+  "component_coverage": 0.0,
+  "market_score": null,
+  "market_regime": "NO_DATA",
+  "horizons": {
+    "5D": null,
+    "20D": null,
+    "60D": null
+  },
+  "market_quality": {
+    "confidence": 35.0,
+    "status": "BLOCK",
+    "missing_fields": [
+      "lme_cash",
+      "lme_3m",
+      "lme_inventory_t",
+      "cancelled_warrants_t",
+      "tc_usd_t",
+      "physical_premium_usd_t"
+    ],
+    "candle_status": "MISSING"
+  },
+  "procurement_state": {
+    "current_inventory_t": null,
+    "demand_60d_t": null,
+    "inventory_updated_at": null,
+    "demand_updated_at": null,
+    "inventory_source": null,
+    "demand_source": null
+  },
+  "procurement_quality": {
+    "confidence": 0,
+    "status": "INPUT_REQUIRED",
+    "max_age_days": null
+  },
+  "procurement": {
+    "status": "INPUT_REQUIRED"
+  },
+  "privacy": {
+    "public_dashboard_include_private": false
+  },
+  "investment": {
+    "conservative": {
+      "strategy": "conservative",
+      "action": "NO_SIGNAL",
+      "reason": "insufficient candle/indicator data"
+    },
+    "aggressive": {
+      "strategy": "aggressive",
+      "action": "NO_SIGNAL",
+      "reason": "insufficient candle/indicator data"
+    }
+  },
+  "performance": {
+    "conservative": {
+      "trades": 0,
+      "wins": 0,
+      "win_rate": null,
+      "net_pnl_usd": 0.0,
+      "profit_factor": null,
+      "expectancy_r": null,
+      "max_drawdown_usd": 0.0,
+      "brier_score": null,
+      "calibration_error": null
+    },
+    "aggressive": {
+      "trades": 0,
+      "wins": 0,
+      "win_rate": null,
+      "net_pnl_usd": 0.0,
+      "profit_factor": null,
+      "expectancy_r": null,
+      "max_drawdown_usd": 0.0,
+      "brier_score": null,
+      "calibration_error": null
+    }
+  },
+  "notes": [
+    "No synthetic LME zinc OHLC is generated.",
+    "Investment book is paper-trading research only; no broker/order execution is included.",
+    "Event Risk Overlay reduces confidence/raises caution rather than mechanically forcing price direction."
+  ]
+}

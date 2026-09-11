@@ -1,0 +1,26 @@
+[
+  {
+    "run_time": "2026-09-11T07:34:37.490052+00:00",
+    "run_date": "2026-09-11",
+    "model_version": "2.6.0",
+    "market_score": null,
+    "market_regime": "NO_DATA",
+    "horizons": {
+      "5D": null,
+      "20D": null,
+      "60D": null
+    },
+    "lme_cash": null,
+    "lme_3m": null,
+    "inventory_t": null,
+    "cancelled_warrants_t": null,
+    "tc_usd_t": null,
+    "premium_usd_t": null,
+    "current_inventory_t": null,
+    "demand_60d_t": null,
+    "coverage_days": null,
+    "procurement_action": null,
+    "market_confidence": 35.0,
+    "procurement_confidence": 0
+  }
+]

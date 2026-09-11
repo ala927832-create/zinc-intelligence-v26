@@ -1,0 +1,56 @@
+<!doctype html><html lang='zh-Hant'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Zinc Intelligence V2.6</title><style>
+:root{--bg:#06111f;--panel:#0a1b2f;--line:#164269;--text:#e8f4ff;--muted:#87a5bf;--cyan:#37c7ff;--green:#2ce6a6;--orange:#ffad42;--red:#ff6474}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0,#0b2945 0,#06111f 35%);color:var(--text);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif} .wrap{max-width:1580px;margin:auto;padding:16px} h1{font-size:25px;margin:0} h2{font-size:15px;color:#9bdcff;margin:0 0 12px} .sub{color:var(--muted)} .top{display:flex;justify-content:space-between;gap:16px;align-items:center;border-bottom:1px solid #1b527e;padding:8px 4px 16px;margin-bottom:14px} .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px} .panel{background:linear-gradient(180deg,rgba(12,35,59,.96),rgba(7,24,42,.96));border:1px solid var(--line);border-radius:11px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.18)} .span12{grid-column:span 12} .span8{grid-column:span 8} .span7{grid-column:span 7} .span6{grid-column:span 6} .span5{grid-column:span 5} .span4{grid-column:span 4} .span3{grid-column:span 3} .hero{font-size:30px;font-weight:800;color:var(--green)} .badge{display:inline-block;padding:4px 10px;border-radius:99px;background:#083b34;color:var(--green);font-weight:700} .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px} .metric-grid div{border:1px solid #173d61;border-radius:8px;padding:8px;display:flex;justify-content:space-between;gap:8px} .metric-grid b{font-size:12px;color:var(--muted)} .strategy-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px} .strategy{border:1px solid #2f698e;border-radius:10px;padding:12px} .strategy.green{box-shadow:inset 0 0 0 1px rgba(44,230,166,.2)} .strategy.orange{box-shadow:inset 0 0 0 1px rgba(255,173,66,.25)} .strategy-title{font-size:17px;font-weight:800;display:flex;justify-content:space-between} .action{font-size:19px;font-weight:800;margin-top:8px;color:var(--cyan)} .muted{color:var(--muted);font-size:12px} table{width:100%;border-collapse:collapse} th,td{padding:8px;border-bottom:1px solid #143652;text-align:left} th{color:#8fc7e8;font-size:12px} img{width:100%;border-radius:8px} .proc-action{font-size:20px;color:var(--green);font-weight:800;padding:10px;border:1px solid #157a64;border-radius:8px;background:#07372e} ul{margin:5px 0 0;padding-left:18px} .warn{color:var(--orange)} .footer{text-align:center;color:#6888a3;padding:24px} @media(max-width:1000px){.span8,.span7,.span6,.span5,.span4,.span3{grid-column:span 12} .strategy-wrap{grid-template-columns:1fr}}
+</style></head><body><div class='wrap'>
+<div class='top'><div><h1>Zn · ZINC PROCUREMENT & INVESTMENT INTELLIGENCE V2.6</h1><div class='sub'>Predict → Freeze → Simulate → Observe → Score → Diagnose → Improve</div></div><div><b>2026-09-11</b><br><span class='sub'>Model 2.6.0</span></div></div>
+<div class='grid'>
+<section class='panel span3'><h2>MARKET REGIME</h2><div class='hero'>NO_DATA</div><div>ZTI / Market Score <b>—/100</b></div><div>20D <span class='badge'>—</span></div></section>
+<section class='panel span5'><h2>KEY MARKET DATA</h2><table><tr><td>LME Cash</td><td>— USD/t</td></tr><tr><td>LME 3M</td><td>— USD/t</td></tr><tr><td>Cash−3M</td><td>— USD/t</td></tr><tr><td>Inventory</td><td>— t</td></tr><tr><td>Cancelled</td><td>— t</td></tr><tr><td>TC</td><td>— USD/t</td></tr></table></section>
+<section class='panel span4'><h2>DATA QUALITY</h2><div class='hero'>35/100</div><div class='badge'>BLOCK</div><p class='sub'>Candles: MISSING<br>Missing: lme_cash, lme_3m, lme_inventory_t, cancelled_warrants_t, tc_usd_t, physical_premium_usd_t</p></section>
+<section class='panel span6'><h2>🏭 PROCUREMENT BOOK</h2><div class='warn'>Public-site privacy mode: exact inventory / demand / tonnage masked.</div><div class='metric-grid'><div><b>現有庫存</b><span>•••• t</span></div><div><b>60D需求</b><span>•••• t</span></div><div><b>Coverage</b><span>— days</span></div><div><b>Uncovered</b><span>•••• t</span></div><div><b>Suggested Cover</b><span>•••• t</span></div><div><b>Equivalent LME</b><span>•••• lots</span></div><div><b>Input Status</b><span>INPUT_REQUIRED</span></div><div><b>Input Age</b><span>— d</span></div></div><p class='proc-action'>INPUT REQUIRED</p></section>
+<section class='panel span6'><h2>📈 FUTURES INVESTMENT BOOK — PAPER RESEARCH ONLY</h2><div class='strategy-wrap'>
+        <div class='strategy green'>
+          <div class='strategy-title'>🛡️ 穩健型 Conservative <span>—/100</span></div>
+          <div class='action'>NO_SIGNAL</div>
+          <div class='muted'>insufficient candle/indicator data</div>
+          <div class='metric-grid'>
+            <div><b>方向</b><span>—</span></div>
+            <div><b>獲利機率</b><span>—</span></div>
+            <div><b>機率狀態</b><span>—</span></div>
+            <div><b>樣本</b><span>0</span></div>
+            <div><b>參考價</b><span>—</span></div>
+            <div><b>停損</b><span>—</span></div>
+            <div><b>目標</b><span>—</span></div>
+            <div><b>R:R</b><span>—</span></div>
+            <div><b>模擬風險</b><span>$—</span></div>
+            <div><b>模擬獲利</b><span>$—</span></div>
+            <div><b>EV</b><span>$—</span></div>
+            <div><b>用途</b><span>PAPER ONLY</span></div>
+          </div>
+        </div>
+        <div class='strategy orange'>
+          <div class='strategy-title'>🚀 積極型 Aggressive <span>—/100</span></div>
+          <div class='action'>NO_SIGNAL</div>
+          <div class='muted'>insufficient candle/indicator data</div>
+          <div class='metric-grid'>
+            <div><b>方向</b><span>—</span></div>
+            <div><b>獲利機率</b><span>—</span></div>
+            <div><b>機率狀態</b><span>—</span></div>
+            <div><b>樣本</b><span>0</span></div>
+            <div><b>參考價</b><span>—</span></div>
+            <div><b>停損</b><span>—</span></div>
+            <div><b>目標</b><span>—</span></div>
+            <div><b>R:R</b><span>—</span></div>
+            <div><b>模擬風險</b><span>$—</span></div>
+            <div><b>模擬獲利</b><span>$—</span></div>
+            <div><b>EV</b><span>$—</span></div>
+            <div><b>用途</b><span>PAPER ONLY</span></div>
+          </div>
+        </div></div></section>
+<section class='panel span8'><h2>🕯 CANDLE LAB — LME ZINC 3M</h2><p class='warn'>尚未提供真實 LME 3M OHLC CSV / API，因此不生成假 K 線。</p></section>
+<section class='panel span4'><h2>EVENT RISK OVERLAY</h2><div class='hero'>NONE</div><ul><li>目前沒有已登錄的 Active Event Risk。</li></ul><h2 style='margin-top:18px'>MACRO & RELATED</h2><table><tr><td>Brent Oil</td><td>—</td><td>—</td></tr><tr><td>Natural Gas</td><td>—</td><td>—</td></tr><tr><td>DXY</td><td>—</td><td>—</td></tr><tr><td>Copper</td><td>—</td><td>—</td></tr><tr><td>Aluminium Proxy</td><td>—</td><td>—</td></tr><tr><td>USD/TWD</td><td>—</td><td>—</td></tr><tr><td>Silver</td><td>—</td><td>—</td></tr></table></section>
+<section class='panel span7'><h2>OPEN PAPER TRADES</h2><table><tr><th>ID</th><th>Strategy</th><th>Side</th><th>Status</th><th>Entry</th><th>Mark</th><th>P/L</th></tr><tr><td colspan='7'>目前沒有模擬持倉。</td></tr></table></section>
+<section class='panel span5'><h2>STRATEGY PERFORMANCE</h2><table><tr><th></th><th>Conservative</th><th>Aggressive</th></tr><tr><td>Trades</td><td>0</td><td>0</td></tr><tr><td>Win rate</td><td>—</td><td>—</td></tr><tr><td>Expectancy R</td><td>—</td><td>—</td></tr><tr><td>Profit Factor</td><td>—</td><td>—</td></tr><tr><td>Max DD</td><td>$0</td><td>$0</td></tr></table></section>
+<section class='panel span12'><h2>DAILY SIGNAL JOURNAL</h2><table><tr><th>Date</th><th>Regime</th><th>Conservative</th><th>Aggressive</th><th>Score</th><th>Version</th></tr><tr><td>2026-09-11</td><td>NO_DATA</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>—</td><td>2.6.0</td></tr></table></section>
+</div><div class='footer'><a href='research.html' style='color:#9bdcff'>Open Research Lab</a> · Zinc Intelligence V2.6 · Investment section is paper simulation, not live order execution.</div></div></body></html>

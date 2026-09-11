@@ -1,0 +1,15 @@
+[
+  {
+    "run_time": "2026-09-11T07:34:37.490052+00:00",
+    "run_date": "2026-09-11",
+    "model_version": "2.6.0",
+    "market_score": null,
+    "market_regime": "NO_DATA",
+    "conservative_action": "NO_SIGNAL",
+    "aggressive_action": "NO_SIGNAL",
+    "conservative_probability": null,
+    "aggressive_probability": null,
+    "data_confidence": 35.0,
+    "event_overlay": "NONE"
+  }
+]

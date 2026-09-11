@@ -1,0 +1,14 @@
+{
+  "as_of": null,
+  "lme_cash": null,
+  "lme_3m": null,
+  "lme_inventory_t": null,
+  "cancelled_warrants_t": null,
+  "tc_usd_t": null,
+  "physical_premium_usd_t": null,
+  "smelter_margin_usd_t": null,
+  "china_demand_yoy_pct": null,
+  "global_balance_kt": null,
+  "smelter_utilization_pct": null,
+  "source": "manual"
+}

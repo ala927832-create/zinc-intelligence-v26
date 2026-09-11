@@ -1,0 +1,69 @@
+{
+  "model_version": "2.6.0",
+  "timezone_display": "Asia/Taipei",
+  "timezone_exchange": "Europe/London",
+  "lme_lot_tonnes": 25.0,
+  "data_quality": {
+    "min_market_confidence_for_investment": 75,
+    "min_procurement_confidence": 65,
+    "stale_procurement_days_yellow": 3,
+    "stale_procurement_days_orange": 8,
+    "stale_procurement_days_red": 15
+  },
+  "procurement": {
+    "critical_days": 10,
+    "low_days": 20,
+    "normal_high_days": 35,
+    "high_days": 50,
+    "default_safety_stock_days": 15,
+    "target_cover_ratios": {
+      "STRONG_BULL": 0.8,
+      "BULL": 0.6,
+      "NEUTRAL": 0.45,
+      "BEAR": 0.3,
+      "STRONG_BEAR": 0.2
+    }
+  },
+  "paper_trading": {
+    "enabled": true,
+    "simulated_lots": 1,
+    "slippage_usd_per_t": 1.5,
+    "commission_usd_per_lot_roundtrip": 30.0,
+    "conservative": {
+      "min_strategy_score": 72,
+      "min_data_confidence": 80,
+      "stop_atr": 1.5,
+      "target_r_multiple": 2.0,
+      "max_holding_sessions": 20,
+      "entry_mode": "pullback"
+    },
+    "aggressive": {
+      "min_strategy_score": 64,
+      "min_data_confidence": 75,
+      "stop_atr": 1.2,
+      "target_r_multiple": 2.5,
+      "max_holding_sessions": 12,
+      "entry_mode": "momentum"
+    }
+  },
+  "market_weights": {
+    "market_structure": 0.25,
+    "supply_demand": 0.2,
+    "smelter_economics": 0.2,
+    "physical_market": 0.1,
+    "macro": 0.1,
+    "technical": 0.15
+  },
+  "macro_tickers": {
+    "Brent Oil": "BZ=F",
+    "Natural Gas": "NG=F",
+    "DXY": "DX-Y.NYB",
+    "Copper": "HG=F",
+    "Aluminium Proxy": "ALI=F",
+    "USD/TWD": "TWD=X",
+    "Silver": "SI=F"
+  },
+  "privacy": {
+    "public_dashboard_include_procurement_details": false
+  }
+}
