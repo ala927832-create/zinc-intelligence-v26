@@ -94,5 +94,29 @@
     "procurement_action": "WAIT",
     "market_confidence": 40.0,
     "procurement_confidence": 95
+  },
+  {
+    "run_time": "2026-09-11T08:31:40.861371+00:00",
+    "run_date": "2026-09-11",
+    "model_version": "2.6.1",
+    "market_score": 51.093662420478246,
+    "market_regime": "NO_DATA",
+    "horizons": {
+      "5D": 50.32809872614347,
+      "20D": 50.60151433126303,
+      "60D": 50.820246815358686
+    },
+    "lme_cash": null,
+    "lme_3m": null,
+    "inventory_t": null,
+    "cancelled_warrants_t": null,
+    "tc_usd_t": null,
+    "premium_usd_t": null,
+    "current_inventory_t": 200.0,
+    "demand_60d_t": 180.0,
+    "coverage_days": 66.66666666666667,
+    "procurement_action": "WAIT",
+    "market_confidence": 40.0,
+    "procurement_confidence": 95
   }
 ]
