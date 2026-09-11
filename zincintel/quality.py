@@ -33,9 +33,14 @@ def assess_market_quality(market: dict, technical_mode: str, macro: dict, event_
     if any(v.get("value") is not None for v in macro.values()):
         confidence += 5
 
-    statuses = [str(v.get("status", "")) for v in market.get("field_sources", {}).values()]
-    if statuses and all("PUBLIC_WEB" in x or "MANUAL" in x for x in statuses):
-        confidence -= 3
+    source_statuses = [str(v.get("status", "")).upper() for v in market.get("field_sources", {}).values()]
+    # Public/day-delayed mirrors are usable for research/procurement context but are not
+    # treated as equivalent to licensed official feeds.
+    if source_statuses:
+        if all(any(tag in s for tag in ["PUBLIC", "MIRROR", "REFERENCE", "MANUAL"]) for s in source_statuses):
+            confidence -= 5
+        if any("STALE" in s for s in source_statuses):
+            confidence -= 8
 
     confidence -= event_overlay.get("confidence_penalty", 0)
     confidence = clamp(confidence, 0, 100)

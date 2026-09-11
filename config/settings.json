@@ -1,5 +1,5 @@
 {
-  "model_version": "2.6.2",
+  "model_version": "2.6.3",
   "timezone_display": "Asia/Taipei",
   "timezone_exchange": "Europe/London",
   "lme_lot_tonnes": 25.0,
@@ -70,15 +70,17 @@
   "free_data_mode": {
     "enabled": true,
     "lme_public_summary": true,
+    "grillo_lme_fallback": true,
+    "westmetall_lme_fallback": true,
     "smm_public_zinc": true,
     "close_only_technical_fallback": true,
     "never_synthesize_ohlc": true
   },
   "data_providers": {
-    "lme_prices": "licensed LME XML -> FREE delayed LME public Summary -> generic API -> manual",
-    "lme_warehouse": "licensed LME XML WSM -> FREE delayed LME public Summary -> warehouse report -> generic API -> manual",
-    "tc": "TC API -> data/tc_manual.csv -> FREE SMM public table -> generic/manual fallback",
-    "premium": "FREE SMM public table -> generic/manual fallback",
-    "candles": "full OHLC URL/file only; otherwise exact LME Closing-3M close history for trend; never synthetic candles"
+    "lme_prices": "licensed LME XML -> LME public Summary -> Grillo day-delayed -> Westmetall day-delayed reference -> generic/manual",
+    "lme_warehouse": "licensed LME XML WSM -> LME public Summary -> Grillo day-delayed warrants -> Westmetall stock reference -> generic/manual",
+    "tc": "TC API -> data/tc_manual.csv -> SMM direct public TC page -> generic/manual",
+    "premium": "SMM direct public premium page -> generic/manual",
+    "candles": "full OHLC URL/file only; otherwise Westmetall/LME exact 3M close reference history for trend; never synthetic candles"
   }
 }

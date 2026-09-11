@@ -9,6 +9,7 @@ from zincintel.config import load_settings
 from zincintel.dashboard import build_dashboard
 from zincintel.discord import send_discord
 from zincintel.free_data import enrich_market_with_free_sources, update_close_history
+from zincintel.free_mirrors import enrich_market_with_free_mirrors
 from zincintel.indicators import add_close_indicators, add_indicators, latest_indicator_dict
 from zincintel.models import (
     event_overlay, macro_score, market_regime, market_structure_score, multi_horizon_scores,
@@ -24,9 +25,18 @@ from zincintel.state import (
 from zincintel.utils import DATA_DIR, iso_now, read_json
 
 
+def _merge_close_histories(primary: pd.DataFrame, mirror: pd.DataFrame) -> pd.DataFrame:
+    frames = [x[["Close"]].copy() for x in [mirror, primary] if x is not None and not x.empty and "Close" in x.columns]
+    if not frames:
+        return pd.DataFrame()
+    out = pd.concat(frames).sort_index()
+    out = out[~out.index.duplicated(keep="last")]
+    return out
+
+
 def main() -> None:
     settings = load_settings()
-    model_version = settings.get("model_version", "2.6.2")
+    model_version = settings.get("model_version", "2.6.3")
     run_time = iso_now()
     run_date = datetime.now(timezone.utc).date().isoformat()
 
@@ -35,7 +45,12 @@ def main() -> None:
         os.getenv("DEMAND_60D_T", "")
     )
 
+    # Source priority:
+    # licensed/API/manual adapter chain -> LME public page -> robust public mirrors.
+    # Each layer fills only missing fields and leaves provenance in field_sources.
     market = enrich_market_with_free_sources(fetch_market_snapshot())
+    market, mirror_history, mirror_history_source = enrich_market_with_free_mirrors(market)
+
     macro = fetch_macro(settings.get("macro_tickers", {}))
     events = read_json(DATA_DIR / "event_risk.json", [])
     ev_overlay = event_overlay(events)
@@ -43,7 +58,10 @@ def main() -> None:
     daily_raw, candle_source = load_candles("daily")
     h1_raw, candle_1h_source = load_candles("1h")
     m15_raw, candle_15m_source = load_candles("15m")
-    close_history, close_history_source = update_close_history(market)
+    saved_close_history, close_history_source = update_close_history(market)
+    close_history = _merge_close_histories(saved_close_history, mirror_history)
+    if not mirror_history.empty:
+        close_history_source = mirror_history_source
 
     daily = add_indicators(daily_raw) if not daily_raw.empty else pd.DataFrame()
     weekly = pd.DataFrame()
@@ -78,7 +96,7 @@ def main() -> None:
     procurement = procurement_metrics(proc_state, regime, settings)
 
     trades = load_trades()
-    # Paper-trade execution requires true OHLC. Close-only mode is analysis-only.
+    # Paper-trade execution requires true OHLC. Close-only mode remains analysis-only.
     trades = process_paper_trades(trades, daily, settings)
 
     investment = {}
@@ -135,9 +153,9 @@ def main() -> None:
         "free_data_limitations": market.get("free_data_limitations", []),
         "notes": [
             "No synthetic LME zinc OHLC is generated.",
-            "Free LME public Summary data is delayed; exact OHLC candlesticks require a full OHLC source.",
+            "Free/public mirror data can be day-delayed and is tagged with source/as-of metadata.",
+            "Close-only technical mode is analysis-only; paper execution still requires true OHLC.",
             "Investment book is paper-trading research only; no broker/order execution is included.",
-            "Event Risk Overlay reduces confidence/raises caution rather than mechanically forcing price direction."
         ]
     }
 

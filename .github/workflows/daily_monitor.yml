@@ -1,4 +1,4 @@
-name: Zinc Intelligence V2.6.2 Free-First
+name: Zinc Intelligence V2.6.3 Free-Mirror
 
 on:
   workflow_dispatch:
@@ -20,7 +20,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: zinc-intelligence-v262
+  group: zinc-intelligence-v263
   cancel-in-progress: false
 
 jobs:
@@ -50,12 +50,13 @@ jobs:
           DEMAND_60D_T: ${{ github.event.inputs.demand_60d_t || '' }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-          # Free-first public fallbacks: no secret required.
-          ENABLE_SMM_PUBLIC_ZINC: "1"
+          # Free public fallbacks. No secrets required.
           LME_PUBLIC_ZINC_URL: "https://www.lme.com/en/metals/non-ferrous/lme-zinc"
-          SMM_PUBLIC_ZINC_URL: "https://www-old.metal.com/Zinc"
+          ENABLE_GRILLO_FALLBACK: "1"
+          ENABLE_WESTMETALL_FALLBACK: "1"
+          ENABLE_SMM_PUBLIC_ZINC: "1"
 
-          # Optional licensed sources. If absent, V2.6.2 falls through to free/public sources.
+          # Optional licensed sources. If absent, the pipeline falls through to free sources.
           LME_XML_USERNAME: ${{ secrets.LME_XML_USERNAME }}
           LME_XML_PASSWORD: ${{ secrets.LME_XML_PASSWORD }}
           LME_XML_CLIENT_ID: ${{ secrets.LME_XML_CLIENT_ID }}
