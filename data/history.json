@@ -142,5 +142,29 @@
     "procurement_action": "WAIT",
     "market_confidence": 23.0,
     "procurement_confidence": 95
+  },
+  {
+    "run_time": "2026-09-11T09:18:25.939920+00:00",
+    "run_date": "2026-09-11",
+    "model_version": "2.6.3",
+    "market_score": 87.64382162240629,
+    "market_regime": "STRONG_BULL",
+    "horizons": {
+      "5D": 85.12779048640004,
+      "20D": 86.02637303497372,
+      "60D": 86.74523907383264
+    },
+    "lme_cash": 4105.0,
+    "lme_3m": 3962.0,
+    "inventory_t": 111350.0,
+    "cancelled_warrants_t": 24325.0,
+    "tc_usd_t": -126.1,
+    "premium_usd_t": 125.0,
+    "current_inventory_t": 200.0,
+    "demand_60d_t": 170.0,
+    "coverage_days": 70.58823529411764,
+    "procurement_action": "HOLD",
+    "market_confidence": 93.0,
+    "procurement_confidence": 95
   }
 ]
