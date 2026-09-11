@@ -86,6 +86,17 @@ def provider_tests():
     assert zinc_table["domestic_monthly"]["value"] == -295.59
     assert zinc_table["import_weekly"]["value"] == -124.5
 
+    zinc_div_html = '''<html><body>
+    <div>Domestic Zinc Concentrate TC (Monthly) (USD/tonne)</div><div>-328.44--262.75</div><div>-295.59</div><div>-184.48</div><div>Sep 01, 2026</div>
+    <div>Domestic Zinc Concentrate TC (Weekly) (USD/tonne)</div><div>-315.3--236.48</div><div>-275.89</div><div>-32.88</div><div>Sep 04, 2026</div>
+    <div>SMM Zinc Concentrate TC Index (Weekly) (USD/dmt)</div><div>-124.5--124.5</div><div>-124.5</div><div>-1.25</div><div>Sep 04, 2026</div>
+    </body></html>'''
+    zinc_div = _parse_smm_zinc_table(zinc_div_html)
+    assert zinc_div["domestic_weekly"]["value"] == -275.89
+    assert zinc_div["domestic_weekly"]["as_of"] == "2026-09-04"
+    assert zinc_div["domestic_monthly"]["value"] == -295.59
+    assert zinc_div["import_weekly"]["value"] == -124.5
+
     raw = pd.DataFrame([{"timestamp": "2026-09-10T18:00:00Z", "Open": 3000, "High": 3050, "Low": 2980, "Close": 3020}])
     normalized = _normalize_candles(raw)
     assert not normalized.empty

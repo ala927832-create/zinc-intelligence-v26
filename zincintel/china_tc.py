@@ -18,7 +18,7 @@ BENCHMARK_FILE = DATA_DIR / "tc_benchmark.json"
 
 def _headers() -> dict[str, str]:
     return {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/152 Safari/537.36 ZincIntelligence/2.7.1",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/152 Safari/537.36 ZincIntelligence/2.7.2",
         "Accept-Language": "en-GB,en;q=0.9",
     }
 
@@ -85,6 +85,77 @@ def _parse_smm_product(html_text: str) -> dict[str, Any]:
     return {"value": avg, "unit": unit, "as_of": as_of, "update_time": update_time}
 
 
+def _parse_smm_zinc_flat_text(html_text: str, existing: dict[str, dict[str, Any]] | None = None) -> dict[str, dict[str, Any]]:
+    """Fallback for SMM landing pages rendered as divs rather than semantic table rows.
+
+    SMM's public Zinc page can expose the same table visually while the raw HTML no longer
+    contains useful <tr> rows. Parse only named TC series and retain the published unit/date.
+    No values are inferred or converted.
+    """
+    out = dict(existing or {})
+    text = BeautifulSoup(html_text, "html.parser").get_text(" ", strip=True)
+    targets = {
+        "import_weekly": "SMM Zinc Concentrate TC Index (Weekly)",
+        "domestic_weekly": "Domestic Zinc Concentrate TC (Weekly)",
+        "domestic_monthly": "Domestic Zinc Concentrate TC (Monthly)",
+    }
+    number_re = re.compile(r"(?<![A-Za-z0-9])-?\d+(?:,\d{3})*(?:\.\d+)?")
+    date_re = re.compile(r"\b([A-Z][a-z]{2}\s+\d{1,2},\s+20\d{2})\b")
+
+    for key, needle in targets.items():
+        if out.get(key, {}).get("value") is not None:
+            continue
+        pos = text.lower().find(needle.lower())
+        if pos < 0:
+            continue
+        window = text[pos: pos + 420]
+        unit = _unit_from_text(window)
+        dm = date_re.search(window)
+        # Expected visual order is range-low, range-high, Avg., Change, Date.
+        before_date = window[:dm.start()] if dm else window
+        nums = [safe_float(x.replace(",", "")) for x in number_re.findall(before_date)]
+        nums = [x for x in nums if x is not None]
+        # Ignore year/frequency-like numbers by requiring the four numeric market columns.
+        if len(nums) < 4:
+            continue
+        out[key] = {
+            "value": nums[2],
+            "unit": unit,
+            "as_of": _to_iso(dm.group(1)) if dm else None,
+            "update_time": None,
+        }
+    return out
+
+
+def _parse_smm_zinc_table(html_text: str) -> dict[str, dict[str, Any]]:
+    """Parse the SMM Zinc landing-page TC table while retaining the published unit."""
+    targets = {
+        "import_weekly": "SMM Zinc Concentrate TC Index (Weekly)",
+        "domestic_weekly": "Domestic Zinc Concentrate TC (Weekly)",
+        "domestic_monthly": "Domestic Zinc Concentrate TC (Monthly)",
+    }
+    out: dict[str, dict[str, Any]] = {}
+    soup = BeautifulSoup(html_text, "html.parser")
+    for tr in soup.find_all("tr"):
+        cells = [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
+        if len(cells) < 3:
+            continue
+        desc = cells[0]
+        key = next((k for k, needle in targets.items() if needle.lower() in desc.lower()), None)
+        if key is None:
+            continue
+        unit = _unit_from_text(desc)
+        avg = safe_float(str(cells[2]).replace(",", "")) if len(cells) >= 3 else None
+        date_text = next((c for c in reversed(cells) if re.search(r"[A-Z][a-z]{2}\s+\d{1,2},\s+20\d{2}", c)), None)
+        out[key] = {
+            "value": avg,
+            "unit": unit,
+            "as_of": _to_iso(date_text),
+            "update_time": None,
+        }
+    return _parse_smm_zinc_flat_text(html_text, out)
+
+
 def _fetch_smm(url: str, expected_update: str, label: str) -> dict[str, Any]:
     try:
         r = requests.get(url, headers=_headers(), timeout=25)
@@ -116,36 +187,6 @@ def _fetch_smm(url: str, expected_update: str, label: str) -> dict[str, Any]:
             "url": url,
             "error": str(exc),
         }
-
-
-def _parse_smm_zinc_table(html_text: str) -> dict[str, dict[str, Any]]:
-    """Parse the SMM Zinc landing-page TC table while retaining the published unit."""
-    targets = {
-        "import_weekly": "SMM Zinc Concentrate TC Index (Weekly)",
-        "domestic_weekly": "Domestic Zinc Concentrate TC (Weekly)",
-        "domestic_monthly": "Domestic Zinc Concentrate TC (Monthly)",
-    }
-    out: dict[str, dict[str, Any]] = {}
-    soup = BeautifulSoup(html_text, "html.parser")
-    for tr in soup.find_all("tr"):
-        cells = [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
-        if len(cells) < 3:
-            continue
-        desc = cells[0]
-        key = next((k for k, needle in targets.items() if needle.lower() in desc.lower()), None)
-        if key is None:
-            continue
-        unit = _unit_from_text(desc)
-        # SMM layout is Description | Price Range | Avg. | Change | Date.
-        avg = safe_float(str(cells[2]).replace(",", "")) if len(cells) >= 3 else None
-        date_text = next((c for c in reversed(cells) if re.search(r"[A-Z][a-z]{2}\s+\d{1,2},\s+20\d{2}", c)), None)
-        out[key] = {
-            "value": avg,
-            "unit": unit,
-            "as_of": _to_iso(date_text),
-            "update_time": None,
-        }
-    return out
 
 
 def _fetch_smm_zinc_table() -> tuple[dict[str, dict[str, Any]], str | None]:
@@ -199,13 +240,10 @@ def _benchmark() -> dict[str, Any]:
 def fetch_china_tc() -> dict[str, Any]:
     """Return separate China zinc concentrate TC series with explicit basis/freshness."""
     table, table_error = _fetch_smm_zinc_table()
-
-    # The dedicated import index page can update later than the landing table, so retain it as primary.
     imported = _prefer(
         _fetch_smm(SMM_IMPORT_WEEKLY_URL, "Weekly", "China import zinc concentrate TC"),
         _series_from_table(table, "import_weekly", "Weekly", "China import zinc concentrate TC", table_error),
     )
-    # Domestic legacy product URLs have become unreliable; the current Zinc landing table is primary.
     domestic_weekly = _prefer(
         _series_from_table(table, "domestic_weekly", "Weekly", "China domestic zinc concentrate TC (weekly)", table_error),
         _fetch_smm(SMM_DOMESTIC_WEEKLY_URL, "Weekly", "China domestic zinc concentrate TC (weekly)"),
