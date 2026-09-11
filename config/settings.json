@@ -1,11 +1,12 @@
 {
-  "model_version": "2.6.1",
+  "model_version": "2.6.2",
   "timezone_display": "Asia/Taipei",
   "timezone_exchange": "Europe/London",
   "lme_lot_tonnes": 25.0,
   "data_quality": {
     "min_market_confidence_for_investment": 75,
     "min_procurement_confidence": 65,
+    "min_component_coverage_for_regime": 0.35,
     "stale_procurement_days_yellow": 3,
     "stale_procurement_days_orange": 8,
     "stale_procurement_days_red": 15
@@ -66,10 +67,18 @@
   "privacy": {
     "public_dashboard_include_procurement_details": false
   },
+  "free_data_mode": {
+    "enabled": true,
+    "lme_public_summary": true,
+    "smm_public_zinc": true,
+    "close_only_technical_fallback": true,
+    "never_synthesize_ohlc": true
+  },
   "data_providers": {
-    "lme_prices": "LME_XML_OFS -> generic API -> manual",
-    "lme_warehouse": "LME_XML_WSM -> official/licensed warehouse report -> generic API -> manual",
-    "tc": "TC_API -> data/tc_manual.csv -> generic API/manual fallback",
-    "candles": "licensed/official OHLC URL -> local OHLC file; no synthetic candles"
+    "lme_prices": "licensed LME XML -> FREE delayed LME public Summary -> generic API -> manual",
+    "lme_warehouse": "licensed LME XML WSM -> FREE delayed LME public Summary -> warehouse report -> generic API -> manual",
+    "tc": "TC API -> data/tc_manual.csv -> FREE SMM public table -> generic/manual fallback",
+    "premium": "FREE SMM public table -> generic/manual fallback",
+    "candles": "full OHLC URL/file only; otherwise exact LME Closing-3M close history for trend; never synthetic candles"
   }
 }
