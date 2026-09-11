@@ -53,7 +53,7 @@ def _fetch(url: str, run_id: str, attempts: int = 12, sleep_seconds: int = 10) -
     for attempt in range(1, attempts + 1):
         target = _cache_bust(url, run_id)
         req = Request(target, headers={
-            "User-Agent": "ZincIntelligenceProductionVerifier/2.7.1",
+            "User-Agent": "ZincIntelligenceProductionVerifier/2.7.4",
             "Cache-Control": "no-cache",
             "Pragma": "no-cache",
         })
@@ -117,7 +117,9 @@ def main() -> int:
         if age is not None:
             _expect(text, f"{float(age):.1f} d", failures, f"{field} age")
 
-    # China TC series: value or explicit missing marker, source, date and cadence must appear.
+    # China TC series: value or explicit missing marker, unit, provenance, date,
+    # cadence and freshness age must appear.  AVAILABLE/VERIFIED series are
+    # required to carry age_days so a current-looking value cannot lose its date context.
     tc_specs = [
         ("import_weekly", "China Import TC · Weekly"),
         ("domestic_weekly", "China Domestic TC · Weekly"),
@@ -134,7 +136,13 @@ def main() -> int:
         _expect(text, str(item.get("expected_update") or "—"), failures, f"{key} cadence")
         _expect(text, str(item.get("source_grade") or "—"), failures, f"{key} source grade")
         _expect(text, str(item.get("source") or "—"), failures, f"{key} source")
-        _expect(text, str(item.get("status") or "—"), failures, f"{key} status")
+        status = str(item.get("status") or "—")
+        _expect(text, status, failures, f"{key} status")
+        age = item.get("age_days")
+        if age is not None:
+            _expect(text, f"{float(age):.1f} d", failures, f"{key} age")
+        elif status in {"AVAILABLE", "VERIFIED_REFERENCE"}:
+            failures.append(f"snapshot governance failure: {key} has status {status} but no age_days")
 
     # Public privacy guarantee: exact internal inventory and demand must not be rendered.
     if not snapshot.get("privacy", {}).get("public_dashboard_include_private", False):
