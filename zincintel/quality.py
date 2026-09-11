@@ -3,21 +3,53 @@ from __future__ import annotations
 from .utils import age_days, clamp
 
 
-def assess_market_quality(market: dict, candles_available: bool, macro: dict, event_overlay: dict) -> dict:
-    fields = ["lme_cash", "lme_3m", "lme_inventory_t", "cancelled_warrants_t", "tc_usd_t", "physical_premium_usd_t"]
-    present = sum(1 for f in fields if market.get(f) is not None)
-    base = 35 + (present / len(fields)) * 50
-    if candles_available:
-        base += 10
+def assess_market_quality(market: dict, technical_mode: str, macro: dict, event_overlay: dict) -> dict:
+    core_weights = {
+        "lme_cash": 14,
+        "lme_3m": 14,
+        "lme_inventory_t": 14,
+        "cancelled_warrants_t": 12,
+    }
+    secondary_weights = {
+        "tc_usd_t": 10,
+        "physical_premium_usd_t": 4,
+        "global_balance_kt": 3,
+        "china_demand_yoy_pct": 3,
+    }
+    confidence = 18.0
+    for field, weight in core_weights.items():
+        if market.get(field) is not None:
+            confidence += weight
+    for field, weight in secondary_weights.items():
+        if market.get(field) is not None:
+            confidence += weight
+
+    mode = (technical_mode or "MISSING").upper()
+    if mode == "FULL_OHLC":
+        confidence += 12
+    elif mode == "CLOSE_ONLY":
+        confidence += 7
+
     if any(v.get("value") is not None for v in macro.values()):
-        base += 5
-    base -= event_overlay.get("confidence_penalty", 0)
-    confidence = clamp(base, 0, 100)
+        confidence += 5
+
+    statuses = [str(v.get("status", "")) for v in market.get("field_sources", {}).values()]
+    if statuses and all("PUBLIC_WEB" in x or "MANUAL" in x for x in statuses):
+        confidence -= 3
+
+    confidence -= event_overlay.get("confidence_penalty", 0)
+    confidence = clamp(confidence, 0, 100)
+    missing_core = [f for f in core_weights if market.get(f) is None]
+    missing_secondary = [f for f in secondary_weights if market.get(f) is None]
+    status = "PASS" if confidence >= 75 and len(missing_core) <= 1 else "CAUTION" if confidence >= 55 else "BLOCK"
     return {
         "confidence": confidence,
-        "status": "PASS" if confidence >= 75 else "CAUTION" if confidence >= 55 else "BLOCK",
-        "missing_fields": [f for f in fields if market.get(f) is None],
-        "candle_status": "AVAILABLE" if candles_available else "MISSING"
+        "status": status,
+        "missing_fields": missing_core + missing_secondary,
+        "missing_core": missing_core,
+        "missing_secondary": missing_secondary,
+        "candle_status": "AVAILABLE" if mode == "FULL_OHLC" else "CLOSE_ONLY" if mode == "CLOSE_ONLY" else "MISSING",
+        "technical_mode": mode,
     }
 
 
