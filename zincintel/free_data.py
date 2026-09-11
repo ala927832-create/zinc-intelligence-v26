@@ -99,8 +99,11 @@ def _extract_lme_public(html_text: str) -> tuple[dict, str | None]:
     if values["cancelled_warrants_t"] is None:
         values["cancelled_warrants_t"] = number(r"Cancelled warrants\s+([\d,]+(?:\.\d+)?)")
 
-    values["lme_cash"] = _mid(values["lme_cash_bid"], values["lme_cash_offer"])
-    values["lme_3m"] = _mid(values["lme_3m_bid"], values["lme_3m_offer"])
+    # Match LME page values exactly: Cash Offer is the settlement reference;
+    # for the 3M single reference use the displayed 3M Offer. Exact Bid/Offer
+    # fields are retained alongside these model reference values.
+    values["lme_cash"] = values["lme_cash_offer"] if values["lme_cash_offer"] is not None else _mid(values["lme_cash_bid"], values["lme_cash_offer"])
+    values["lme_3m"] = values["lme_3m_offer"] if values["lme_3m_offer"] is not None else _mid(values["lme_3m_bid"], values["lme_3m_offer"])
     values["lme_settlement"] = values["lme_cash_offer"]
 
     dates = re.findall(r"\b\d{1,2}\s+[A-Z][a-z]{2}\s+20\d{2}\b", text)
