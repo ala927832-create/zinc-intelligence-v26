@@ -1,4 +1,4 @@
-name: Zinc Intelligence V2.6.1
+name: Zinc Intelligence V2.6.2 Free-First
 
 on:
   workflow_dispatch:
@@ -20,7 +20,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: zinc-intelligence-v261
+  group: zinc-intelligence-v262
   cancel-in-progress: false
 
 jobs:
@@ -50,7 +50,12 @@ jobs:
           DEMAND_60D_T: ${{ github.event.inputs.demand_60d_t || '' }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-          # V2.6.1 official/licensed adapters
+          # Free-first public fallbacks: no secret required.
+          ENABLE_SMM_PUBLIC_ZINC: "1"
+          LME_PUBLIC_ZINC_URL: "https://www.lme.com/en/metals/non-ferrous/lme-zinc"
+          SMM_PUBLIC_ZINC_URL: "https://www-old.metal.com/Zinc"
+
+          # Optional licensed sources. If absent, V2.6.2 falls through to free/public sources.
           LME_XML_USERNAME: ${{ secrets.LME_XML_USERNAME }}
           LME_XML_PASSWORD: ${{ secrets.LME_XML_PASSWORD }}
           LME_XML_CLIENT_ID: ${{ secrets.LME_XML_CLIENT_ID }}
@@ -62,7 +67,7 @@ jobs:
           ZINC_1H_CANDLE_URL: ${{ secrets.ZINC_1H_CANDLE_URL }}
           ZINC_15M_CANDLE_URL: ${{ secrets.ZINC_15M_CANDLE_URL }}
 
-          # Backward-compatible V2.6 sources/fallbacks
+          # Backward-compatible fallbacks.
           ZINC_MARKET_API_URL: ${{ secrets.ZINC_MARKET_API_URL }}
           ZINC_MARKET_API_KEY: ${{ secrets.ZINC_MARKET_API_KEY }}
           ZINC_DAILY_CSV_URL: ${{ secrets.ZINC_DAILY_CSV_URL }}
