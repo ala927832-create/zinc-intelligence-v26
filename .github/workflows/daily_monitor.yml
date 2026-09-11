@@ -1,1 +1,90 @@
+name: Zinc Intelligence V2.6
 
+on:
+  workflow_dispatch:
+    inputs:
+      current_inventory_t:
+        description: "Current usable zinc inventory (t). Leave blank to carry forward previous value."
+        required: false
+        type: string
+      demand_60d_t:
+        description: "Forecast zinc demand for next 60 days (t). Leave blank to carry forward previous value."
+        required: false
+        type: string
+  schedule:
+    # GitHub cron is UTC. 20:30 UTC runs after the LMEselect trading session on normal weekdays.
+    - cron: "30 20 * * 1-5"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: zinc-intelligence-v26
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Smoke test
+        run: python smoke_test.py
+
+      - name: Run intelligence pipeline
+        env:
+          CURRENT_INVENTORY_T: ${{ github.event.inputs.current_inventory_t || '' }}
+          DEMAND_60D_T: ${{ github.event.inputs.demand_60d_t || '' }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ZINC_MARKET_API_URL: ${{ secrets.ZINC_MARKET_API_URL }}
+          ZINC_MARKET_API_KEY: ${{ secrets.ZINC_MARKET_API_KEY }}
+          ZINC_DAILY_CSV_URL: ${{ secrets.ZINC_DAILY_CSV_URL }}
+          ZINC_1H_CSV_URL: ${{ secrets.ZINC_1H_CSV_URL }}
+          ZINC_15M_CSV_URL: ${{ secrets.ZINC_15M_CSV_URL }}
+        run: python main.py
+
+      - name: Persist state and research journals
+        run: |
+          git config user.name "zinc-intelligence-bot"
+          git config user.email "zinc-intelligence-bot@users.noreply.github.com"
+          git add data public
+          git diff --cached --quiet && echo "No state changes" && exit 0
+          git commit -m "chore: update zinc intelligence state"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
