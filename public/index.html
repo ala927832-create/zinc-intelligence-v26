@@ -1,56 +1,79 @@
-<!doctype html><html lang='zh-Hant'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Zinc Intelligence V2.6</title><style>
-:root{--bg:#06111f;--panel:#0a1b2f;--line:#164269;--text:#e8f4ff;--muted:#87a5bf;--cyan:#37c7ff;--green:#2ce6a6;--orange:#ffad42;--red:#ff6474}
-*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0,#0b2945 0,#06111f 35%);color:var(--text);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif} .wrap{max-width:1580px;margin:auto;padding:16px} h1{font-size:25px;margin:0} h2{font-size:15px;color:#9bdcff;margin:0 0 12px} .sub{color:var(--muted)} .top{display:flex;justify-content:space-between;gap:16px;align-items:center;border-bottom:1px solid #1b527e;padding:8px 4px 16px;margin-bottom:14px} .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px} .panel{background:linear-gradient(180deg,rgba(12,35,59,.96),rgba(7,24,42,.96));border:1px solid var(--line);border-radius:11px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.18)} .span12{grid-column:span 12} .span8{grid-column:span 8} .span7{grid-column:span 7} .span6{grid-column:span 6} .span5{grid-column:span 5} .span4{grid-column:span 4} .span3{grid-column:span 3} .hero{font-size:30px;font-weight:800;color:var(--green)} .badge{display:inline-block;padding:4px 10px;border-radius:99px;background:#083b34;color:var(--green);font-weight:700} .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px} .metric-grid div{border:1px solid #173d61;border-radius:8px;padding:8px;display:flex;justify-content:space-between;gap:8px} .metric-grid b{font-size:12px;color:var(--muted)} .strategy-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px} .strategy{border:1px solid #2f698e;border-radius:10px;padding:12px} .strategy.green{box-shadow:inset 0 0 0 1px rgba(44,230,166,.2)} .strategy.orange{box-shadow:inset 0 0 0 1px rgba(255,173,66,.25)} .strategy-title{font-size:17px;font-weight:800;display:flex;justify-content:space-between} .action{font-size:19px;font-weight:800;margin-top:8px;color:var(--cyan)} .muted{color:var(--muted);font-size:12px} table{width:100%;border-collapse:collapse} th,td{padding:8px;border-bottom:1px solid #143652;text-align:left} th{color:#8fc7e8;font-size:12px} img{width:100%;border-radius:8px} .proc-action{font-size:20px;color:var(--green);font-weight:800;padding:10px;border:1px solid #157a64;border-radius:8px;background:#07372e} ul{margin:5px 0 0;padding-left:18px} .warn{color:var(--orange)} .footer{text-align:center;color:#6888a3;padding:24px} @media(max-width:1000px){.span8,.span7,.span6,.span5,.span4,.span3{grid-column:span 12} .strategy-wrap{grid-template-columns:1fr}}
+<!doctype html>
+<html lang='zh-Hant'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Zinc Intelligence V2.7</title>
+<style>
+:root{--bg:#06111f;--panel:#0b1d31;--panel2:#0e263f;--line:#1c4668;--text:#edf7ff;--muted:#8ca9c1;--cyan:#5cd4ff;--green:#2ce6a6;--orange:#ffb253;--red:#ff6879}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#123454 0,#06111f 36%);color:var(--text);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif}
+a{color:#8addff}.wrap{max-width:1600px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;padding:8px 2px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
+h1{margin:0;font-size:26px}h2{font-size:14px;letter-spacing:.08em;color:#9edfff;margin:0 0 12px}.muted{color:var(--muted)}.eyebrow{font-size:11px;letter-spacing:.08em;color:#91b8d4;text-transform:uppercase}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.panel{background:linear-gradient(180deg,rgba(14,38,63,.98),rgba(8,26,45,.98));border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:0 12px 30px rgba(0,0,0,.16)}.s12{grid-column:span 12}.s8{grid-column:span 8}.s6{grid-column:span 6}.s4{grid-column:span 4}.s3{grid-column:span 3}.hero{font-size:31px;font-weight:850;color:var(--green)}.market-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.mcard,.tc-card,.paper-card{background:#081a2d;border:1px solid #183f60;border-radius:10px;padding:12px}.mvalue,.tc-value{font-size:23px;font-weight:800;margin:4px 0}small{font-size:11px;color:var(--muted)}.meta,.kv{display:flex;justify-content:space-between;gap:8px;margin-top:7px;font-size:12px}.source{font-size:10px;color:#7192ad;margin-top:8px}.pill{display:inline-block;padding:3px 7px;border-radius:99px;font-size:10px;font-weight:750}.ok{color:var(--green);background:#073d34}.warn{color:var(--orange);background:#452f0e}.bad{color:#ff8a98;background:#48151c}table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid #173b59;text-align:left;vertical-align:top}th{font-size:11px;color:#8fbad7}.tc-grid,.paper-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.paper-grid{grid-template-columns:1fr 1fr}.paper-action{font-size:18px;font-weight:800;color:var(--cyan);margin:5px 0}.notice{padding:12px;border-radius:9px;margin:8px 0}img{width:100%;border-radius:9px}details{margin-top:8px}.footer{text-align:center;color:#6786a0;padding:24px}@media(max-width:1000px){.s8,.s6,.s4,.s3{grid-column:span 12}.market-cards,.tc-grid,.paper-grid{grid-template-columns:1fr}}
 </style></head><body><div class='wrap'>
-<div class='top'><div><h1>Zn · ZINC PROCUREMENT & INVESTMENT INTELLIGENCE V2.6</h1><div class='sub'>Predict → Freeze → Simulate → Observe → Score → Diagnose → Improve</div></div><div><b>2026-09-11</b><br><span class='sub'>Model 2.6.3</span></div></div>
+<div class='top'><div><h1>Zn · ZINC INTELLIGENCE V2.7</h1><div class='muted'>Accuracy-first · Official-first · Freshness-aware · Procurement privacy preserved</div></div><div><b>2026-09-11</b><br><span class='muted'>Model 2.7.0</span></div></div>
 <div class='grid'>
-<section class='panel span3'><h2>MARKET REGIME</h2><div class='hero'>STRONG_BULL</div><div>ZTI / Market Score <b>87.6/100</b></div><div>20D <span class='badge'>86.0</span></div></section>
-<section class='panel span5'><h2>KEY MARKET DATA</h2><table><tr><td>LME Cash</td><td>4,105.0 USD/t</td></tr><tr><td>LME 3M</td><td>3,962.0 USD/t</td></tr><tr><td>Cash−3M</td><td>143.0 USD/t</td></tr><tr><td>Inventory</td><td>111,350 t</td></tr><tr><td>Cancelled</td><td>24,325 t</td></tr><tr><td>TC</td><td>-126.1 USD/t</td></tr></table></section>
-<section class='panel span4'><h2>DATA QUALITY</h2><div class='hero'>93/100</div><div class='badge'>PASS</div><p class='sub'>Candles: CLOSE_ONLY<br>Missing: global_balance_kt, china_demand_yoy_pct</p></section>
-<section class='panel span6'><h2>🏭 PROCUREMENT BOOK</h2><div class='warn'>Public-site privacy mode: exact inventory / demand / tonnage masked.</div><div class='metric-grid'><div><b>現有庫存</b><span>•••• t</span></div><div><b>60D需求</b><span>•••• t</span></div><div><b>Coverage</b><span>70.6 days</span></div><div><b>Uncovered</b><span>•••• t</span></div><div><b>Suggested Cover</b><span>•••• t</span></div><div><b>Equivalent LME</b><span>•••• lots</span></div><div><b>Input Status</b><span>CURRENT</span></div><div><b>Input Age</b><span>0.0 d</span></div></div><p class='proc-action'>HOLD</p></section>
-<section class='panel span6'><h2>📈 FUTURES INVESTMENT BOOK — PAPER RESEARCH ONLY</h2><div class='strategy-wrap'>
-        <div class='strategy green'>
-          <div class='strategy-title'>🛡️ 穩健型 Conservative <span>—/100</span></div>
-          <div class='action'>NO_SIGNAL</div>
-          <div class='muted'>insufficient candle/indicator data</div>
-          <div class='metric-grid'>
-            <div><b>方向</b><span>—</span></div>
-            <div><b>獲利機率</b><span>—</span></div>
-            <div><b>機率狀態</b><span>—</span></div>
-            <div><b>樣本</b><span>0</span></div>
-            <div><b>參考價</b><span>—</span></div>
-            <div><b>停損</b><span>—</span></div>
-            <div><b>目標</b><span>—</span></div>
-            <div><b>R:R</b><span>—</span></div>
-            <div><b>模擬風險</b><span>$—</span></div>
-            <div><b>模擬獲利</b><span>$—</span></div>
-            <div><b>EV</b><span>$—</span></div>
-            <div><b>用途</b><span>PAPER ONLY</span></div>
-          </div>
-        </div>
-        <div class='strategy orange'>
-          <div class='strategy-title'>🚀 積極型 Aggressive <span>—/100</span></div>
-          <div class='action'>NO_SIGNAL</div>
-          <div class='muted'>insufficient candle/indicator data</div>
-          <div class='metric-grid'>
-            <div><b>方向</b><span>—</span></div>
-            <div><b>獲利機率</b><span>—</span></div>
-            <div><b>機率狀態</b><span>—</span></div>
-            <div><b>樣本</b><span>0</span></div>
-            <div><b>參考價</b><span>—</span></div>
-            <div><b>停損</b><span>—</span></div>
-            <div><b>目標</b><span>—</span></div>
-            <div><b>R:R</b><span>—</span></div>
-            <div><b>模擬風險</b><span>$—</span></div>
-            <div><b>模擬獲利</b><span>$—</span></div>
-            <div><b>EV</b><span>$—</span></div>
-            <div><b>用途</b><span>PAPER ONLY</span></div>
-          </div>
-        </div></div></section>
-<section class='panel span8'><h2>🕯 CANDLE LAB — LME ZINC 3M</h2><p class='warn'>尚未提供真實 LME 3M OHLC CSV / API，因此不生成假 K 線。</p></section>
-<section class='panel span4'><h2>EVENT RISK OVERLAY</h2><div class='hero'>NONE</div><ul><li>目前沒有已登錄的 Active Event Risk。</li></ul><h2 style='margin-top:18px'>MACRO & RELATED</h2><table><tr><td>Brent Oil</td><td>104.80</td><td>-2.63%</td></tr><tr><td>Natural Gas</td><td>2.81</td><td>-0.71%</td></tr><tr><td>DXY</td><td>99.14</td><td>0.05%</td></tr><tr><td>Copper</td><td>6.54</td><td>1.18%</td></tr><tr><td>Aluminium Proxy</td><td>3,452.50</td><td>0.04%</td></tr><tr><td>USD/TWD</td><td>31.63</td><td>0.52%</td></tr><tr><td>Silver</td><td>64.50</td><td>0.34%</td></tr></table></section>
-<section class='panel span7'><h2>OPEN PAPER TRADES</h2><table><tr><th>ID</th><th>Strategy</th><th>Side</th><th>Status</th><th>Entry</th><th>Mark</th><th>P/L</th></tr><tr><td colspan='7'>目前沒有模擬持倉。</td></tr></table></section>
-<section class='panel span5'><h2>STRATEGY PERFORMANCE</h2><table><tr><th></th><th>Conservative</th><th>Aggressive</th></tr><tr><td>Trades</td><td>0</td><td>0</td></tr><tr><td>Win rate</td><td>—</td><td>—</td></tr><tr><td>Expectancy R</td><td>—</td><td>—</td></tr><tr><td>Profit Factor</td><td>—</td><td>—</td></tr><tr><td>Max DD</td><td>$0</td><td>$0</td></tr></table></section>
-<section class='panel span12'><h2>DAILY SIGNAL JOURNAL</h2><table><tr><th>Date</th><th>Regime</th><th>Conservative</th><th>Aggressive</th><th>Score</th><th>Version</th></tr><tr><td>2026-09-11</td><td>STRONG_BULL</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>87.6</td><td>2.6.3</td></tr><tr><td>2026-09-11</td><td>STRONG_BULL</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>87.6</td><td>2.6.3</td></tr><tr><td>2026-09-11</td><td>NO_DATA</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>50.5</td><td>2.6.2</td></tr><tr><td>2026-09-11</td><td>NO_DATA</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>51.1</td><td>2.6.1</td></tr><tr><td>2026-09-11</td><td>NO_DATA</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>51.2</td><td>2.6.0</td></tr><tr><td>2026-09-11</td><td>NO_DATA</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>52.1</td><td>2.6.0</td></tr><tr><td>2026-09-11</td><td>NO_DATA</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>52.0</td><td>2.6.0</td></tr><tr><td>2026-09-11</td><td>NO_DATA</td><td>NO_SIGNAL</td><td>NO_SIGNAL</td><td>—</td><td>2.6.0</td></tr></table></section>
-</div><div class='footer'><a href='research.html' style='color:#9bdcff'>Open Research Lab</a> · Zinc Intelligence V2.6 · Investment section is paper simulation, not live order execution.</div></div></body></html>
+<section class='panel s3'><h2>CORE DATA GATE</h2><div class='hero'>HEALTHY</div><span class='pill ok'>5 core usable</span><p class='muted'>Stale: None<br>Missing: None</p></section>
+<section class='panel s3'><h2>MARKET REGIME</h2><div class='hero'>STRONG_BULL</div><div>ZTI / Score <b>87.5</b></div><div>Confidence <b>93/100</b></div></section>
+<section class='panel s6'><h2>LME ZINC · CORE REFERENCES</h2><div class='market-cards'>
+<div class='mcard'><div class='eyebrow'>Cash</div><div class='mvalue'>4,105.0 <small>USD/t</small></div><div class='muted'>Cash−3M 143.0</div></div>
+<div class='mcard'><div class='eyebrow'>3M</div><div class='mvalue'>3,962.0 <small>USD/t</small></div><div class='muted'>Technical mode CLOSE_ONLY</div></div>
+<div class='mcard'><div class='eyebrow'>Inventory</div><div class='mvalue'>111,350 <small>t</small></div><div class='muted'>Live 87,025 · Cancelled 24,325</div></div>
+</div></section>
+<section class='panel s12'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr><tr><td><b>LME Cash</b></td><td>2026-09-11</td><td>0.4 d</td><td>T+1 business day</td><td>B_PUBLIC_REFERENCE · grillo_lme_zinc</td><td><span class='pill ok'>CURRENT_ENOUGH</span></td></tr><tr><td><b>LME 3M</b></td><td>2026-09-11</td><td>0.4 d</td><td>T+1 business day</td><td>B_PUBLIC_REFERENCE · grillo_lme_zinc</td><td><span class='pill ok'>CURRENT_ENOUGH</span></td></tr><tr><td><b>Opening / Total Stock</b></td><td>2026-09-11</td><td>0.4 d</td><td>T+1/T+2 business day</td><td>B_PUBLIC_REFERENCE · grillo_lme_zinc</td><td><span class='pill ok'>CURRENT_ENOUGH</span></td></tr><tr><td><b>Live Warrants</b></td><td>2026-09-11</td><td>0.4 d</td><td>T+1/T+2 business day</td><td>B_PUBLIC_REFERENCE · grillo_lme_zinc</td><td><span class='pill ok'>CURRENT_ENOUGH</span></td></tr><tr><td><b>Cancelled Warrants</b></td><td>2026-09-11</td><td>0.4 d</td><td>T+1/T+2 business day</td><td>B_PUBLIC_REFERENCE · grillo_lme_zinc</td><td><span class='pill ok'>CURRENT_ENOUGH</span></td></tr><tr><td><b>TC (legacy model field)</b></td><td>2026-09-11</td><td>0.4 d</td><td>Weekly or better</td><td>B_MARKET_SOURCE_RESTRICTED · smm_tc_direct</td><td><span class='pill ok'>CURRENT_ENOUGH</span></td></tr><tr><td><b>Physical Premium</b></td><td>2026-09-11</td><td>0.4 d</td><td>Weekly or better</td><td>B_MARKET_SOURCE_RESTRICTED · smm_premium_direct</td><td><span class='pill ok'>CURRENT_ENOUGH</span></td></tr></table></section>
+<section class='panel s12'><h2>CHINA ZINC CONCENTRATE TC</h2><div class='tc-grid'>
+    <div class='tc-card'>
+      <div class='eyebrow'>China Import TC · Weekly</div>
+      <div class='tc-value'>-126.10 <small>USD/dmt</small></div>
+      <div class='muted'>CIF China main ports · USD/dmt</div>
+      <div class='meta'><span>As of 2026-09-11</span><span>Age 0.4 d</span></div>
+      <div class='meta'><span>Weekly</span><span class='pill ok'>AVAILABLE</span></div>
+      <div class='source'>B_MARKET_SOURCE · SMM_PUBLIC</div>
+    </div>
+    <div class='tc-card'>
+      <div class='eyebrow'>China Domestic TC · Weekly</div>
+      <div class='tc-value'>— <small>USD/tonne</small></div>
+      <div class='muted'>Zn50 domestic concentrate · source unit retained</div>
+      <div class='meta'><span>As of 2026-09-11</span><span>Age 0.4 d</span></div>
+      <div class='meta'><span>Weekly</span><span class='pill bad'>MISSING</span></div>
+      <div class='source'>B_MARKET_SOURCE · SMM_PUBLIC</div>
+    </div>
+    <div class='tc-card'>
+      <div class='eyebrow'>China Domestic TC · Monthly</div>
+      <div class='tc-value'>— <small>USD/tonne</small></div>
+      <div class='muted'>Zn50 domestic concentrate · monthly reference</div>
+      <div class='meta'><span>As of 2026-09-01</span><span>Age 10.4 d</span></div>
+      <div class='meta'><span>Monthly</span><span class='pill bad'>MISSING</span></div>
+      <div class='source'>B_MARKET_SOURCE · SMM_PUBLIC</div>
+    </div>
+    <div class='tc-card'>
+      <div class='eyebrow'>Annual Benchmark TC</div>
+      <div class='tc-value'>85.00 <small>USD/dmt</small></div>
+      <div class='muted'>Industry annual benchmark · not spot TC</div>
+      <div class='meta'><span>As of 2026-03-06</span><span>Age 189.4 d</span></div>
+      <div class='meta'><span>Annual</span><span class='pill ok'>VERIFIED_REFERENCE</span></div>
+      <div class='source'>B_VERIFIED_BENCHMARK · Fastmarkets reported Teck / Korea Zinc annual benchmark</div>
+    </div></div><p class='muted'>不同 basis 不混算：Import TC、Domestic TC、Annual Benchmark 分開保存與判讀。延遲一日/一週/月度可接受，但日期與來源必須可追溯。</p></section>
+<section class='panel s6'><h2>🏭 PROCUREMENT</h2><div class='notice warn'>Public privacy mode：精確庫存、60D需求與建議採購噸數已遮罩。</div><div class='market-cards'>
+<div class='mcard'><div class='eyebrow'>Coverage</div><div class='mvalue'>70.6 <small>days</small></div><div class='muted'>EXCESS</div></div>
+<div class='mcard'><div class='eyebrow'>Action</div><div class='mvalue'>HOLD</div><div class='muted'>Input CURRENT</div></div>
+<div class='mcard'><div class='eyebrow'>Private inputs</div><div class='mvalue'>•••• / ••••</div><div class='muted'>inventory / 60D demand</div></div>
+</div></section>
+<section class='panel s6'><h2>📈 PAPER RESEARCH</h2><div class='paper-grid'>
+    <div class='paper-card'>
+      <div class='eyebrow'>Conservative</div>
+      <div class='paper-action'>NO_SIGNAL</div>
+      <div class='muted'>insufficient candle/indicator data</div>
+      <div class='kv'><span>Score</span><b>—</b></div>
+      <div class='kv'><span>Probability</span><b>—</b></div>
+      <div class='kv'><span>Reference</span><b>—</b></div>
+      <div class='source'>PAPER RESEARCH ONLY</div>
+    </div>
+    <div class='paper-card'>
+      <div class='eyebrow'>Aggressive</div>
+      <div class='paper-action'>NO_SIGNAL</div>
+      <div class='muted'>insufficient candle/indicator data</div>
+      <div class='kv'><span>Score</span><b>—</b></div>
+      <div class='kv'><span>Probability</span><b>—</b></div>
+      <div class='kv'><span>Reference</span><b>—</b></div>
+      <div class='source'>PAPER RESEARCH ONLY</div>
+    </div></div></section>
+<section class='panel s8'><h2>TECHNICAL DATA</h2><div class='notice warn'>Close-only mode：可計算 EMA / RSI / ROC，但沒有真實 Open/High/Low，所以不產生假 K 線、ATR 或 Paper Trade execution。</div></section>
+<section class='panel s4'><h2>MODEL / PIPELINE STATUS</h2><table><tr><td>Technical mode</td><td>CLOSE_ONLY</td></tr><tr><td>Close-history points</td><td>175</td></tr><tr><td>Market confidence</td><td>93</td></tr><tr><td>Provider failures</td><td>1</td></tr></table><p><a href='research.html'>Research Lab →</a></p></section>
+</div><div class='footer'>Zinc Intelligence V2.7 · Public dashboard uses masked procurement inputs · Investment module is paper research only.</div></div></body></html>

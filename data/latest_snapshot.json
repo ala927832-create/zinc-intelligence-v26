@@ -1,7 +1,7 @@
 {
-  "run_time": "2026-09-11T09:19:56.117776+00:00",
+  "run_time": "2026-09-11T10:01:38.054520+00:00",
   "run_date": "2026-09-11",
-  "model_version": "2.6.3",
+  "model_version": "2.7.0",
   "market": {
     "lme_cash": 4105.0,
     "lme_3m": 3962.0,
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -126.1,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-09-11T09:19:56.120025+00:00",
+    "as_of": "2026-09-11T10:01:38.056508+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_cash": {
@@ -122,7 +122,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-09-11T09:19:56.120025+00:00",
+        "as_of": "2026-09-11T10:01:38.056508+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -167,30 +167,193 @@
       "Delivered-in/out warehouse movements are not shown on the public Zinc Summary; the delayed stock-breakdown XLS may require LME site access/download.",
       "SMM TC/premium public values carry redistribution/licensing restrictions and are tagged as a fallback, not official LME data.",
       "Smelter utilization, global balance and China-demand series have no single stable free daily feed of equivalent quality and remain optional/manual enrichments."
+    ],
+    "data_health": {
+      "lme_cash": {
+        "value_present": true,
+        "source": "grillo_lme_zinc",
+        "source_grade": "B_PUBLIC_REFERENCE",
+        "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
+        "as_of": "2026-09-11",
+        "age_days": 0.42,
+        "expected_update": "T+1 business day",
+        "max_age_days": 4,
+        "importance": "CORE",
+        "freshness": "CURRENT_ENOUGH"
+      },
+      "lme_3m": {
+        "value_present": true,
+        "source": "grillo_lme_zinc",
+        "source_grade": "B_PUBLIC_REFERENCE",
+        "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
+        "as_of": "2026-09-11",
+        "age_days": 0.42,
+        "expected_update": "T+1 business day",
+        "max_age_days": 4,
+        "importance": "CORE",
+        "freshness": "CURRENT_ENOUGH"
+      },
+      "lme_inventory_t": {
+        "value_present": true,
+        "source": "grillo_lme_zinc",
+        "source_grade": "B_PUBLIC_REFERENCE",
+        "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
+        "as_of": "2026-09-11",
+        "age_days": 0.42,
+        "expected_update": "T+1/T+2 business day",
+        "max_age_days": 5,
+        "importance": "CORE",
+        "freshness": "CURRENT_ENOUGH"
+      },
+      "live_warrants_t": {
+        "value_present": true,
+        "source": "grillo_lme_zinc",
+        "source_grade": "B_PUBLIC_REFERENCE",
+        "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
+        "as_of": "2026-09-11",
+        "age_days": 0.42,
+        "expected_update": "T+1/T+2 business day",
+        "max_age_days": 5,
+        "importance": "CORE",
+        "freshness": "CURRENT_ENOUGH"
+      },
+      "cancelled_warrants_t": {
+        "value_present": true,
+        "source": "grillo_lme_zinc",
+        "source_grade": "B_PUBLIC_REFERENCE",
+        "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
+        "as_of": "2026-09-11",
+        "age_days": 0.42,
+        "expected_update": "T+1/T+2 business day",
+        "max_age_days": 5,
+        "importance": "CORE",
+        "freshness": "CURRENT_ENOUGH"
+      },
+      "tc_usd_t": {
+        "value_present": true,
+        "source": "smm_tc_direct",
+        "source_grade": "B_MARKET_SOURCE_RESTRICTED",
+        "source_status": "PUBLIC_WEB_DELAYED",
+        "as_of": "2026-09-11",
+        "age_days": 0.42,
+        "expected_update": "Weekly or better",
+        "max_age_days": 14,
+        "importance": "SECONDARY",
+        "freshness": "CURRENT_ENOUGH"
+      },
+      "physical_premium_usd_t": {
+        "value_present": true,
+        "source": "smm_premium_direct",
+        "source_grade": "B_MARKET_SOURCE_RESTRICTED",
+        "source_status": "PUBLIC_WEB_DELAYED",
+        "as_of": "2026-09-11",
+        "age_days": 0.42,
+        "expected_update": "Weekly or better",
+        "max_age_days": 14,
+        "importance": "SECONDARY",
+        "freshness": "CURRENT_ENOUGH"
+      }
+    }
+  },
+  "core_data_gate": {
+    "status": "HEALTHY",
+    "usable_core": [
+      "lme_cash",
+      "lme_3m",
+      "lme_inventory_t",
+      "live_warrants_t",
+      "cancelled_warrants_t"
+    ],
+    "stale_core": [],
+    "missing_core": []
+  },
+  "china_tc": {
+    "import_weekly": {
+      "label": "China import zinc concentrate TC",
+      "value": -126.1,
+      "unit": "USD/dmt",
+      "as_of": "2026-09-11",
+      "update_time": "17:00 GMT+8",
+      "status": "AVAILABLE",
+      "source": "SMM_PUBLIC",
+      "source_grade": "B_MARKET_SOURCE",
+      "expected_update": "Weekly",
+      "age_days": 0.42,
+      "url": "https://www-old.metal.com/Zinc/202506030011",
+      "error": null
+    },
+    "domestic_weekly": {
+      "label": "China domestic zinc concentrate TC (weekly)",
+      "value": null,
+      "unit": "USD/tonne",
+      "as_of": "2026-09-11",
+      "update_time": "17:00 GMT+8",
+      "status": "MISSING",
+      "source": "SMM_PUBLIC",
+      "source_grade": "B_MARKET_SOURCE",
+      "expected_update": "Weekly",
+      "age_days": 0.42,
+      "url": "https://www-old.metal.com/Zinc/202004070002",
+      "error": null
+    },
+    "domestic_monthly": {
+      "label": "China domestic zinc concentrate TC (monthly)",
+      "value": null,
+      "unit": "USD/tonne",
+      "as_of": "2026-09-01",
+      "update_time": "17:00 GMT+8",
+      "status": "MISSING",
+      "source": "SMM_PUBLIC",
+      "source_grade": "B_MARKET_SOURCE",
+      "expected_update": "Monthly",
+      "age_days": 10.42,
+      "url": "https://www-old.metal.com/Zinc/201312030008",
+      "error": null
+    },
+    "annual_benchmark": {
+      "label": "Annual benchmark TC",
+      "value": 85.0,
+      "unit": "USD/dmt",
+      "as_of": "2026-03-06",
+      "status": "VERIFIED_REFERENCE",
+      "source": "Fastmarkets reported Teck / Korea Zinc annual benchmark",
+      "source_grade": "B_VERIFIED_BENCHMARK",
+      "expected_update": "Annual",
+      "age_days": 189.42,
+      "url": "https://www.fastmarkets.com/insights/teck-korea-zinc-benchmark-zinc-concentrate-tcs-85-per-tonne/",
+      "notes": "Annual benchmark reference only. Do not substitute for China import spot TC or China domestic TC."
+    },
+    "primary_import_tc_usd_dmt": -126.1,
+    "primary_domestic_tc": null,
+    "primary_domestic_unit": "USD/tonne",
+    "notes": [
+      "Import and domestic TC are separate market series and are not arithmetically blended.",
+      "SMM public values may be delayed weekly/monthly; accuracy and source date take priority over recency.",
+      "Annual benchmark is a separately verified industry reference, not a spot TC."
     ]
   },
   "macro": {
     "Brent Oil": {
-      "value": 104.80000305175781,
-      "change_pct": -2.629373105898025,
+      "value": 104.06999969482422,
+      "change_pct": -3.3076258008365778,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 2.813999891281128,
-      "change_pct": -0.7057240142687715,
+      "value": 2.803999900817871,
+      "change_pct": -1.0585818150063764,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 99.14099884033203,
-      "change_pct": 0.05147088942005773,
+      "value": 99.13700103759766,
+      "change_pct": 0.047436372433340424,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.543000221252441,
-      "change_pct": 1.1752004566783159,
+      "value": 6.538000106811523,
+      "change_pct": 1.0978830848672905,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -201,14 +364,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 31.628999710083008,
-      "change_pct": 0.5244056842673706,
+      "value": 31.614999771118164,
+      "change_pct": 0.47991058303251677,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 64.5,
-      "change_pct": 0.33601429508682834,
+      "value": 64.44499969482422,
+      "change_pct": 0.25045597870927416,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -243,16 +406,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99923219928885,
     "physical_market": 99.94997988929205,
-    "macro": 50.33292514717729,
+    "macro": 49.46194118403173,
     "technical": 84.04949142811165
   },
   "component_coverage": 0.8,
-  "market_score": 87.62512818857306,
+  "market_score": 87.51625519317986,
   "market_regime": "STRONG_BULL",
   "horizons": {
-    "5D": 85.12218245625007,
-    "20D": 86.01609164636542,
-    "60D": 86.7312189984577
+    "5D": 85.08952055763211,
+    "20D": 85.95621149889917,
+    "60D": 86.6495642519128
   },
   "market_quality": {
     "confidence": 93.0,
@@ -280,7 +443,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 0.00010572599537037038
+    "max_age_days": 0.029099887268518518
   },
   "procurement": {
     "status": "OK",
@@ -342,9 +505,10 @@
     "Smelter utilization, global balance and China-demand series have no single stable free daily feed of equivalent quality and remain optional/manual enrichments."
   ],
   "notes": [
-    "No synthetic LME zinc OHLC is generated.",
-    "Free/public mirror data can be day-delayed and is tagged with source/as-of metadata.",
-    "Close-only technical mode is analysis-only; paper execution still requires true OHLC.",
-    "Investment book is paper-trading research only; no broker/order execution is included."
+    "Accuracy and source traceability take priority over real-time freshness.",
+    "No synthetic LME zinc OHLC, stock, TC or price is generated.",
+    "China import TC, domestic TC and annual benchmark remain separate series.",
+    "Close-only technical mode is analysis-only; paper execution requires true OHLC.",
+    "Public procurement inputs remain masked by default."
   ]
 }
