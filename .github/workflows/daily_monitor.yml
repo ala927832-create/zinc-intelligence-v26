@@ -3,6 +3,11 @@ name: Zinc Intelligence V2.7 Official-First
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
+    paths-ignore:
+      - "data/**"
+      - "public/**"
   workflow_dispatch:
     inputs:
       current_inventory_t:
