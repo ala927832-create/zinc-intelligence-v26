@@ -5,8 +5,10 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
+from zincintel.china_tc import fetch_china_tc
 from zincintel.config import load_settings
-from zincintel.dashboard import build_dashboard
+from zincintel.dashboard_v27 import build_dashboard_v27
+from zincintel.data_governance import annotate_data_health, apply_last_known_good, core_data_gate
 from zincintel.discord import send_discord
 from zincintel.free_data import enrich_market_with_free_sources, update_close_history
 from zincintel.free_mirrors import enrich_market_with_free_mirrors
@@ -30,13 +32,32 @@ def _merge_close_histories(primary: pd.DataFrame, mirror: pd.DataFrame) -> pd.Da
     if not frames:
         return pd.DataFrame()
     out = pd.concat(frames).sort_index()
-    out = out[~out.index.duplicated(keep="last")]
-    return out
+    return out[~out.index.duplicated(keep="last")]
+
+
+def _apply_china_tc_to_legacy_model_field(market: dict, china_tc: dict) -> dict:
+    """Use China import weekly TC as the legacy smelter-economics TC only when no better TC source exists.
+
+    Domestic China TC and annual benchmark remain separate and are never blended into tc_usd_t.
+    """
+    if market.get("tc_usd_t") is not None:
+        return market
+    imported = china_tc.get("import_weekly", {})
+    value = imported.get("value")
+    if value is None:
+        return market
+    market["tc_usd_t"] = value
+    market.setdefault("field_sources", {})["tc_usd_t"] = {
+        "provider": "smm_china_import_tc_weekly",
+        "status": "PUBLIC_MARKET_WEEKLY",
+        "as_of": imported.get("as_of"),
+    }
+    return market
 
 
 def main() -> None:
     settings = load_settings()
-    model_version = settings.get("model_version", "2.6.3")
+    model_version = settings.get("model_version", "2.7.0")
     run_time = iso_now()
     run_date = datetime.now(timezone.utc).date().isoformat()
 
@@ -45,11 +66,19 @@ def main() -> None:
         os.getenv("DEMAND_60D_T", "")
     )
 
-    # Source priority:
-    # licensed/API/manual adapter chain -> LME public page -> robust public mirrors.
-    # Each layer fills only missing fields and leaves provenance in field_sources.
+    # Accuracy-first source priority:
+    # licensed/official adapters -> official public LME -> public reference mirrors -> verified carry-forward.
     market = enrich_market_with_free_sources(fetch_market_snapshot())
     market, mirror_history, mirror_history_source = enrich_market_with_free_mirrors(market)
+
+    china_tc = fetch_china_tc()
+    market = _apply_china_tc_to_legacy_model_field(market, china_tc)
+
+    # A temporary provider outage may reuse a prior verified value only inside an explicit freshness window.
+    # The old as-of date and original provider are retained; nothing synthetic is created.
+    market = apply_last_known_good(market)
+    market = annotate_data_health(market)
+    data_gate = core_data_gate(market)
 
     macro = fetch_macro(settings.get("macro_tickers", {}))
     events = read_json(DATA_DIR / "event_risk.json", [])
@@ -96,7 +125,6 @@ def main() -> None:
     procurement = procurement_metrics(proc_state, regime, settings)
 
     trades = load_trades()
-    # Paper-trade execution requires true OHLC. Close-only mode remains analysis-only.
     trades = process_paper_trades(trades, daily, settings)
 
     investment = {}
@@ -132,6 +160,8 @@ def main() -> None:
         "run_date": run_date,
         "model_version": model_version,
         "market": market,
+        "core_data_gate": data_gate,
+        "china_tc": china_tc,
         "macro": macro,
         "event_overlay": ev_overlay,
         "candle_sources": {"daily": candle_source, "1h": candle_1h_source, "15m": candle_15m_source, "close_history": close_history_source},
@@ -152,10 +182,11 @@ def main() -> None:
         "performance": perf,
         "free_data_limitations": market.get("free_data_limitations", []),
         "notes": [
-            "No synthetic LME zinc OHLC is generated.",
-            "Free/public mirror data can be day-delayed and is tagged with source/as-of metadata.",
-            "Close-only technical mode is analysis-only; paper execution still requires true OHLC.",
-            "Investment book is paper-trading research only; no broker/order execution is included.",
+            "Accuracy and source traceability take priority over real-time freshness.",
+            "No synthetic LME zinc OHLC, stock, TC or price is generated.",
+            "China import TC, domestic TC and annual benchmark remain separate series.",
+            "Close-only technical mode is analysis-only; paper execution requires true OHLC.",
+            "Public procurement inputs remain masked by default.",
         ]
     }
 
@@ -165,10 +196,16 @@ def main() -> None:
         "market_score": score, "market_regime": regime, "horizons": horizons,
         "lme_cash": market.get("lme_cash"), "lme_3m": market.get("lme_3m"),
         "inventory_t": market.get("lme_inventory_t"), "cancelled_warrants_t": market.get("cancelled_warrants_t"),
-        "tc_usd_t": market.get("tc_usd_t"), "premium_usd_t": market.get("physical_premium_usd_t"),
+        "tc_usd_t": market.get("tc_usd_t"),
+        "china_import_tc_usd_dmt": china_tc.get("primary_import_tc_usd_dmt"),
+        "china_domestic_tc": china_tc.get("primary_domestic_tc"),
+        "china_domestic_tc_unit": china_tc.get("primary_domestic_unit"),
+        "annual_benchmark_tc_usd_dmt": china_tc.get("annual_benchmark", {}).get("value"),
+        "premium_usd_t": market.get("physical_premium_usd_t"),
         "current_inventory_t": proc_state.get("current_inventory_t"), "demand_60d_t": proc_state.get("demand_60d_t"),
         "coverage_days": procurement.get("coverage_days"), "procurement_action": procurement.get("action"),
-        "market_confidence": market_quality.get("confidence"), "procurement_confidence": proc_quality.get("confidence")
+        "market_confidence": market_quality.get("confidence"), "procurement_confidence": proc_quality.get("confidence"),
+        "core_data_gate": data_gate.get("status"),
     })
     append_signal({
         "run_time": run_time, "run_date": run_date, "model_version": model_version,
@@ -177,11 +214,14 @@ def main() -> None:
         "aggressive_action": investment.get("aggressive", {}).get("action"),
         "conservative_probability": investment.get("conservative", {}).get("probability", {}).get("p_profit"),
         "aggressive_probability": investment.get("aggressive", {}).get("probability", {}).get("p_profit"),
-        "data_confidence": market_quality.get("confidence"), "event_overlay": ev_overlay.get("level")
+        "data_confidence": market_quality.get("confidence"), "event_overlay": ev_overlay.get("level"),
+        "core_data_gate": data_gate.get("status"),
     })
 
-    out = build_dashboard(snapshot, {"daily": daily, "weekly": weekly, "1h": h1_raw, "15m": m15_raw}, trades, perf)
+    out = build_dashboard_v27(snapshot, {"daily": daily, "weekly": weekly, "1h": h1_raw, "15m": m15_raw}, trades, perf)
     print(f"Dashboard written to {out}")
+    print(f"Core data gate: {data_gate['status']} | usable={data_gate['usable_core']} | stale={data_gate['stale_core']} | missing={data_gate['missing_core']}")
+
     if os.getenv("DISCORD_WEBHOOK_URL"):
         try:
             send_discord(snapshot)
