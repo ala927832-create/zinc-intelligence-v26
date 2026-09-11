@@ -1,7 +1,7 @@
 {
-  "run_time": "2026-09-11T08:31:40.861371+00:00",
+  "run_time": "2026-09-11T09:00:24.277210+00:00",
   "run_date": "2026-09-11",
-  "model_version": "2.6.1",
+  "model_version": "2.6.2",
   "market": {
     "lme_cash": null,
     "lme_3m": null,
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": null,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-09-11T08:31:40.863983+00:00",
+    "as_of": "2026-09-11T09:00:24.280408+00:00",
     "source": "adapter_chain",
     "field_sources": {},
     "provider_status": {
@@ -56,53 +56,71 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-09-11T08:31:40.863983+00:00",
+        "as_of": "2026-09-11T09:00:24.280408+00:00",
         "error": null
+      },
+      "lme_public_summary": {
+        "status": "ERROR",
+        "as_of": null,
+        "error": "403 Client Error: Forbidden for url: https://www.lme.com/en/metals/non-ferrous/lme-zinc"
+      },
+      "smm_public_zinc": {
+        "status": "MISSING",
+        "as_of": null,
+        "error": null,
+        "redistribution_caution": true
       }
     },
     "cash_3m": null,
-    "cancelled_ratio_pct": null
+    "cancelled_ratio_pct": null,
+    "free_data_limitations": [
+      "True LME Zinc 3M Daily OHLC is not exposed as a stable unauthenticated free API; free current-year viewing/download may require an LME account.",
+      "LME 15m/1H OHLC suitable for automated candlestick backtests is not available as a stable anonymous free feed.",
+      "Delivered-in/out warehouse movements are not shown on the public Zinc Summary; the delayed stock-breakdown XLS may require LME site access/download.",
+      "SMM TC/premium public values carry redistribution/licensing restrictions and are tagged as a fallback, not official LME data.",
+      "Smelter utilization, global balance and China-demand series have no single stable free daily feed of equivalent quality and remain optional/manual enrichments."
+    ]
   },
   "macro": {
     "Brent Oil": {
-      "value": 105.55000305175781,
-      "change_pct": -1.9325413497528476,
+      "value": 104.68000030517578,
+      "change_pct": -2.7408687387553643,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 2.8239998817443848,
-      "change_pct": -0.35286621353116665,
+      "value": 2.821000099182129,
+      "change_pct": -0.4587159822382336,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 99.12200164794922,
-      "change_pct": 0.03229923427332526,
+      "value": 99.1050033569336,
+      "change_pct": 0.015144837619929241,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.543000221252441,
-      "change_pct": 1.1752004566783159,
+      "value": 6.547500133514404,
+      "change_pct": 1.244783141952066,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Aluminium Proxy": {
-      "value": 3463.0,
-      "change_pct": 0.3404563563926155,
+      "value": 3452.5,
+      "change_pct": 0.03621876131836288,
       "ticker": "ALI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 31.64299964904785,
-      "change_pct": 0.5689007855022021,
+      "value": 31.635000228881836,
+      "change_pct": 0.5434767453688316,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 64.45999908447266,
-      "change_pct": 0.27378898606096325,
+      "value": 64.66000366210938,
+      "change_pct": 0.5849155311902665,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -115,27 +133,30 @@
   "candle_sources": {
     "daily": "missing",
     "1h": "missing",
-    "15m": "missing"
+    "15m": "missing",
+    "close_history": "missing"
   },
+  "technical_mode": "MISSING",
+  "free_close_history_points": 0,
   "indicators": {},
   "components": {
     "market_structure": null,
     "supply_demand": null,
     "smelter_economics": null,
     "physical_market": null,
-    "macro": 51.093662420478246,
+    "macro": 50.528070181050374,
     "technical": null
   },
   "component_coverage": 0.1,
-  "market_score": 51.093662420478246,
+  "market_score": 50.528070181050374,
   "market_regime": "NO_DATA",
   "horizons": {
-    "5D": 50.32809872614347,
-    "20D": 50.60151433126303,
-    "60D": 50.820246815358686
+    "5D": 50.15842105431511,
+    "20D": 50.29043859957771,
+    "60D": 50.39605263578778
   },
   "market_quality": {
-    "confidence": 40.0,
+    "confidence": 23.0,
     "status": "BLOCK",
     "missing_fields": [
       "lme_cash",
@@ -143,27 +164,42 @@
       "lme_inventory_t",
       "cancelled_warrants_t",
       "tc_usd_t",
-      "physical_premium_usd_t"
+      "physical_premium_usd_t",
+      "global_balance_kt",
+      "china_demand_yoy_pct"
     ],
-    "candle_status": "MISSING"
+    "missing_core": [
+      "lme_cash",
+      "lme_3m",
+      "lme_inventory_t",
+      "cancelled_warrants_t"
+    ],
+    "missing_secondary": [
+      "tc_usd_t",
+      "physical_premium_usd_t",
+      "global_balance_kt",
+      "china_demand_yoy_pct"
+    ],
+    "candle_status": "MISSING",
+    "technical_mode": "MISSING"
   },
   "procurement_state": {
     "current_inventory_t": 200.0,
-    "demand_60d_t": 180.0,
-    "inventory_updated_at": "2026-09-11T08:31:40.861455+00:00",
-    "demand_updated_at": "2026-09-11T08:31:40.861455+00:00",
+    "demand_60d_t": 170.0,
+    "inventory_updated_at": "2026-09-11T09:00:24.277316+00:00",
+    "demand_updated_at": "2026-09-11T09:00:24.277316+00:00",
     "inventory_source": "workflow/manual input",
     "demand_source": "workflow/manual input"
   },
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 8.736273148148149e-06
+    "max_age_days": 3.9236608796296295e-05
   },
   "procurement": {
     "status": "OK",
-    "daily_demand_t": 3.0,
-    "coverage_days": 66.66666666666667,
+    "daily_demand_t": 2.8333333333333335,
+    "coverage_days": 70.58823529411764,
     "inventory_band": "EXCESS",
     "uncovered_demand_t": 0,
     "action": "WAIT",
@@ -212,8 +248,16 @@
       "calibration_error": null
     }
   },
+  "free_data_limitations": [
+    "True LME Zinc 3M Daily OHLC is not exposed as a stable unauthenticated free API; free current-year viewing/download may require an LME account.",
+    "LME 15m/1H OHLC suitable for automated candlestick backtests is not available as a stable anonymous free feed.",
+    "Delivered-in/out warehouse movements are not shown on the public Zinc Summary; the delayed stock-breakdown XLS may require LME site access/download.",
+    "SMM TC/premium public values carry redistribution/licensing restrictions and are tagged as a fallback, not official LME data.",
+    "Smelter utilization, global balance and China-demand series have no single stable free daily feed of equivalent quality and remain optional/manual enrichments."
+  ],
   "notes": [
     "No synthetic LME zinc OHLC is generated.",
+    "Free LME public Summary data is delayed; exact OHLC candlesticks require a full OHLC source.",
     "Investment book is paper-trading research only; no broker/order execution is included.",
     "Event Risk Overlay reduces confidence/raises caution rather than mechanically forcing price direction."
   ]

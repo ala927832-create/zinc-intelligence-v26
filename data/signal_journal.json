@@ -63,5 +63,18 @@
     "aggressive_probability": null,
     "data_confidence": 40.0,
     "event_overlay": "NONE"
+  },
+  {
+    "run_time": "2026-09-11T09:00:24.277210+00:00",
+    "run_date": "2026-09-11",
+    "model_version": "2.6.2",
+    "market_score": 50.528070181050374,
+    "market_regime": "NO_DATA",
+    "conservative_action": "NO_SIGNAL",
+    "aggressive_action": "NO_SIGNAL",
+    "conservative_probability": null,
+    "aggressive_probability": null,
+    "data_confidence": 23.0,
+    "event_overlay": "NONE"
   }
 ]
