@@ -1,6 +1,7 @@
 from zincintel.models import procurement_metrics, strategy_recommendation
 from zincintel.config import load_settings
 from zincintel.free_data import _extract_lme_public, _extract_smm_public
+from zincintel.free_mirrors import parse_grillo, parse_westmetall
 from zincintel.providers import LmeXmlAdapter, _normalize_candles
 import pandas as pd
 import xml.etree.ElementTree as ET
@@ -25,14 +26,36 @@ def provider_tests():
     <table><tr><th>Stocks</th><th>Amount</th></tr><tr><td>Opening Stock</td><td>105800</td></tr>
     <tr><td>Live warrants</td><td>83950</td></tr><tr><td>Cancelled warrants</td><td>19775</td></tr></table></body></html>'''
     pub_values, pub_date = _extract_lme_public(public_html)
-    assert pub_values["lme_cash_bid"] == 3685.0
-    assert pub_values["lme_cash_offer"] == 3685.5
-    assert pub_values["lme_3m_bid"] == 3619.0
-    assert pub_values["lme_3m_offer"] == 3621.0
+    assert pub_values["lme_cash"] == 3685.5
+    assert pub_values["lme_3m"] == 3621.0
     assert pub_values["lme_closing_3m"] == 3673.5
     assert pub_values["lme_inventory_t"] == 105800.0
     assert pub_values["cancelled_warrants_t"] == 19775.0
     assert pub_date == "2026-09-10"
+
+    grillo_html = '''<html><body>
+    Last modified (day-delayed): 10.09.2026
+    Cash desk Money: 3.685,00 $/t Letter: 3.685,50 $/t
+    3-months Money: 3.619,00 $/t Letter: 3.621,00 $/t
+    LME-Zinc Stock (10.09.2026) Opening stock 105.800 Live warrants 83.950 Cancelled warrants 21.850
+    </body></html>'''
+    gv, gd = parse_grillo(grillo_html)
+    assert gv["lme_cash"] == 3685.5
+    assert gv["lme_3m"] == 3621.0
+    assert gv["lme_inventory_t"] == 105800.0
+    assert gv["live_warrants_t"] == 83950.0
+    assert gv["cancelled_warrants_t"] == 21850.0
+    assert gd == "2026-09-10"
+
+    west_html = '''<table><thead><tr><th>Date</th><th>Zinc Cash Settlement</th><th>Zinc 3-month</th><th>Zinc stock</th></tr></thead>
+    <tbody><tr><td>09.09.2026</td><td>3.670,00</td><td>3.610,00</td><td>106.000</td></tr>
+    <tr><td>10.09.2026</td><td>3.685,50</td><td>3.621,00</td><td>105.800</td></tr></tbody></table>'''
+    wv, wd, wh = parse_westmetall(west_html)
+    assert wv["lme_cash"] == 3685.5
+    assert wv["lme_3m"] == 3621.0
+    assert wv["lme_inventory_t"] == 105800.0
+    assert wd == "2026-09-10"
+    assert len(wh) == 2
 
     smm_html = '''<table><tr><th>Price description</th><th>Avg.</th><th>Date</th></tr>
     <tr><td>SMM 0# Zinc Ingot premium (USD/tonne)</td><td>-13.82</td><td>Sep 10, 2026</td></tr>
