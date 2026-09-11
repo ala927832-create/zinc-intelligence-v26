@@ -1,5 +1,5 @@
 {
-  "model_version": "2.6.3",
+  "model_version": "2.7.0",
   "timezone_display": "Asia/Taipei",
   "timezone_exchange": "Europe/London",
   "lme_lot_tonnes": 25.0,
@@ -9,7 +9,9 @@
     "min_component_coverage_for_regime": 0.35,
     "stale_procurement_days_yellow": 3,
     "stale_procurement_days_orange": 8,
-    "stale_procurement_days_red": 15
+    "stale_procurement_days_red": 15,
+    "core_market_max_age_days": 5,
+    "tc_max_age_days": 14
   },
   "procurement": {
     "critical_days": 10,
@@ -67,20 +69,21 @@
   "privacy": {
     "public_dashboard_include_procurement_details": false
   },
-  "free_data_mode": {
-    "enabled": true,
-    "lme_public_summary": true,
-    "grillo_lme_fallback": true,
-    "westmetall_lme_fallback": true,
-    "smm_public_zinc": true,
-    "close_only_technical_fallback": true,
-    "never_synthesize_ohlc": true
+  "accuracy_first_policy": {
+    "official_delayed_beats_unverified_realtime": true,
+    "show_source_date_and_freshness": true,
+    "allow_last_known_good_within_freshness_window": true,
+    "block_pages_deploy_when_core_data_unusable": true,
+    "never_synthesize_market_data": true,
+    "keep_china_tc_bases_separate": true
   },
   "data_providers": {
-    "lme_prices": "licensed LME XML -> LME public Summary -> Grillo day-delayed -> Westmetall day-delayed reference -> generic/manual",
-    "lme_warehouse": "licensed LME XML WSM -> LME public Summary -> Grillo day-delayed warrants -> Westmetall stock reference -> generic/manual",
-    "tc": "TC API -> data/tc_manual.csv -> SMM direct public TC page -> generic/manual",
-    "premium": "SMM direct public premium page -> generic/manual",
-    "candles": "full OHLC URL/file only; otherwise Westmetall/LME exact 3M close reference history for trend; never synthetic candles"
+    "lme_prices": "LME XML official -> LME public official -> Grillo delayed reference -> Westmetall delayed reference -> verified carry-forward -> manual",
+    "lme_warehouse": "LME XML WSM official -> LME public/official report -> Grillo warrants -> Westmetall stock -> verified carry-forward -> manual",
+    "china_import_tc": "SMM Zinc Concentrate TC Index weekly (USD/dmt, CIF China main ports)",
+    "china_domestic_tc": "SMM Domestic Zinc Concentrate TC weekly/monthly; original basis retained",
+    "annual_benchmark_tc": "Verified annual industry benchmark reference; never substituted for spot TC",
+    "premium": "SMM public physical premium -> verified manual fallback",
+    "candles": "verified full OHLC only; otherwise exact delayed 3M close reference history for trend; never synthetic candles"
   }
 }

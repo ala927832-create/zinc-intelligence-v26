@@ -1,6 +1,8 @@
-name: Zinc Intelligence V2.6.3 Free-Mirror
+name: Zinc Intelligence V2.7 Official-First
 
 on:
+  pull_request:
+    branches: [main]
   workflow_dispatch:
     inputs:
       current_inventory_t:
@@ -12,7 +14,10 @@ on:
         required: false
         type: string
   schedule:
-    - cron: "30 20 * * 1-5"
+    # UTC: 02:30 = 10:30 Taiwan; 09:30 = 17:30 Taiwan.
+    # Accuracy-first: wait for delayed official/reference data rather than chase incomplete realtime values.
+    - cron: "30 2 * * 1-5"
+    - cron: "30 9 * * 1-5"
 
 permissions:
   contents: write
@@ -20,11 +25,34 @@ permissions:
   id-token: write
 
 concurrency:
-  group: zinc-intelligence-v263
+  group: zinc-intelligence-v27-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Compile
+        run: python -m compileall -q .
+
+      - name: Smoke test
+        run: python smoke_test.py
+
   build:
+    if: github.event_name != 'pull_request'
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,22 +69,19 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Smoke test
-        run: python smoke_test.py
-
       - name: Run intelligence pipeline
         env:
           CURRENT_INVENTORY_T: ${{ github.event.inputs.current_inventory_t || '' }}
           DEMAND_60D_T: ${{ github.event.inputs.demand_60d_t || '' }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-          # Free public fallbacks. No secrets required.
+          # Official/free public sources and accuracy-first reference fallbacks.
           LME_PUBLIC_ZINC_URL: "https://www.lme.com/en/metals/non-ferrous/lme-zinc"
           ENABLE_GRILLO_FALLBACK: "1"
           ENABLE_WESTMETALL_FALLBACK: "1"
           ENABLE_SMM_PUBLIC_ZINC: "1"
 
-          # Optional licensed sources. If absent, the pipeline falls through to free sources.
+          # Optional licensed official sources. They automatically outrank public/reference fallbacks.
           LME_XML_USERNAME: ${{ secrets.LME_XML_USERNAME }}
           LME_XML_PASSWORD: ${{ secrets.LME_XML_PASSWORD }}
           LME_XML_CLIENT_ID: ${{ secrets.LME_XML_CLIENT_ID }}
@@ -68,7 +93,7 @@ jobs:
           ZINC_1H_CANDLE_URL: ${{ secrets.ZINC_1H_CANDLE_URL }}
           ZINC_15M_CANDLE_URL: ${{ secrets.ZINC_15M_CANDLE_URL }}
 
-          # Backward-compatible fallbacks.
+          # Backward-compatible adapters.
           ZINC_MARKET_API_URL: ${{ secrets.ZINC_MARKET_API_URL }}
           ZINC_MARKET_API_KEY: ${{ secrets.ZINC_MARKET_API_KEY }}
           ZINC_DAILY_CSV_URL: ${{ secrets.ZINC_DAILY_CSV_URL }}
@@ -76,13 +101,16 @@ jobs:
           ZINC_15M_CSV_URL: ${{ secrets.ZINC_15M_CSV_URL }}
         run: python main.py
 
-      - name: Persist state and research journals
+      - name: Validate data before deploy
+        run: python validate_deploy.py
+
+      - name: Persist verified state and research journals
         run: |
           git config user.name "zinc-intelligence-bot"
           git config user.email "zinc-intelligence-bot@users.noreply.github.com"
           git add data public
           git diff --cached --quiet && echo "No state changes" && exit 0
-          git commit -m "chore: update zinc intelligence state"
+          git commit -m "chore: update verified zinc intelligence state"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
@@ -95,6 +123,7 @@ jobs:
           path: public
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     permissions:
       pages: write
