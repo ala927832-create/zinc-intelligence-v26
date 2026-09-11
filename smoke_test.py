@@ -1,10 +1,15 @@
-from zincintel.models import procurement_metrics, strategy_recommendation
+from datetime import datetime, timezone
+import xml.etree.ElementTree as ET
+
+import pandas as pd
+
+from zincintel.china_tc import _parse_smm_product
 from zincintel.config import load_settings
+from zincintel.data_governance import annotate_data_health, apply_last_known_good, core_data_gate
 from zincintel.free_data import _extract_lme_public, _extract_smm_public
 from zincintel.free_mirrors import parse_grillo, parse_westmetall
+from zincintel.models import procurement_metrics, strategy_recommendation
 from zincintel.providers import LmeXmlAdapter, _normalize_candles
-import pandas as pd
-import xml.etree.ElementTree as ET
 
 
 def provider_tests():
@@ -64,6 +69,12 @@ def provider_tests():
     assert smm_values["tc_usd_t"] == -124.5
     assert smm_values["physical_premium_usd_t"] == -13.82
 
+    product_html = '''<html><body><h1>SMM Zinc Concentrate TC Index (Weekly) Price, USD/dmt</h1><div>Avg.:-124.5</div><div>Sep 04, 2026</div><div>Update Time: 17:00 GMT+8</div></body></html>'''
+    tc_product = _parse_smm_product(product_html)
+    assert tc_product["value"] == -124.5
+    assert tc_product["unit"].lower() == "usd/dmt"
+    assert tc_product["as_of"] == "2026-09-04"
+
     raw = pd.DataFrame([{"timestamp": "2026-09-10T18:00:00Z", "Open": 3000, "High": 3050, "Low": 2980, "Close": 3020}])
     normalized = _normalize_candles(raw)
     assert not normalized.empty
@@ -71,6 +82,29 @@ def provider_tests():
 
     close_only = pd.DataFrame([{"timestamp": "2026-09-10T18:00:00Z", "Close": 3020}])
     assert _normalize_candles(close_only).empty
+
+
+def governance_tests():
+    today = datetime.now(timezone.utc).date().isoformat()
+    previous = {
+        "lme_cash": 3685.5,
+        "lme_3m": 3621.0,
+        "lme_inventory_t": 105800.0,
+        "live_warrants_t": 83950.0,
+        "cancelled_warrants_t": 21850.0,
+        "field_sources": {
+            key: {"provider": "lme_xml_test", "status": "OFFICIAL_NEXT_DAY", "as_of": today}
+            for key in ["lme_cash", "lme_3m", "lme_inventory_t", "live_warrants_t", "cancelled_warrants_t"]
+        },
+    }
+    current = {"field_sources": {}, "provider_status": {}}
+    carried = apply_last_known_good(current, previous)
+    assert carried["lme_cash"] == 3685.5
+    assert carried["field_sources"]["lme_cash"]["status"] == "CARRY_FORWARD"
+    annotated = annotate_data_health(carried)
+    gate = core_data_gate(annotated)
+    assert gate["status"] == "HEALTHY"
+    assert len(gate["usable_core"]) == 5
 
 
 def main():
@@ -87,6 +121,7 @@ def main():
     assert rec["paper_only"] is True
     assert rec["suggested_stop"] < rec["reference_price"]
     provider_tests()
+    governance_tests()
     print("smoke test passed")
 
 
