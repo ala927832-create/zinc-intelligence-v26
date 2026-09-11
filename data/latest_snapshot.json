@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-09-11T10:01:38.054520+00:00",
+  "run_time": "2026-09-11T10:09:47.459477+00:00",
   "run_date": "2026-09-11",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -126.1,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-09-11T10:01:38.056508+00:00",
+    "as_of": "2026-09-11T10:09:47.461934+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_cash": {
@@ -122,7 +122,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-09-11T10:01:38.056508+00:00",
+        "as_of": "2026-09-11T10:09:47.461934+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -328,32 +328,34 @@
     "primary_domestic_unit": "USD/tonne",
     "notes": [
       "Import and domestic TC are separate market series and are not arithmetically blended.",
+      "Domestic TC on the English SMM public table may be displayed as a USD/tonne conversion; the source unit is retained exactly as published.",
+      "China-native market commentary commonly quotes domestic TC in yuan/mt Zn metal content; do not silently convert between bases.",
       "SMM public values may be delayed weekly/monthly; accuracy and source date take priority over recency.",
       "Annual benchmark is a separately verified industry reference, not a spot TC."
     ]
   },
   "macro": {
     "Brent Oil": {
-      "value": 104.06999969482422,
-      "change_pct": -3.3076258008365778,
+      "value": 104.29000091552734,
+      "change_pct": -3.1032206848677246,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 2.803999900817871,
-      "change_pct": -1.0585818150063764,
+      "value": 2.808000087738037,
+      "change_pct": -0.9174319644764783,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 99.13700103759766,
-      "change_pct": 0.047436372433340424,
+      "value": 99.13899993896484,
+      "change_pct": 0.04945363092669908,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.538000106811523,
-      "change_pct": 1.0978830848672905,
+      "value": 6.545499801635742,
+      "change_pct": 1.2138517691934192,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -364,14 +366,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 31.614999771118164,
-      "change_pct": 0.47991058303251677,
+      "value": 31.61400032043457,
+      "change_pct": 0.47673409351658425,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 64.44499969482422,
-      "change_pct": 0.25045597870927416,
+      "value": 64.49500274658203,
+      "change_pct": 0.3282405820576484,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -406,16 +408,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99923219928885,
     "physical_market": 99.94997988929205,
-    "macro": 49.46194118403173,
+    "macro": 49.968871929892394,
     "technical": 84.04949142811165
   },
   "component_coverage": 0.8,
-  "market_score": 87.51625519317986,
+  "market_score": 87.57962153641245,
   "market_regime": "STRONG_BULL",
   "horizons": {
-    "5D": 85.08952055763211,
-    "20D": 85.95621149889917,
-    "60D": 86.6495642519128
+    "5D": 85.10853046060188,
+    "20D": 85.9910629876771,
+    "60D": 86.69708900933725
   },
   "market_quality": {
     "confidence": 93.0,
@@ -443,7 +445,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 0.029099887268518518
+    "max_age_days": 0.03480790945601852
   },
   "procurement": {
     "status": "OK",
