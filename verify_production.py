@@ -26,10 +26,74 @@ class _TextExtractor(HTMLParser):
             self.parts.append(text)
 
 
+class _ClassBlockExtractor(HTMLParser):
+    """Collect visible text for each element carrying a target CSS class.
+
+    Production verification must prove that value/provenance tokens are rendered
+    together in the intended card, not merely somewhere else on the page.
+    """
+
+    def __init__(self, target_class: str) -> None:
+        super().__init__()
+        self.target_class = target_class
+        self.depth = 0
+        self.current: list[str] | None = None
+        self.blocks: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self.current is not None:
+            self.depth += 1
+            return
+        classes = ""
+        for key, value in attrs:
+            if key == "class" and value:
+                classes = value
+                break
+        if self.target_class in classes.split():
+            self.current = []
+            self.depth = 1
+
+    def handle_data(self, data: str) -> None:
+        if self.current is not None:
+            text = data.strip()
+            if text:
+                self.current.append(text)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.current is None:
+            return
+        self.depth -= 1
+        if self.depth == 0:
+            self.blocks.append(" ".join(html_lib.unescape(x) for x in self.current))
+            self.current = None
+
+
 def _visible_text(raw_html: str) -> str:
     parser = _TextExtractor()
     parser.feed(raw_html)
     return " ".join(html_lib.unescape(x) for x in parser.parts)
+
+
+def _class_blocks(raw_html: str, class_name: str) -> list[str]:
+    parser = _ClassBlockExtractor(class_name)
+    parser.feed(raw_html)
+    return parser.blocks
+
+
+def _table_row_text(raw_html: str, label: str) -> str:
+    for block in re.findall(r"<tr\b[^>]*>(.*?)</tr>", raw_html, flags=re.IGNORECASE | re.DOTALL):
+        text = _visible_text(block)
+        if _norm(label) in _norm(text):
+            return text
+    return ""
+
+
+def _find_block(blocks: list[str], marker: str) -> str:
+    marker_norm = _norm(marker)
+    for block in blocks:
+        if marker_norm in _norm(block):
+            return block
+    return ""
 
 
 def _norm(text: object) -> str:
@@ -53,7 +117,7 @@ def _fetch(url: str, run_id: str, attempts: int = 12, sleep_seconds: int = 10) -
     for attempt in range(1, attempts + 1):
         target = _cache_bust(url, run_id)
         req = Request(target, headers={
-            "User-Agent": "ZincIntelligenceProductionVerifier/2.7.4",
+            "User-Agent": "ZincIntelligenceProductionVerifier/2.7.5",
             "Cache-Control": "no-cache",
             "Pragma": "no-cache",
         })
@@ -96,30 +160,62 @@ def main() -> int:
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
     _expect(text, "PAPER RESEARCH ONLY", failures)
 
-    # LME core values must be visible, not only present in JSON.
-    _expect(text, _fmt(market.get("lme_cash"), 1), failures, "LME Cash")
-    _expect(text, _fmt(market.get("lme_3m"), 1), failures, "LME 3M")
-    _expect(text, f"Cash−3M {_fmt(market.get('cash_3m'), 1)}", failures, "Cash-3M")
-    _expect(text, _fmt(market.get("lme_inventory_t"), 0), failures, "inventory")
-    _expect(text, f"Live {_fmt(market.get('live_warrants_t'), 0)}", failures, "live warrants")
-    _expect(text, f"Cancelled {_fmt(market.get('cancelled_warrants_t'), 0)}", failures, "cancelled warrants")
-    _expect(text, f"Ratio {_fmt(market.get('cancelled_ratio_pct'), 1)}%", failures, "cancelled ratio")
+    # Verify the core figures inside their actual KPI cards, so the deployment
+    # cannot pass merely because the same number appears elsewhere on the page.
+    market_cards = _class_blocks(raw_html, "mcard")
+    cash_card = _find_block(market_cards, "Cash−3M")
+    three_m_card = _find_block(market_cards, "Technical mode")
+    inventory_card = _find_block(market_cards, "Cancelled")
 
-    # Data-health provenance, date and freshness must be rendered for every core field.
-    for field in ["lme_cash", "lme_3m", "lme_inventory_t", "live_warrants_t", "cancelled_warrants_t"]:
+    _expect(cash_card, _fmt(market.get("lme_cash"), 1), failures, "LME Cash card value")
+    _expect(cash_card, f"Cash−3M {_fmt(market.get('cash_3m'), 1)}", failures, "Cash-3M card value")
+    _expect(three_m_card, _fmt(market.get("lme_3m"), 1), failures, "LME 3M card value")
+    _expect(inventory_card, _fmt(market.get("lme_inventory_t"), 0), failures, "inventory card value")
+    _expect(inventory_card, f"Live {_fmt(market.get('live_warrants_t'), 0)}", failures, "live warrants card value")
+    _expect(inventory_card, f"Cancelled {_fmt(market.get('cancelled_warrants_t'), 0)}", failures, "cancelled warrants card value")
+    _expect(inventory_card, f"Ratio {_fmt(market.get('cancelled_ratio_pct'), 1)}%", failures, "cancelled ratio card value")
+
+    # The headline cards must retain their visible date/age/source-grade context.
+    for card, field, label in [
+        (cash_card, "lme_cash", "LME Cash card"),
+        (three_m_card, "lme_3m", "LME 3M card"),
+        (inventory_card, "lme_inventory_t", "Inventory card"),
+    ]:
         h = health.get(field, {})
-        _expect(text, str(h.get("as_of") or "—"), failures, f"{field} as-of")
-        _expect(text, str(h.get("expected_update") or "—"), failures, f"{field} expected update")
-        _expect(text, str(h.get("source_grade") or "—"), failures, f"{field} source grade")
-        _expect(text, str(h.get("source") or "—"), failures, f"{field} provider")
-        _expect(text, str(h.get("freshness") or "—"), failures, f"{field} freshness")
+        _expect(card, str(h.get("as_of") or "—"), failures, f"{label} as-of")
+        _expect(card, str(h.get("source_grade") or "—"), failures, f"{label} source grade")
         age = h.get("age_days")
         if age is not None:
-            _expect(text, f"{float(age):.1f} d", failures, f"{field} age")
+            _expect(card, f"{float(age):.1f} d", failures, f"{label} age")
 
-    # China TC series: value or explicit missing marker, unit, provenance, date,
-    # cadence and freshness age must appear.  AVAILABLE/VERIFIED series are
-    # required to carry age_days so a current-looking value cannot lose its date context.
+    # Data-health provenance must be correct in each field's own table row.
+    # This prevents a source/date token belonging to one series from satisfying
+    # another series' verification by accident.
+    health_labels = {
+        "lme_cash": "LME Cash",
+        "lme_3m": "LME 3M",
+        "lme_inventory_t": "Opening / Total Stock",
+        "live_warrants_t": "Live Warrants",
+        "cancelled_warrants_t": "Cancelled Warrants",
+    }
+    for field, row_label in health_labels.items():
+        h = health.get(field, {})
+        row_text = _table_row_text(raw_html, row_label)
+        if not row_text:
+            failures.append(f"missing rendered data-health row: {row_label}")
+            continue
+        _expect(row_text, str(h.get("as_of") or "—"), failures, f"{field} as-of")
+        _expect(row_text, str(h.get("expected_update") or "—"), failures, f"{field} expected update")
+        _expect(row_text, str(h.get("source_grade") or "—"), failures, f"{field} source grade")
+        _expect(row_text, str(h.get("source") or "—"), failures, f"{field} provider")
+        _expect(row_text, str(h.get("freshness") or "—"), failures, f"{field} freshness")
+        age = h.get("age_days")
+        if age is not None:
+            _expect(row_text, f"{float(age):.1f} d", failures, f"{field} age")
+
+    # China TC series are verified card-by-card, preserving their different
+    # units/bases and preventing provenance from one TC series satisfying another.
+    tc_cards = _class_blocks(raw_html, "tc-card")
     tc_specs = [
         ("import_weekly", "China Import TC · Weekly"),
         ("domestic_weekly", "China Domestic TC · Weekly"),
@@ -128,19 +224,22 @@ def main() -> int:
     ]
     for key, title in tc_specs:
         item = tc.get(key, {})
-        _expect(text, title, failures)
+        card = _find_block(tc_cards, title)
+        if not card:
+            failures.append(f"missing rendered TC card: {title}")
+            continue
         value = item.get("value")
-        _expect(text, _fmt(value, 2) if value is not None else "—", failures, f"{key} value")
-        _expect(text, str(item.get("unit") or "—"), failures, f"{key} unit")
-        _expect(text, f"As of {item.get('as_of') or '—'}", failures, f"{key} as-of")
-        _expect(text, str(item.get("expected_update") or "—"), failures, f"{key} cadence")
-        _expect(text, str(item.get("source_grade") or "—"), failures, f"{key} source grade")
-        _expect(text, str(item.get("source") or "—"), failures, f"{key} source")
+        _expect(card, _fmt(value, 2) if value is not None else "—", failures, f"{key} value")
+        _expect(card, str(item.get("unit") or "—"), failures, f"{key} unit")
+        _expect(card, f"As of {item.get('as_of') or '—'}", failures, f"{key} as-of")
+        _expect(card, str(item.get("expected_update") or "—"), failures, f"{key} cadence")
+        _expect(card, str(item.get("source_grade") or "—"), failures, f"{key} source grade")
+        _expect(card, str(item.get("source") or "—"), failures, f"{key} source")
         status = str(item.get("status") or "—")
-        _expect(text, status, failures, f"{key} status")
+        _expect(card, status, failures, f"{key} status")
         age = item.get("age_days")
         if age is not None:
-            _expect(text, f"{float(age):.1f} d", failures, f"{key} age")
+            _expect(card, f"{float(age):.1f} d", failures, f"{key} age")
         elif status in {"AVAILABLE", "VERIFIED_REFERENCE"}:
             failures.append(f"snapshot governance failure: {key} has status {status} but no age_days")
 
