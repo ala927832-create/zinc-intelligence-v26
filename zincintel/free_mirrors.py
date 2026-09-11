@@ -26,7 +26,7 @@ def _headers() -> dict[str, str]:
 
 
 def _eu_num(value: Any) -> float | None:
-    """Parse 3.631,00 -> 3631.00 and 105.800 -> 105800."""
+    """Parse both EN and EU formats: 3,685.50 / 3.685,50 / 105,800 / 105.800."""
     if value is None:
         return None
     s = str(value).strip().replace("\xa0", "").replace(" ", "")
@@ -39,7 +39,6 @@ def _eu_num(value: Any) -> float | None:
         else:
             s = s.replace(",", "")
     elif "," in s:
-        # European decimal comma unless it is clearly thousands grouping.
         if re.fullmatch(r"-?\d{1,3}(,\d{3})+", s):
             s = s.replace(",", "")
         else:
@@ -47,6 +46,10 @@ def _eu_num(value: Any) -> float | None:
     elif re.fullmatch(r"-?\d{1,3}(\.\d{3})+", s):
         s = s.replace(".", "")
     return safe_float(s)
+
+
+def _norm(value: Any) -> str:
+    return "".join(ch.lower() for ch in str(value or "") if ch.isalnum())
 
 
 def _date_iso(text: str | None) -> str | None:
@@ -143,40 +146,85 @@ def fetch_grillo() -> tuple[dict, str | None, str, str | None]:
 
 
 def parse_westmetall(html_text: str) -> tuple[dict, str | None, pd.DataFrame]:
-    try:
-        tables = pd.read_html(io.StringIO(html_text))
-    except Exception:
+    """Parse Westmetall without letting pandas coerce stock thousands separators.
+
+    Westmetall may render English numbers (115,675) or German numbers (115.675).
+    Reading raw cell text preserves the distinction before normalization.
+    """
+    soup = BeautifulSoup(html_text, "html.parser")
+    records: list[dict[str, Any]] = []
+
+    for table in soup.find_all("table"):
+        indices: dict[str, int] | None = None
+        for tr in table.find_all("tr"):
+            cells = [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
+            if not cells:
+                continue
+            norms = [_norm(c) for c in cells]
+            if any(x in {"date", "datum"} for x in norms) and any("cashsettlement" in x for x in norms):
+                def idx(predicate):
+                    return next((i for i, x in enumerate(norms) if predicate(x)), None)
+                date_i = idx(lambda x: x in {"date", "datum"})
+                cash_i = idx(lambda x: "cashsettlement" in x)
+                m3_i = idx(lambda x: "3month" in x or "3months" in x or "3monate" in x)
+                stock_i = idx(lambda x: "zincstock" in x or "zinkbest" in x)
+                if date_i is not None and cash_i is not None and m3_i is not None:
+                    indices = {"date": date_i, "cash": cash_i, "m3": m3_i}
+                    if stock_i is not None:
+                        indices["stock"] = stock_i
+                continue
+            if not indices:
+                continue
+            if max(indices.values()) >= len(cells):
+                continue
+            ts = pd.to_datetime(cells[indices["date"]], errors="coerce", dayfirst=True, utc=True)
+            cash = _eu_num(cells[indices["cash"]])
+            m3 = _eu_num(cells[indices["m3"]])
+            stock = _eu_num(cells[indices["stock"]]) if "stock" in indices else None
+            if pd.isna(ts) or cash is None or m3 is None:
+                continue
+            records.append({"timestamp": ts, "Cash": cash, "Close": m3, "Stock": stock})
+
+    # Fallback to pandas for unusual but still tabular HTML. This is secondary only.
+    if not records:
+        try:
+            tables = pd.read_html(io.StringIO(html_text))
+        except Exception:
+            tables = []
+        for df in tables:
+            if df.empty:
+                continue
+            norm = {_norm(c): c for c in df.columns}
+            date_col = next((c for k, c in norm.items() if k in {"date", "datum"}), None)
+            cash_col = next((c for k, c in norm.items() if "cashsettlement" in k), None)
+            m3_col = next((c for k, c in norm.items() if "3month" in k or "3months" in k or "3monate" in k), None)
+            stock_col = next((c for k, c in norm.items() if "zincstock" in k or "zinkbest" in k), None)
+            if not (date_col and cash_col and m3_col):
+                continue
+            for _, row in df.iterrows():
+                ts = pd.to_datetime(row.get(date_col), errors="coerce", dayfirst=True, utc=True)
+                cash = _eu_num(row.get(cash_col))
+                m3 = _eu_num(row.get(m3_col))
+                stock = _eu_num(row.get(stock_col)) if stock_col else None
+                if pd.isna(ts) or cash is None or m3 is None:
+                    continue
+                records.append({"timestamp": ts, "Cash": cash, "Close": m3, "Stock": stock})
+
+    if not records:
         return {}, None, pd.DataFrame()
-    for df in tables:
-        if df.empty:
-            continue
-        norm = {str(c).lower().replace(" ", "").replace("-", ""): c for c in df.columns}
-        date_col = next((c for k, c in norm.items() if k == "date"), None)
-        cash_col = next((c for k, c in norm.items() if "zinc" in k and "cash" in k and "settlement" in k), None)
-        m3_col = next((c for k, c in norm.items() if "zinc" in k and ("3month" in k or "3months" in k)), None)
-        stock_col = next((c for k, c in norm.items() if "zincstock" in k), None)
-        if not (date_col and cash_col and m3_col):
-            continue
-        work = df[[x for x in [date_col, cash_col, m3_col, stock_col] if x is not None]].copy()
-        work["timestamp"] = pd.to_datetime(work[date_col], errors="coerce", utc=True)
-        work["Cash"] = work[cash_col].map(_eu_num)
-        work["Close"] = work[m3_col].map(_eu_num)
-        work["Stock"] = work[stock_col].map(_eu_num) if stock_col else None
-        work = work.dropna(subset=["timestamp", "Cash", "Close"]).sort_values("timestamp")
-        if work.empty:
-            continue
-        latest = work.iloc[-1]
-        values = {
-            "lme_cash": float(latest["Cash"]),
-            "lme_cash_offer": float(latest["Cash"]),
-            "lme_settlement": float(latest["Cash"]),
-            "lme_3m": float(latest["Close"]),
-            "lme_3m_offer": float(latest["Close"]),
-            "lme_inventory_t": float(latest["Stock"]) if pd.notna(latest.get("Stock")) else None,
-        }
-        hist = work[["timestamp", "Close"]].drop_duplicates("timestamp").set_index("timestamp")
-        return values, latest["timestamp"].date().isoformat(), hist
-    return {}, None, pd.DataFrame()
+
+    work = pd.DataFrame(records).sort_values("timestamp").drop_duplicates("timestamp", keep="last")
+    latest = work.iloc[-1]
+    values = {
+        "lme_cash": float(latest["Cash"]),
+        "lme_cash_offer": float(latest["Cash"]),
+        "lme_settlement": float(latest["Cash"]),
+        "lme_3m": float(latest["Close"]),
+        "lme_3m_offer": float(latest["Close"]),
+        "lme_inventory_t": float(latest["Stock"]) if pd.notna(latest.get("Stock")) else None,
+    }
+    hist = work[["timestamp", "Close"]].set_index("timestamp")
+    return values, latest["timestamp"].date().isoformat(), hist
 
 
 def fetch_westmetall() -> tuple[dict, str | None, str, str | None, pd.DataFrame]:
@@ -204,7 +252,6 @@ def _parse_smm_single(html_text: str) -> tuple[float | None, str | None]:
     if m:
         avg = safe_float(m.group(1))
     if avg is None:
-        # Product pages often print the primary USD value before 'USD/tonne'.
         m = re.search(r"(-?\d+(?:\.\d+)?)\s+USD/(?:dmt|tonne)", text, flags=re.I)
         if m:
             avg = safe_float(m.group(1))
@@ -223,12 +270,6 @@ def fetch_smm_direct(url: str, label: str) -> tuple[float | None, str | None, st
 
 
 def enrich_market_with_free_mirrors(market: dict) -> tuple[dict, pd.DataFrame, str]:
-    """Fill missing core fields after official/public LME attempts fail.
-
-    Priority inside this layer:
-    Grillo (explicit Cash/3M bid-offer + warrants) -> Westmetall (Cash settlement/3M/stock/history).
-    SMM direct product pages fill TC/premium only.
-    """
     market.setdefault("provider_status", {})
     mirror_history = pd.DataFrame()
     history_source = "missing"
