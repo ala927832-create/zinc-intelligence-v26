@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-09-11T07:34:37.490052+00:00",
+  "run_time": "2026-09-11T07:59:19.346167+00:00",
   "run_date": "2026-09-11",
   "model_version": "2.6.0",
   "market": {
@@ -13,7 +13,7 @@
     "china_demand_yoy_pct": null,
     "global_balance_kt": null,
     "smelter_utilization_pct": null,
-    "as_of": "2026-09-11T07:34:37.490862+00:00",
+    "as_of": "2026-09-11T07:59:19.346429+00:00",
     "source": "manual",
     "cash_3m": null,
     "cancelled_ratio_pct": null,
@@ -21,53 +21,46 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": null,
-      "change_pct": null,
+      "value": 105.94000244140625,
+      "change_pct": -1.5701894036404873,
       "ticker": "BZ=F",
-      "status": "MISSING",
-      "error": "yfinance not installed"
+      "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": null,
-      "change_pct": null,
+      "value": 2.812999963760376,
+      "change_pct": -0.7410072705044568,
       "ticker": "NG=F",
-      "status": "MISSING",
-      "error": "yfinance not installed"
+      "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": null,
-      "change_pct": null,
+      "value": 99.09600067138672,
+      "change_pct": 0.0060594749399456305,
       "ticker": "DX-Y.NYB",
-      "status": "MISSING",
-      "error": "yfinance not installed"
+      "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": null,
-      "change_pct": null,
+      "value": 6.554500102996826,
+      "change_pct": 1.3530245131313512,
       "ticker": "HG=F",
-      "status": "MISSING",
-      "error": "yfinance not installed"
+      "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Aluminium Proxy": {
-      "value": null,
-      "change_pct": null,
+      "value": 3463.0,
+      "change_pct": 0.3404563563926155,
       "ticker": "ALI=F",
-      "status": "MISSING",
-      "error": "yfinance not installed"
+      "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": null,
-      "change_pct": null,
+      "value": 31.618999481201172,
+      "change_pct": 0.49262260309921313,
       "ticker": "TWD=X",
-      "status": "MISSING",
-      "error": "yfinance not installed"
+      "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": null,
-      "change_pct": null,
+      "value": 64.46499633789062,
+      "change_pct": 0.281562699090121,
       "ticker": "SI=F",
-      "status": "MISSING",
-      "error": "yfinance not installed"
+      "status": "LIVE_OR_DELAYED_PUBLIC"
     }
   },
   "event_overlay": {
@@ -86,19 +79,19 @@
     "supply_demand": null,
     "smelter_economics": null,
     "physical_market": null,
-    "macro": null,
+    "macro": 52.01767771490996,
     "technical": null
   },
-  "component_coverage": 0.0,
-  "market_score": null,
+  "component_coverage": 0.1,
+  "market_score": 52.01767771490996,
   "market_regime": "NO_DATA",
   "horizons": {
-    "5D": null,
-    "20D": null,
-    "60D": null
+    "5D": 50.60530331447299,
+    "20D": 51.10972274320048,
+    "60D": 51.51325828618247
   },
   "market_quality": {
-    "confidence": 35.0,
+    "confidence": 40.0,
     "status": "BLOCK",
     "missing_fields": [
       "lme_cash",
@@ -111,20 +104,30 @@
     "candle_status": "MISSING"
   },
   "procurement_state": {
-    "current_inventory_t": null,
-    "demand_60d_t": null,
-    "inventory_updated_at": null,
-    "demand_updated_at": null,
-    "inventory_source": null,
-    "demand_source": null
+    "current_inventory_t": 300.0,
+    "demand_60d_t": 168.0,
+    "inventory_updated_at": "2026-09-11T07:59:19.346227+00:00",
+    "demand_updated_at": "2026-09-11T07:59:19.346227+00:00",
+    "inventory_source": "workflow/manual input",
+    "demand_source": "workflow/manual input"
   },
   "procurement_quality": {
-    "confidence": 0,
-    "status": "INPUT_REQUIRED",
-    "max_age_days": null
+    "confidence": 95,
+    "status": "CURRENT",
+    "max_age_days": 1.147e-05
   },
   "procurement": {
-    "status": "INPUT_REQUIRED"
+    "status": "OK",
+    "daily_demand_t": 2.8,
+    "coverage_days": 107.14285714285715,
+    "inventory_band": "EXCESS",
+    "uncovered_demand_t": 0,
+    "action": "WAIT",
+    "production_safety_override": false,
+    "target_cover_ratio": 0.25,
+    "suggested_cover_t": 0.0,
+    "equivalent_lme_lots": 0.0,
+    "safety_stock_days": 15
   },
   "privacy": {
     "public_dashboard_include_private": false

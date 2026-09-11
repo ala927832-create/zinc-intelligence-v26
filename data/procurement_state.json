@@ -1,8 +1,8 @@
 {
-  "current_inventory_t": null,
-  "demand_60d_t": null,
-  "inventory_updated_at": null,
-  "demand_updated_at": null,
-  "inventory_source": null,
-  "demand_source": null
+  "current_inventory_t": 300.0,
+  "demand_60d_t": 168.0,
+  "inventory_updated_at": "2026-09-11T07:59:19.346227+00:00",
+  "demand_updated_at": "2026-09-11T07:59:19.346227+00:00",
+  "inventory_source": "workflow/manual input",
+  "demand_source": "workflow/manual input"
 }
