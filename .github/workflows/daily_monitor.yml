@@ -136,8 +136,26 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  verify-production:
+    if: github.event_name != 'pull_request'
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest verified main state
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Verify production Pages against latest snapshot
+        env:
+          PRODUCTION_URL: ${{ needs.deploy.outputs.page_url }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: python verify_production.py

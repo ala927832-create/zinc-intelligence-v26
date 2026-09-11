@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 import pandas as pd
 
-from zincintel.china_tc import _parse_smm_product
+from zincintel.china_tc import _parse_smm_product, _parse_smm_zinc_table
 from zincintel.config import load_settings
 from zincintel.data_governance import annotate_data_health, apply_last_known_good, core_data_gate
 from zincintel.free_data import _extract_lme_public, _extract_smm_public
@@ -74,6 +74,17 @@ def provider_tests():
     assert tc_product["value"] == -124.5
     assert tc_product["unit"].lower() == "usd/dmt"
     assert tc_product["as_of"] == "2026-09-04"
+
+    zinc_table_html = '''<table><tr><th>Price description</th><th>Price Range</th><th>Avg.</th><th>Change</th><th>Date</th></tr>
+    <tr><td>Domestic Zinc Concentrate TC (Monthly) (USD/tonne)</td><td>-328.44--262.75</td><td>-295.59</td><td>-184.48</td><td>Sep 01, 2026</td></tr>
+    <tr><td>Domestic Zinc Concentrate TC (Weekly) (USD/tonne)</td><td>-315.3--236.48</td><td>-275.89</td><td>-32.88</td><td>Sep 04, 2026</td></tr>
+    <tr><td>SMM Zinc Concentrate TC Index (Weekly) (USD/dmt)</td><td>-124.5--124.5</td><td>-124.5</td><td>-1.25</td><td>Sep 04, 2026</td></tr></table>'''
+    zinc_table = _parse_smm_zinc_table(zinc_table_html)
+    assert zinc_table["domestic_weekly"]["value"] == -275.89
+    assert zinc_table["domestic_weekly"]["unit"].lower() == "usd/tonne"
+    assert zinc_table["domestic_weekly"]["as_of"] == "2026-09-04"
+    assert zinc_table["domestic_monthly"]["value"] == -295.59
+    assert zinc_table["import_weekly"]["value"] == -124.5
 
     raw = pd.DataFrame([{"timestamp": "2026-09-10T18:00:00Z", "Open": 3000, "High": 3050, "Low": 2980, "Close": 3020}])
     normalized = _normalize_candles(raw)
