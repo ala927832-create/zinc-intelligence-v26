@@ -1,5 +1,28 @@
 from zincintel.models import procurement_metrics, strategy_recommendation
 from zincintel.config import load_settings
+from zincintel.providers import LmeXmlAdapter, _normalize_candles
+import pandas as pd
+import xml.etree.ElementTree as ET
+
+
+def provider_tests():
+    ofs = ET.fromstring('''<lme status="0"><date>20260910</date><officials status="0"><row_official status="0" code="ZS" type="M"><currency>USD</currency><settlement>3020.0</settlement><of_item prompt_date="CASH"><bid>3019.0</bid><ask>3020.0</ask></of_item><of_item prompt_date="3M"><bid>2989.0</bid><ask>2991.0</ask></of_item></row_official></officials></lme>''')
+    values, _ = LmeXmlAdapter.parse_ofs(ofs)
+    assert values["lme_cash"] == 3020.0
+    assert values["lme_3m"] == 2991.0
+
+    wsm = ET.fromstring('''<lme status="0"><date>20260910</date><wsmreport status="0"><identification report_code="WSM" report_date="20260909" report_time="0900" report_version="100"/><datawsm><row_wsm code="ZS"><location/><grade_code/><stock_status>I</stock_status><stock_qty>105800</stock_qty><expiry/></row_wsm><row_wsm code="ZS"><location/><grade_code/><stock_status>e</stock_status><stock_qty>83950</stock_qty><expiry/></row_wsm><row_wsm code="ZS"><location/><grade_code/><stock_status>f</stock_status><stock_qty>21850</stock_qty><expiry/></row_wsm></datawsm></wsmreport></lme>''')
+    values2, _ = LmeXmlAdapter.parse_wsm(wsm)
+    assert values2["lme_inventory_t"] == 105800.0
+    assert values2["cancelled_warrants_t"] == 21850.0
+
+    raw = pd.DataFrame([{"timestamp": "2026-09-10T18:00:00Z", "Open": 3000, "High": 3050, "Low": 2980, "Close": 3020}])
+    normalized = _normalize_candles(raw)
+    assert not normalized.empty
+    assert float(normalized.iloc[-1]["Close"]) == 3020.0
+
+    close_only = pd.DataFrame([{"timestamp": "2026-09-10T18:00:00Z", "Close": 3020}])
+    assert _normalize_candles(close_only).empty
 
 
 def main():
@@ -15,6 +38,7 @@ def main():
     )
     assert rec["paper_only"] is True
     assert rec["suggested_stop"] < rec["reference_price"]
+    provider_tests()
     print("smoke test passed")
 
 

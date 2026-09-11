@@ -1,4 +1,4 @@
-name: Zinc Intelligence V2.6
+name: Zinc Intelligence V2.6.1
 
 on:
   workflow_dispatch:
@@ -12,7 +12,6 @@ on:
         required: false
         type: string
   schedule:
-    # GitHub cron is UTC. 20:30 UTC runs after the LMEselect trading session on normal weekdays.
     - cron: "30 20 * * 1-5"
 
 permissions:
@@ -21,7 +20,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: zinc-intelligence-v26
+  group: zinc-intelligence-v261
   cancel-in-progress: false
 
 jobs:
@@ -50,6 +49,20 @@ jobs:
           CURRENT_INVENTORY_T: ${{ github.event.inputs.current_inventory_t || '' }}
           DEMAND_60D_T: ${{ github.event.inputs.demand_60d_t || '' }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+          # V2.6.1 official/licensed adapters
+          LME_XML_USERNAME: ${{ secrets.LME_XML_USERNAME }}
+          LME_XML_PASSWORD: ${{ secrets.LME_XML_PASSWORD }}
+          LME_XML_CLIENT_ID: ${{ secrets.LME_XML_CLIENT_ID }}
+          LME_WAREHOUSE_REPORT_URL: ${{ secrets.LME_WAREHOUSE_REPORT_URL }}
+          TC_API_URL: ${{ secrets.TC_API_URL }}
+          TC_API_KEY: ${{ secrets.TC_API_KEY }}
+          CANDLE_API_KEY: ${{ secrets.CANDLE_API_KEY }}
+          ZINC_DAILY_CANDLE_URL: ${{ secrets.ZINC_DAILY_CANDLE_URL }}
+          ZINC_1H_CANDLE_URL: ${{ secrets.ZINC_1H_CANDLE_URL }}
+          ZINC_15M_CANDLE_URL: ${{ secrets.ZINC_15M_CANDLE_URL }}
+
+          # Backward-compatible V2.6 sources/fallbacks
           ZINC_MARKET_API_URL: ${{ secrets.ZINC_MARKET_API_URL }}
           ZINC_MARKET_API_KEY: ${{ secrets.ZINC_MARKET_API_KEY }}
           ZINC_DAILY_CSV_URL: ${{ secrets.ZINC_DAILY_CSV_URL }}
@@ -68,10 +81,10 @@ jobs:
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
@@ -87,4 +100,4 @@ jobs:
     steps:
       - name: Deploy GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
