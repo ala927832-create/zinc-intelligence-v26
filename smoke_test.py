@@ -104,6 +104,8 @@ def provider_tests():
 
     close_only = pd.DataFrame([{"timestamp": "2026-09-10T18:00:00Z", "Close": 3020}])
     assert _normalize_candles(close_only).empty
+    impossible = pd.DataFrame([{"timestamp": "2026-09-10", "Open": 3000, "High": 2990, "Low": 2980, "Close": 3020}])
+    assert _normalize_candles(impossible).empty
 
 
 def governance_tests():
