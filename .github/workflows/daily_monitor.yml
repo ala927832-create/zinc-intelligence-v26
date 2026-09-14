@@ -64,6 +64,9 @@ jobs:
       - name: Public data isolation test
         run: python test_public_isolation.py
 
+      - name: Private archive and local chart test
+        run: python test_private_research.py
+
   build:
     if: github.event_name != 'pull_request'
     needs: test
