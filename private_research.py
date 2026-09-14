@@ -12,6 +12,8 @@ import os
 from pathlib import Path
 import tempfile
 
+from private_notes import add_note, read_notes
+
 ROOT = Path(__file__).resolve().parent
 FIELDS = ("date", "open", "high", "low", "close", "market", "contract", "currency", "source")
 IDENTITY = {"market": "LME", "contract": "ZINC_3M", "currency": "USD"}
@@ -97,6 +99,8 @@ def page() -> str:
 <title>Private zinc 3M research</title><style>body{font:15px system-ui;background:#101a28;color:#e8eef8;margin:22px}header{display:flex;gap:18px;flex-wrap:wrap;align-items:center}button,select{background:#1d3249;color:#fff;border:1px solid #53708a;padding:7px;border-radius:5px}svg{width:100%;height:560px;background:#152437;touch-action:none}#tooltip{min-height:2em}small{color:#a9bfd2}</style>
 <header><h2>LME Zinc 3M · 完整日線</h2><label>視窗 <select id="window"><option value="30">30 筆</option><option value="60" selected>60 筆</option><option value="120">120 筆</option><option value="all">全部</option></select></label><label><input id="ma5" type="checkbox" checked> MA5</label><label><input id="ma20" type="checkbox" checked> MA20</label><label><input id="ma50" type="checkbox" checked> MA50</label><button id="older">較早</button><button id="newer">較新</button></header>
 <p id="meta"></p><svg id="chart" viewBox="0 0 1000 560" role="img" aria-label="歷史 OHLC K 線與移動平均線"></svg><p id="tooltip"></p><small>移動平均為前 N 個完整交易日的收盤價算術平均，不是工廠實際加權採購均價；不足 N 筆不顯示。此頁僅供歷史資料觀察，不產生交易建議。</small>
+<section><h3>圖表下的私人研究紀錄</h3><p>線上圖表觀察與本機 OHLC 主檔分開保存；「已核對」由你自行判斷，不代表系統已驗證資料來源。</p>
+<form id="noteform"><label>網站／圖表連結 <input name="chart_url" type="url" required placeholder="https://..."></label><label>實際市場 <input name="market" required placeholder="依來源顯示"></label><label>合約 <input name="contract" required placeholder="依來源顯示"></label><label>觀察日期 <input name="observed_on" type="date" required></label><label>圖表最後交易日 <input name="last_trading_day" type="date" required></label><label>均線 <select name="moving_averages"><option>無</option><option>MA5</option><option>MA20</option><option>MA50</option><option>MA5/MA20</option><option>MA20/MA50</option><option>MA5/MA20/MA50</option></select></label><label>核對狀態 <select name="verification"><option>待核對</option><option>已核對</option></select></label><label>觀察筆記 <textarea name="observations" maxlength="2000"></textarea></label><label>附件圖片檔名（選填） <input name="attachment" placeholder="chart.png"></label><label><input name="attachment_allowed" type="checkbox"> 已確認來源允許我私人保存該圖片；圖片由我手動存入私人 attachments 資料夾</label><button type="submit">儲存紀錄</button></form><p id="note-status"></p><div id="notes"></div></section>
 <script>
 let data=[], end=0; const $=id=>document.getElementById(id), ns='http://www.w3.org/2000/svg';
 function el(name,attrs){let n=document.createElementNS(ns,name);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);$('chart').append(n);return n}
@@ -114,10 +118,14 @@ function draw(){const svg=$('chart');svg.replaceChildren();if(!data.length){$('m
 for(let id of ['window','ma5','ma20','ma50'])$(id).addEventListener('change',draw);
 $('older').onclick=()=>{end=Math.max(1,end-+($('window').value==='all'?60:$('window').value));draw()};$('newer').onclick=()=>{end=Math.min(data.length,end+($('window').value==='all'?60:$('window').value));draw()};
 fetch('/api/ohlc',{cache:'no-store'}).then(r=>r.json()).then(rows=>{data=rows;end=data.length;draw()}).catch(()=>{$('meta').textContent='無法讀取本機私人日線'});
+async function refreshNotes(){let rows=await fetch('/api/notes',{cache:'no-store'}).then(r=>r.json());let target=$('notes');target.replaceChildren();for(let d of rows.slice().reverse()){let block=document.createElement('p');block.textContent=`${d.observed_on}｜${d.market} ${d.contract}｜圖表截至 ${d.last_trading_day}｜${d.moving_averages}｜${d.verification}｜${d.observations} ${d.attachment?'｜附件：'+d.attachment:''}｜`;let link=document.createElement('a');link.href=d.chart_url;link.textContent='原圖連結';link.rel='noopener noreferrer';link.target='_blank';block.append(link);target.append(block)}}
+$('noteform').onsubmit=async e=>{e.preventDefault();let f=e.target,body=Object.fromEntries(new FormData(f).entries());body.attachment_allowed=f.elements.attachment_allowed.checked;let response=await fetch('/api/notes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});$('note-status').textContent=response.ok?'已存入私人研究紀錄':'儲存失敗：請檢查網址、日期、欄位及圖片權限';if(response.ok){f.reset();await refreshNotes()}};
+$('noteform').elements.observed_on.value=new Date().toLocaleDateString('en-CA');refreshNotes().catch(()=>{$('note-status').textContent='私人紀錄讀取失敗'});
 </script></html>"""
 
 
 def serve(path: Path, port: int) -> None:
+    notes_path = path.parent / "research_notes.jsonl"
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             host = self.headers.get("Host", "")
@@ -131,6 +139,12 @@ def serve(path: Path, port: int) -> None:
                 except (OSError, ValueError):
                     self.send_error(500, "Private OHLC archive invalid"); return
                 payload = json.dumps(rows, ensure_ascii=False).encode("utf-8"); kind = "application/json; charset=utf-8"
+            elif self.path == "/api/notes":
+                try:
+                    payload = json.dumps(read_notes(notes_path), ensure_ascii=False).encode("utf-8")
+                except (OSError, ValueError):
+                    self.send_error(500, "Private notes invalid"); return
+                kind = "application/json; charset=utf-8"
             else:
                 self.send_error(404); return
             self.send_response(200)
@@ -138,6 +152,26 @@ def serve(path: Path, port: int) -> None:
             self.send_header("Cache-Control", "no-store")
             self.send_header("Content-Security-Policy", "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self'")
             self.send_header("X-Content-Type-Options", "nosniff")
+            self.end_headers(); self.wfile.write(payload)
+
+        def do_POST(self):
+            host = self.headers.get("Host", "")
+            origin = self.headers.get("Origin", "")
+            if self.path != "/api/notes" or host not in {f"127.0.0.1:{server.server_port}", f"localhost:{server.server_port}"} or origin not in {f"http://127.0.0.1:{server.server_port}", f"http://localhost:{server.server_port}"}:
+                self.send_error(403); return
+            if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
+                self.send_error(415); return
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                if not 0 < length <= 6000:
+                    raise ValueError("Invalid size")
+                saved = add_note(notes_path, json.loads(self.rfile.read(length)))
+            except (ValueError, OSError, TypeError):
+                self.send_error(400, "Invalid research note"); return
+            payload = json.dumps(saved, ensure_ascii=False).encode("utf-8")
+            self.send_response(201)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Cache-Control", "no-store")
             self.end_headers(); self.wfile.write(payload)
 
     with ThreadingHTTPServer(("127.0.0.1", port), Handler) as server:

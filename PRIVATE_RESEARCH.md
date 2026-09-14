@@ -37,3 +37,15 @@ it requires a separate authenticated hosting environment, reviewed access
 policies, TLS, backups, and confirmation that the data licence permits storing
 and displaying OHLC there. A private Discord or private GitHub repository alone
 is not proof of these protections. Public Pages must remain unchanged.
+
+## Separate chart observations
+
+Below the local chart, record the source's HTTPS chart URL, the actual market
+and contract displayed on that site, observation date, last trading day,
+MA5/MA20/MA50 selection, `已核對` or `待核對`, and an optional description.
+These entries are stored as `research_notes.jsonl` in `ZINC_PRIVATE_DIR`, never
+in the OHLC CSV. `已核對` is a user-selected label, not automated validation.
+The optional attachment field is only a filename reference; the app does not
+download, upload, or copy website images. Confirm permission first, then save
+an allowed image manually in a separate private `attachments` folder. Notes
+and images do not supply OHLC values or change the displayed candle chart.

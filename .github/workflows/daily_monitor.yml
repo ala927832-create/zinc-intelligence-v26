@@ -67,6 +67,9 @@ jobs:
       - name: Private archive and local chart test
         run: python test_private_research.py
 
+      - name: Private research notes test
+        run: python test_private_notes.py
+
   build:
     if: github.event_name != 'pull_request'
     needs: test
