@@ -20,7 +20,7 @@ from zincintel.models import (
     supply_demand_score, technical_score, weighted_score,
 )
 from zincintel.paper import empirical_stats, performance_summary, process_paper_trades, queue_trade_if_actionable
-from zincintel.providers import fetch_macro, fetch_market_snapshot, load_candles, load_verified_daily_candles
+from zincintel.providers import fetch_macro, fetch_market_snapshot
 from zincintel.quality import assess_market_quality, procurement_quality
 from zincintel.state import (
     append_history, append_signal, load_trades, save_latest, save_trades, update_procurement_state,
@@ -85,9 +85,11 @@ def main() -> None:
     events = read_json(DATA_DIR / "event_risk.json", [])
     ev_overlay = event_overlay(events)
 
-    daily_raw, candle_source = load_verified_daily_candles()
-    h1_raw, candle_1h_source = load_candles("1h")
-    m15_raw, candle_15m_source = load_candles("15m")
+    # This entry point builds the public Pages site. Never ingest private OHLC here,
+    # even if a local file or legacy candle environment variable is present.
+    daily_raw, candle_source = pd.DataFrame(), "PRIVATE_ONLY"
+    h1_raw, candle_1h_source = pd.DataFrame(), "PRIVATE_ONLY"
+    m15_raw, candle_15m_source = pd.DataFrame(), "PRIVATE_ONLY"
     saved_close_history, close_history_source = update_close_history(market)
     close_history = _merge_close_histories(saved_close_history, mirror_history)
     if not mirror_history.empty:

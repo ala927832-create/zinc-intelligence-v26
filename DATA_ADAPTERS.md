@@ -48,9 +48,9 @@ The LME XML service is licensed. Put credentials in GitHub repository Secrets, n
 
 The adapter authenticates against the LME SSO token endpoint and then requests the official Next-Day XML feed. Missing credentials do not break the pipeline; the provider is marked `NOT_CONFIGURED` and lower-priority sources are tried.
 
-## Candlestick feeds
+## Private candlestick inputs (not connected to public Pages)
 
-V2.6.1 accepts CSV, XLS/XLSX or JSON full-OHLC data for LME Zinc 3M:
+The legacy standalone adapter accepts CSV, XLS/XLSX or JSON full-OHLC data for LME Zinc 3M, but the public `main.py` does not call it. Do not put private OHLC files or credentials into this public repository or its Pages workflow:
 
 - `ZINC_DAILY_CANDLE_URL`
 - `ZINC_1H_CANDLE_URL`
@@ -78,7 +78,7 @@ This is retained in `latest_snapshot.json` so future model reviews can reconstru
 LME, Fastmarkets, SMM and other commercial market data can have redistribution restrictions. Keep raw licensed data and credentials private unless your licence explicitly permits public redistribution. The public GitHub Pages dashboard should prefer derived signals and masked enterprise procurement data.
 # Verified daily OHLC chart input
 
-The public daily candlestick chart accepts only a dated LME zinc 3M series.
+The legacy daily candlestick adapter accepts only a dated LME zinc 3M series, but is disabled for public builds. Private research requires a separately secured storage and rendering environment; the public site retains its market summary and close-only research, and labels OHLC missing.
 `ZINC_DAILY_CANDLE_FILE` or `ZINC_DAILY_CANDLE_URL` may provide CSV, JSON or Excel
 with these columns on **every row**: `date,open,high,low,close,market,contract,currency,source,public_display_allowed`.
 Use `YYYY-MM-DD`, `LME`, `ZINC_3M`, `USD`, an identifiable source name, and
