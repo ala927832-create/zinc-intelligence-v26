@@ -417,6 +417,10 @@ def _normalize_candles(df: pd.DataFrame) -> pd.DataFrame:
     for col in ["Open", "High", "Low", "Close", "Volume"]:
         out[col] = pd.to_numeric(out[col], errors="coerce")
     out = out.dropna(subset=["timestamp", "Open", "High", "Low", "Close"]).sort_values("timestamp")
+    # Reject malformed bars rather than letting impossible ranges drive indicators.
+    valid = (out["High"] >= out[["Open", "Low", "Close"]].max(axis=1)) & (out["Low"] <= out[["Open", "High", "Close"]].min(axis=1))
+    valid &= (out[["Open", "High", "Low", "Close"]] > 0).all(axis=1) & (out["Volume"] >= 0)
+    out = out.loc[valid]
     return out.drop_duplicates("timestamp", keep="last").set_index("timestamp")[["Open", "High", "Low", "Close", "Volume"]]
 
 
@@ -435,6 +439,9 @@ def load_candles(kind: str = "daily") -> tuple[pd.DataFrame, str]:
             continue
         try:
             df = _normalize_candles(_read_table(source, key))
+            if kind == "daily" and not df.empty:
+                # A current UTC trading day can still be in progress. Only settled bars are usable.
+                df = df[df.index.date < pd.Timestamp.now(tz="UTC").date()]
             if not df.empty:
                 return df, source
         except Exception:
