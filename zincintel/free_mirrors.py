@@ -124,9 +124,9 @@ def parse_grillo(html_text: str) -> tuple[dict, str | None]:
         values["live_warrants_t"] = _eu_num(stock.group(3))
         values["cancelled_warrants_t"] = _eu_num(stock.group(4))
 
-    modified = re.search(r"Last\s+modified\s*\(day-delayed\):\s*(\d{1,2}\.\d{1,2}\.\d{4})", text, flags=re.I)
-    as_of = _date_iso(modified.group(1)) if modified else stock_date
-    return values, as_of
+    # The page's Last modified date is not the market date. The stock section
+    # carries its own report date; prices need separate row-level dating.
+    return values, stock_date
 
 
 def fetch_grillo() -> tuple[dict, str | None, str, str | None]:
@@ -136,6 +136,12 @@ def fetch_grillo() -> tuple[dict, str | None, str, str | None]:
         r = requests.get(GRILLO_ZINC_URL, headers=_headers(), timeout=25)
         r.raise_for_status()
         values, as_of = parse_grillo(r.text)
+        # Until price-table dates are parsed individually, use Grillo only for
+        # dated warehouse fields. Westmetall/official feeds can fill prices.
+        values = {key: value for key, value in values.items()
+                  if key in {"lme_inventory_t", "live_warrants_t", "cancelled_warrants_t"}}
+        if as_of is None:
+            return {}, None, "UNKNOWN_MARKET_DATE", None
         age = _age_days(as_of)
         status = "PUBLIC_MIRROR_DAY_DELAYED" if any(v is not None for v in values.values()) else "MISSING"
         if age is not None and age > 10:
