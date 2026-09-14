@@ -76,3 +76,19 @@ This is retained in `latest_snapshot.json` so future model reviews can reconstru
 ## Licensing / publication
 
 LME, Fastmarkets, SMM and other commercial market data can have redistribution restrictions. Keep raw licensed data and credentials private unless your licence explicitly permits public redistribution. The public GitHub Pages dashboard should prefer derived signals and masked enterprise procurement data.
+# Verified daily OHLC chart input
+
+The public daily candlestick chart accepts only a dated LME zinc 3M series.
+`ZINC_DAILY_CANDLE_FILE` or `ZINC_DAILY_CANDLE_URL` may provide CSV, JSON or Excel
+with these columns on **every row**: `date,open,high,low,close,market,contract,currency,source,public_display_allowed`.
+Use `YYYY-MM-DD`, `LME`, `ZINC_3M`, `USD`, an identifiable source name, and
+`public_display_allowed=true` only after verifying permission to store the
+rows in this public repository and show the chart on public Pages. This flag
+records the operator's rights check; the program cannot grant usage rights.
+
+The importer rejects the whole batch if it contains an incomplete, current-day,
+contradictory, misidentified or undated bar. It retains verified historical
+rows in `data/history/lme_zinc_3m_ohlc.csv`; a conflicting correction requires
+review. Close-only reference history remains separate and is never converted
+to candlesticks. A short OHLC history may show a chart while long-history
+research remains unavailable. No synthetic OHLC test data is committed.

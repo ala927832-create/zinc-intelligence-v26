@@ -19,7 +19,7 @@ from zincintel.models import (
     supply_demand_score, technical_score, weighted_score,
 )
 from zincintel.paper import empirical_stats, performance_summary, process_paper_trades, queue_trade_if_actionable
-from zincintel.providers import fetch_macro, fetch_market_snapshot, load_candles
+from zincintel.providers import fetch_macro, fetch_market_snapshot, load_candles, load_verified_daily_candles
 from zincintel.quality import assess_market_quality, procurement_quality
 from zincintel.state import (
     append_history, append_signal, load_trades, save_latest, save_trades, update_procurement_state,
@@ -84,7 +84,7 @@ def main() -> None:
     events = read_json(DATA_DIR / "event_risk.json", [])
     ev_overlay = event_overlay(events)
 
-    daily_raw, candle_source = load_candles("daily")
+    daily_raw, candle_source = load_verified_daily_candles()
     h1_raw, candle_1h_source = load_candles("1h")
     m15_raw, candle_15m_source = load_candles("15m")
     saved_close_history, close_history_source = update_close_history(market)
@@ -94,7 +94,7 @@ def main() -> None:
 
     daily = add_indicators(daily_raw) if not daily_raw.empty else pd.DataFrame()
     weekly = pd.DataFrame()
-    if not daily_raw.empty:
+    if len(daily_raw) >= 60:
         weekly = daily_raw.resample("W-FRI").agg({"Open":"first","High":"max","Low":"min","Close":"last","Volume":"sum"}).dropna(subset=["Open","High","Low","Close"])
         weekly = add_indicators(weekly)
         technical_df = daily
@@ -227,6 +227,9 @@ def main() -> None:
     })
 
     out = build_dashboard_v27(snapshot, {"daily": daily, "weekly": weekly, "1h": h1_raw, "15m": m15_raw}, trades, perf)
+    # The chart digest is known only after rendering and must travel with the
+    # exact snapshot used by the production verifier.
+    save_latest(snapshot)
     print(f"Dashboard written to {out}")
     print(f"Core data gate: {data_gate['status']} | usable={data_gate['usable_core']} | stale={data_gate['stale_core']} | missing={data_gate['missing_core']}")
 

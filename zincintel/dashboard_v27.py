@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import html
+import hashlib
 from pathlib import Path
 
 import pandas as pd
@@ -136,14 +137,27 @@ def build_dashboard_v27(snapshot: dict, candle_frames: dict[str, pd.DataFrame], 
     gate_class = _freshness_class(gate.get("status"))
     candle_daily = Path(PUBLIC_DIR / "assets" / "candle_daily.png")
     candle_weekly = Path(PUBLIC_DIR / "assets" / "candle_weekly.png")
+    candle_meta = snapshot.get("daily_candle_status", {})
+    chart_ready = (candle_meta.get("complete_sessions", 0) > 0
+                   and candle_meta.get("source") not in (None, "missing", "invalid_verified_history")
+                   and not candle_frames.get("daily", pd.DataFrame()).empty)
+    if not chart_ready:
+        for stale_chart in (candle_daily, candle_weekly):
+            stale_chart.unlink(missing_ok=True)
     candle_block = ""
-    if candle_daily.exists():
-        candle_block += "<img src='assets/candle_daily.png' alt='Daily zinc candle'>"
+    if chart_ready and candle_daily.exists():
+        candle_meta["image_sha256"] = hashlib.sha256(candle_daily.read_bytes()).hexdigest()
+        candle_block += (
+            "<div class='notice ok'>LME Zinc 3M · daily OHLC · USD · "
+            f"source {_esc(candle_meta.get('source'))} · last {_esc(candle_meta.get('last_complete_date'))} · "
+            f"{_esc(candle_meta.get('complete_sessions'))} verified sessions</div>"
+            "<img src='assets/candle_daily.png' alt='Verified LME zinc 3M daily OHLC'>"
+        )
     elif technical_mode == "CLOSE_ONLY":
         candle_block += "<div class='notice warn'>Close-only mode：可計算 EMA / RSI / ROC，但沒有真實 Open/High/Low，所以不產生假 K 線、ATR 或 Paper Trade execution。</div>"
     else:
         candle_block += "<div class='notice bad'>No verified OHLC source. Technical execution remains blocked.</div>"
-    if candle_weekly.exists():
+    if chart_ready and candle_weekly.exists():
         candle_block += "<details><summary>Weekly chart</summary><img src='assets/candle_weekly.png' alt='Weekly zinc candle'></details>"
 
     page = f"""<!doctype html>

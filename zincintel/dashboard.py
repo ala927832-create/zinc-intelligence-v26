@@ -67,7 +67,8 @@ def _make_candle_chart(df: pd.DataFrame, trades: list[dict], label: str="Daily",
                 except Exception:
                     pass
     ax.set_title(f"LME Zinc 3M Candle Lab — {label}", color="white", fontsize=12)
-    ax.legend(loc="upper left", facecolor="#071426", labelcolor="white")
+    if ax.get_legend_handles_labels()[0]:
+        ax.legend(loc="upper left", facecolor="#071426", labelcolor="white")
     ax.xaxis_date(); axv.xaxis.set_major_formatter(mdates.DateFormatter("%m-%d"))
     fig.autofmt_xdate()
     fig.savefig(out, dpi=150, bbox_inches="tight", facecolor="#071426")

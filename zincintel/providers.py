@@ -447,3 +447,27 @@ def load_candles(kind: str = "daily") -> tuple[pd.DataFrame, str]:
         except Exception:
             continue
     return pd.DataFrame(), "missing"
+
+
+def load_verified_daily_candles() -> tuple[pd.DataFrame, str]:
+    """Persist complete, identified daily bars; an unverified feed cannot replace history."""
+    from .ohlc_history import chart_frame, load_verified_history, persist_daily_rows
+
+    candidates = [os.getenv("ZINC_DAILY_CANDLE_URL", "").strip(),
+                  os.getenv("ZINC_DAILY_CANDLE_FILE", "").strip(),
+                  "data/lme_zinc_3m_daily.csv"]
+    for source in candidates:
+        if not source:
+            continue
+        try:
+            raw = _read_table(source, os.getenv("CANDLE_API_KEY", "").strip())
+            if not raw.empty:
+                persist_daily_rows(raw)
+                break
+        except (ValueError, OSError, requests.RequestException):
+            continue
+    try:
+        rows = load_verified_history()
+    except (ValueError, OSError):
+        return pd.DataFrame(), "invalid_verified_history"
+    return chart_frame(rows), str(rows.iloc[-1]["source"]) if not rows.empty else "missing"

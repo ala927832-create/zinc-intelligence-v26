@@ -55,6 +55,9 @@ jobs:
       - name: Smoke test
         run: python smoke_test.py
 
+      - name: OHLC chart integrity test
+        run: python test_ohlc_chart.py
+
   build:
     if: github.event_name != 'pull_request'
     needs: test
