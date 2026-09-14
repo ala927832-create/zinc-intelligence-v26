@@ -67,6 +67,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Refresh verified state before the single writer runs
+        run: |
+          git fetch origin "${GITHUB_REF_NAME}"
+          # An older run must not silently execute code that changed upstream.
+          if ! git diff --quiet HEAD "origin/${GITHUB_REF_NAME}" -- . ':!data' ':!public'; then
+            echo "Code changed since this run started; a newer run must rebuild." >&2
+            exit 1
+          fi
+          # Carry forward the latest committed history before calculating this run.
+          git reset --hard "origin/${GITHUB_REF_NAME}"
+
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
@@ -120,7 +131,8 @@ jobs:
             echo "No state changes"
           else
             git commit -m "chore: update verified zinc intelligence state"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
+            # No rebase of generated JSON: a concurrent remote write is a failed
+            # precondition, never a conflict to auto-resolve or overwrite.
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
 
