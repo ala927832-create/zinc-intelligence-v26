@@ -51,6 +51,10 @@ def provider_tests():
     assert gv["live_warrants_t"] == 83950.0
     assert gv["cancelled_warrants_t"] == 21850.0
     assert gd == "2026-09-10"
+    # Page update dates must never replace the dated warehouse report.
+    mismatched = grillo_html.replace("10.09.2026\n    Cash", "14.09.2026\n    Cash")
+    _, dated_stock = parse_grillo(mismatched)
+    assert dated_stock == "2026-09-10"
 
     west_html = '''<table><thead><tr><th>Date</th><th>Zinc Cash Settlement</th><th>Zinc 3-month</th><th>Zinc stock</th></tr></thead>
     <tbody><tr><td>09.09.2026</td><td>3.670,00</td><td>3.610,00</td><td>106.000</td></tr>
