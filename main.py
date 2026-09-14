@@ -13,6 +13,7 @@ from zincintel.discord import send_discord
 from zincintel.free_data import enrich_market_with_free_sources, update_close_history
 from zincintel.free_mirrors import enrich_market_with_free_mirrors
 from zincintel.indicators import add_close_indicators, add_indicators, latest_indicator_dict
+from zincintel.market_research import describe_close_series
 from zincintel.models import (
     event_overlay, macro_score, market_regime, market_structure_score, multi_horizon_scores,
     physical_score, procurement_metrics, smelter_score, strategy_recommendation,
@@ -91,6 +92,7 @@ def main() -> None:
     close_history = _merge_close_histories(saved_close_history, mirror_history)
     if not mirror_history.empty:
         close_history_source = mirror_history_source
+    research_close = describe_close_series(mirror_history, mirror_history_source)
 
     daily = add_indicators(daily_raw) if not daily_raw.empty else pd.DataFrame()
     weekly = pd.DataFrame()
@@ -174,6 +176,7 @@ def main() -> None:
         "candle_sources": {"daily": candle_source, "1h": candle_1h_source, "15m": candle_15m_source, "close_history": close_history_source},
         "technical_mode": technical_mode,
         "daily_candle_status": candle_status,
+        "market_research": {"close_series": research_close},
         "free_close_history_points": int(len(close_history)),
         "indicators": indicators,
         "components": components,

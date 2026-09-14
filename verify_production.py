@@ -183,6 +183,24 @@ def main() -> int:
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
     _expect(text, "PAPER RESEARCH ONLY", failures)
 
+    # A descriptive research panel must match the same deployed snapshot.
+    research_section = re.search(r"<section\b[^>]*id=['\"]market-research['\"][^>]*>(.*?)</section>",
+                                 raw_html, flags=re.IGNORECASE | re.DOTALL)
+    if not research_section:
+        failures.append("missing market research panel")
+    else:
+        research_text = _visible_text(research_section.group(1))
+        candle = snapshot.get("daily_candle_status", {})
+        research = snapshot.get("market_research", {}).get("close_series", {})
+        _expect(research_text, str(candle.get("status")), failures, "OHLC gap status")
+        _expect(research_text, str(candle.get("complete_sessions")), failures, "OHLC count")
+        _expect(research_text, str(research.get("as_of") or "—"), failures, "close series date")
+        _expect(research_text, str(research.get("source") or "—"), failures, "close series source")
+        _expect(research_text, str(research.get("observations", 0)), failures, "close series count")
+        for length in (20, 60):
+            _expect(research_text, _fmt(research.get(f"volatility_{length}_pct"), 2),
+                    failures, f"historical volatility {length}")
+
     # Verify the core figures inside their actual KPI cards, so the deployment
     # cannot pass merely because the same number appears elsewhere on the page.
     market_cards = _class_blocks(raw_html, "mcard")

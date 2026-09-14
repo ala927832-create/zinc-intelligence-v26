@@ -58,6 +58,9 @@ jobs:
       - name: OHLC chart integrity test
         run: python test_ohlc_chart.py
 
+      - name: Market research data test
+        run: python test_market_research.py
+
   build:
     if: github.event_name != 'pull_request'
     needs: test

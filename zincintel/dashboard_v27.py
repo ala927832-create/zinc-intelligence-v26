@@ -109,6 +109,36 @@ def _paper_card(rec: dict, label: str, snapshot: dict) -> str:
     </div>"""
 
 
+def _research_panel(snapshot: dict) -> str:
+    market = snapshot.get("market", {})
+    health = market.get("data_health", {})
+    candle = snapshot.get("daily_candle_status", {})
+    close = snapshot.get("market_research", {}).get("close_series", {})
+    core_rows = "".join(
+        "<tr>"
+        f"<td>{_esc(label)}</td><td>{_esc(health.get(key, {}).get('as_of'))}</td>"
+        f"<td>{_esc(health.get(key, {}).get('source'))}</td>"
+        f"<td>{_esc(health.get(key, {}).get('source_grade'))}</td>"
+        "</tr>"
+        for key, label in (("lme_cash", "Cash"), ("lme_3m", "3M"), ("lme_inventory_t", "Warehouse stock"))
+    )
+    count = int(candle.get("complete_sessions") or 0)
+    gap = "Open / High / Low / Close 全部缺少可驗證日線" if count == 0 else (
+        f"已驗證 {count} 筆；長期研究門檻 {int(candle.get('minimum_sessions') or 60)} 筆"
+    )
+    return f"""
+    <section class='panel s12' id='market-research'><h2>市場資料研究 · 來源與缺口</h2>
+      <div class='health-scroll'><table><tr><th>資料</th><th>交易日</th><th>來源</th><th>來源等級</th></tr>{core_rows}</table></div>
+      <p class='muted'>日線 OHLC：{_esc(candle.get('status'))} · {gap} · 最後完整交易日 {_esc(candle.get('last_complete_date'))} · 來源 {_esc(candle.get('source'))}。收盤價歷史不補造 K 線。</p>
+      <div class='market-cards'>
+        <div class='mcard'><div class='eyebrow'>20 筆報酬的歷史波動</div><div class='mvalue'>{fmt(close.get('volatility_20_pct'),2)}<small> % 年化</small></div><div class='muted'>有效報酬 {_esc(close.get('returns_20',0))}/20</div></div>
+        <div class='mcard'><div class='eyebrow'>60 筆報酬的歷史波動</div><div class='mvalue'>{fmt(close.get('volatility_60_pct'),2)}<small> % 年化</small></div><div class='muted'>有效報酬 {_esc(close.get('returns_60',0))}/60</div></div>
+        <div class='mcard'><div class='eyebrow'>同源收盤價序列</div><div class='mvalue'>{_esc(close.get('observations',0))}<small> 筆</small></div><div class='muted'>截至 {_esc(close.get('as_of'))} · {_esc(close.get('source_grade'))}</div></div>
+      </div>
+      <p class='source'>來源 {_esc(close.get('source'))} · {_esc(close.get('series'))}；方法：{_esc(close.get('method'))}。這是已觀察到的變動程度，不是未來漲跌或獲利機率。</p>
+    </section>"""
+
+
 def build_dashboard_v27(snapshot: dict, candle_frames: dict[str, pd.DataFrame], trades: list[dict], perf: dict) -> Path:
     build_legacy_dashboard(snapshot, candle_frames, trades, perf)
     PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
@@ -182,6 +212,7 @@ h1{{margin:0;font-size:28px;line-height:1.12}}h2{{font-size:14px;letter-spacing:
 <div class='mcard'><div class='eyebrow'>Inventory</div><div class='mvalue'>{fmt(market.get('lme_inventory_t'),0)} <small>t</small></div><div class='muted'>Live {fmt(market.get('live_warrants_t'),0)} · Cancelled {fmt(market.get('cancelled_warrants_t'),0)} · Ratio {fmt(market.get('cancelled_ratio_pct'),1)}%</div>{_core_meta(snapshot,'lme_inventory_t')}</div>
 </div></section>
 <section class='panel s12'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll' role='region' aria-label='Data health table' tabindex='0'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
+{_research_panel(snapshot)}
 <section class='panel s12'><h2>CHINA ZINC CONCENTRATE TC</h2><div class='tc-grid'>{tc_html}</div><p class='muted'>不同 basis 不混算：Import TC、Domestic TC、Annual Benchmark 分開保存與判讀。延遲一日/一週/月度可接受，但日期與來源必須可追溯。</p></section>
 <section class='panel s6'><h2>🏭 PROCUREMENT</h2>{"<div class='notice warn'>Public privacy mode：精確庫存、60D需求與建議採購噸數已遮罩。</div>" if not include_private else ''}<div class='market-cards'>
 <div class='mcard'><div class='eyebrow'>Coverage</div><div class='mvalue'>{fmt(proc.get('coverage_days'),1)} <small>days</small></div><div class='muted'>{_esc(proc.get('inventory_band'))}</div></div>
