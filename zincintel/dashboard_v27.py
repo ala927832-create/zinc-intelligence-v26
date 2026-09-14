@@ -86,8 +86,14 @@ def _tc_card(item: dict, title: str, basis: str) -> str:
     </div>"""
 
 
-def _paper_card(rec: dict, label: str) -> str:
+def _paper_card(rec: dict, label: str, snapshot: dict) -> str:
     p = rec.get("probability", {})
+    candles = snapshot.get("daily_candle_status", {})
+    health = snapshot.get("market", {}).get("data_health", {}).get("lme_3m", {})
+    reference = rec.get("reference_price")
+    reference_label = f"{fmt(reference,1)} · model" if reference is not None else (
+        f"{fmt(snapshot.get('market', {}).get('lme_3m'),1)} · LME 3M market reference" if snapshot.get('market', {}).get('lme_3m') is not None else "Unavailable"
+    )
     return f"""
     <div class='paper-card'>
       <div class='eyebrow'>{_esc(label)}</div>
@@ -95,7 +101,9 @@ def _paper_card(rec: dict, label: str) -> str:
       <div class='muted'>{_esc(rec.get('reason'))}</div>
       <div class='kv'><span>Score</span><b>{fmt(rec.get('strategy_score'),1)}</b></div>
       <div class='kv'><span>Probability</span><b>{pct(p.get('p_profit'))}</b></div>
-      <div class='kv'><span>Reference</span><b>{fmt(rec.get('reference_price'),1)}</b></div>
+      <div class='kv'><span>Reference</span><b>{_esc(reference_label)}</b></div>
+      <div class='muted'>Market as-of {_esc(health.get('as_of'))} · {_esc(health.get('source_grade'))}</div>
+      <div class='muted'>Daily OHLC: {_esc(candles.get('complete_sessions', 0))}/{_esc(candles.get('minimum_sessions', 60))} sessions · {_esc(candles.get('status'))} · last {_esc(candles.get('last_complete_date'))}</div>
       <div class='source'>PAPER RESEARCH ONLY</div>
     </div>"""
 
@@ -166,7 +174,7 @@ h1{{margin:0;font-size:28px;line-height:1.12}}h2{{font-size:14px;letter-spacing:
 <div class='mcard'><div class='eyebrow'>Action</div><div class='mvalue'>{_esc(proc.get('action'))}</div><div class='muted'>Input {_esc(proc_q.get('status'))}</div></div>
 <div class='mcard'><div class='eyebrow'>Private inputs</div><div class='mvalue'>{private_value(proc_state.get('current_inventory_t'),0)} / {private_value(proc_state.get('demand_60d_t'),0)}</div><div class='muted'>inventory / 60D demand</div></div>
 </div></section>
-<section class='panel s6'><h2>📈 PAPER RESEARCH</h2><div class='paper-grid'>{_paper_card(inv.get('conservative',{}),'Conservative')}{_paper_card(inv.get('aggressive',{}),'Aggressive')}</div></section>
+<section class='panel s6'><h2>📈 PAPER RESEARCH</h2><div class='paper-grid'>{_paper_card(inv.get('conservative',{}),'Conservative',snapshot)}{_paper_card(inv.get('aggressive',{}),'Aggressive',snapshot)}</div></section>
 <section class='panel s8'><h2>TECHNICAL DATA</h2>{candle_block}</section>
 <section class='panel s4'><h2>MODEL / PIPELINE STATUS</h2><table><tr><td>Technical mode</td><td>{_esc(technical_mode)}</td></tr><tr><td>Close-history points</td><td>{_esc(snapshot.get('free_close_history_points'))}</td></tr><tr><td>Market confidence</td><td>{fmt(iq.get('confidence'),0)}</td></tr><tr><td>Provider failures</td><td>{sum(1 for v in market.get('provider_status',{}).values() if str(v.get('status')).upper()=='ERROR')}</td></tr></table><p><a href='research.html'>Research Lab →</a></p></section>
 </div><div class='footer'>Zinc Intelligence V2.7 · Public dashboard uses masked procurement inputs · Investment module is paper research only.</div></div></body></html>"""
