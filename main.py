@@ -106,6 +106,13 @@ def main() -> None:
         technical_df = pd.DataFrame()
         technical_mode = "MISSING"
     indicators = latest_indicator_dict(technical_df)
+    candle_status = {
+        "status": "COMPLETE_HISTORY" if len(daily_raw) >= 60 else "INSUFFICIENT_HISTORY" if not daily_raw.empty else "MISSING",
+        "complete_sessions": int(len(daily_raw)),
+        "minimum_sessions": 60,
+        "last_complete_date": daily_raw.index[-1].date().isoformat() if not daily_raw.empty else None,
+        "source": candle_source,
+    }
 
     market_quality = assess_market_quality(market, technical_mode, macro, ev_overlay)
     proc_quality = procurement_quality(proc_state, settings)
@@ -166,6 +173,7 @@ def main() -> None:
         "event_overlay": ev_overlay,
         "candle_sources": {"daily": candle_source, "1h": candle_1h_source, "15m": candle_15m_source, "close_history": close_history_source},
         "technical_mode": technical_mode,
+        "daily_candle_status": candle_status,
         "free_close_history_points": int(len(close_history)),
         "indicators": indicators,
         "components": components,
