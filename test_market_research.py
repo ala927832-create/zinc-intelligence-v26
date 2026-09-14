@@ -21,11 +21,25 @@ def main() -> None:
     assert ready["status"] == "AVAILABLE"
     assert ready["returns_20"] == 20 and ready["returns_60"] == 60
     assert ready["volatility_20_pct"] > 0 and ready["volatility_60_pct"] > 0
+    assert ready["sma_14"] is not None and ready["sma_30"] is not None
+    assert ready["material_gap_count"] == 0
+    assert ready["ema_20"] is not None and 0 <= ready["rsi_14"] <= 100
+    assert short["sma_30"] is None and short["ema_20"] is not None
+    assert describe_close_series(series(14), "westmetall_lme_3m_reference")["rsi_14"] is None
+    broken = pd.concat([series(60).iloc[:40], series(60).iloc[50:]])
+    interrupted = describe_close_series(broken, "westmetall_lme_3m_reference")
+    assert interrupted["material_gap_count"] == 1
+    assert interrupted["close_indicator_sessions"] == 10
+    assert interrupted["returns_20"] == 9 and interrupted["volatility_20_pct"] is None
+    assert interrupted["sma_14"] is None and interrupted["rsi_14"] is None
     duplicate = pd.concat([series(61), series(61).tail(1)])
     assert describe_close_series(duplicate, "westmetall_lme_3m_reference")["status"] == "MISSING"
     page = _research_panel({"market_research": {"close_series": ready},
                             "daily_candle_status": {"status": "MISSING", "complete_sessions": 0}})
-    assert "Open / High / Low / Close 全部缺少" in page
+    assert "收盤價趨勢：可分析" in page and "SMA14" in page and "SMA30" in page
+    assert "EMA20" in page and "RSI14" in page
+    assert "資料缺口" in page and "最後交易日" in page
+    assert "日線 OHLC" not in page and "ATR" not in page
     assert ready["as_of"] in page and "B_PUBLIC_REFERENCE" in page
     assert "獲利機率" in page
     print("market research tests passed")

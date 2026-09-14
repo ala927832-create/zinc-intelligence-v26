@@ -69,8 +69,9 @@ def main() -> None:
             snapshot = {"daily_candle_status": status, "technical_mode": "CLOSE_ONLY"}
             dashboard_v27.build_dashboard_v27(snapshot, {"daily": frame}, [], {})
             rendered = (public / "index.html").read_text()
-            assert "2 verified sessions" in rendered and "assets/candle_daily.png" in rendered
-            assert len(status["image_sha256"]) == 64
+            assert "assets/candle_daily.png" not in rendered
+            assert not (assets / "candle_daily.png").exists()
+            assert not (assets / "candle_weekly.png").exists()
 
             snapshot["daily_candle_status"] = {"status": "MISSING", "complete_sessions": 0, "source": "missing"}
             dashboard_v27.build_dashboard_v27(snapshot, {"daily": pd.DataFrame()}, [], {})

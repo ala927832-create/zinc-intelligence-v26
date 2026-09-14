@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import html as html_lib
-import hashlib
 import json
 import os
 import re
@@ -10,7 +9,7 @@ import time
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode, urljoin, urlsplit, urlunsplit
+from urllib.parse import urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 SNAPSHOT_PATH = Path("data/latest_snapshot.json")
@@ -154,28 +153,9 @@ def main() -> int:
     raw_html = _fetch(page_url, run_id)
     text = _visible_text(raw_html)
     failures: list[str] = []
-    candle = snapshot.get("daily_candle_status", {})
     chart_src = "assets/candle_daily.png"
-    if candle.get("complete_sessions", 0) > 0:
-        _expect(raw_html, f"src='{chart_src}'", failures, "daily chart element")
-        _expect(text, f"{candle['complete_sessions']} verified sessions", failures, "daily chart count")
-        _expect(text, str(candle.get("last_complete_date")), failures, "last verified OHLC date")
-        _expect(text, str(candle.get("source")), failures, "OHLC provider")
-        expected_sha = candle.get("image_sha256")
-        if not expected_sha:
-            failures.append("missing daily chart digest in deployed snapshot")
-        else:
-            try:
-                req = Request(_cache_bust(urljoin(page_url, chart_src), run_id),
-                              headers={"Cache-Control": "no-cache"})
-                with urlopen(req, timeout=30) as response:
-                    actual_sha = hashlib.sha256(response.read()).hexdigest()
-                if actual_sha != expected_sha:
-                    failures.append("production candle image differs from deployed snapshot")
-            except (HTTPError, URLError, TimeoutError, OSError) as exc:
-                failures.append(f"production candle image unavailable: {exc}")
-    elif chart_src in raw_html or "assets/candle_weekly.png" in raw_html:
-        failures.append("stale candle element rendered despite missing verified OHLC")
+    if chart_src in raw_html or "assets/candle_weekly.png" in raw_html:
+        failures.append("private candle element rendered on public page")
 
     # Version and integrity markers.
     _expect(text, "Zn · ZINC INTELLIGENCE V2.7", failures)
@@ -190,13 +170,14 @@ def main() -> int:
         failures.append("missing market research panel")
     else:
         research_text = _visible_text(research_section.group(1))
-        candle = snapshot.get("daily_candle_status", {})
         research = snapshot.get("market_research", {}).get("close_series", {})
-        _expect(research_text, str(candle.get("status")), failures, "OHLC gap status")
-        _expect(research_text, str(candle.get("complete_sessions")), failures, "OHLC count")
         _expect(research_text, str(research.get("as_of") or "—"), failures, "close series date")
         _expect(research_text, str(research.get("source") or "—"), failures, "close series source")
         _expect(research_text, str(research.get("observations", 0)), failures, "close series count")
+        for field, min_sessions in (("latest_close", 1), ("sma_14", 14), ("sma_30", 30), ("ema_20", 20), ("rsi_14", 15)):
+            value = research.get(field)
+            expected = _fmt(value, 2) if value is not None and research.get("close_indicator_sessions", 0) >= min_sessions else "資料不足"
+            _expect(research_text, expected, failures, f"close-only {field}")
         for length in (20, 60):
             _expect(research_text, _fmt(research.get(f"volatility_{length}_pct"), 2),
                     failures, f"historical volatility {length}")

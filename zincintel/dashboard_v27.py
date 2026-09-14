@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import html
-import hashlib
 from pathlib import Path
 
 import pandas as pd
@@ -89,7 +88,6 @@ def _tc_card(item: dict, title: str, basis: str) -> str:
 
 def _paper_card(rec: dict, label: str, snapshot: dict) -> str:
     p = rec.get("probability", {})
-    candles = snapshot.get("daily_candle_status", {})
     health = snapshot.get("market", {}).get("data_health", {}).get("lme_3m", {})
     reference = rec.get("reference_price")
     reference_label = f"{fmt(reference,1)} · model" if reference is not None else (
@@ -104,7 +102,7 @@ def _paper_card(rec: dict, label: str, snapshot: dict) -> str:
       <div class='kv'><span>Probability</span><b>{pct(p.get('p_profit'))}</b></div>
       <div class='kv'><span>Reference</span><b>{_esc(reference_label)}</b></div>
       <div class='muted'>Market as-of {_esc(health.get('as_of'))} · {_esc(health.get('source_grade'))}</div>
-      <div class='muted'>Daily OHLC: {_esc(candles.get('complete_sessions', 0))}/{_esc(candles.get('minimum_sessions', 60))} sessions · {_esc(candles.get('status'))} · last {_esc(candles.get('last_complete_date'))}</div>
+      <div class='muted'>Research inputs: {_esc(snapshot.get('technical_mode'))} · historical estimates require validation</div>
       <div class='source'>PAPER RESEARCH ONLY</div>
     </div>"""
 
@@ -112,7 +110,6 @@ def _paper_card(rec: dict, label: str, snapshot: dict) -> str:
 def _research_panel(snapshot: dict) -> str:
     market = snapshot.get("market", {})
     health = market.get("data_health", {})
-    candle = snapshot.get("daily_candle_status", {})
     close = snapshot.get("market_research", {}).get("close_series", {})
     core_rows = "".join(
         "<tr>"
@@ -122,14 +119,23 @@ def _research_panel(snapshot: dict) -> str:
         "</tr>"
         for key, label in (("lme_cash", "Cash"), ("lme_3m", "3M"), ("lme_inventory_t", "Warehouse stock"))
     )
-    count = int(candle.get("complete_sessions") or 0)
-    gap = "Open / High / Low / Close 全部缺少可驗證日線" if count == 0 else (
-        f"已驗證 {count} 筆；長期研究門檻 {int(candle.get('minimum_sessions') or 60)} 筆"
-    )
+    def close_metric(key: str, minimum: int, suffix: str = "USD/t") -> str:
+        value = close.get(key)
+        return (f"{fmt(value, 2)} {suffix}" if value is not None and int(close.get('close_indicator_sessions') or 0) >= minimum
+                else f"資料不足（需要 {minimum} 筆有效交易日）")
     return f"""
     <section class='panel s12' id='market-research'><h2>市場資料研究 · 來源與缺口</h2>
       <div class='health-scroll'><table><tr><th>資料</th><th>交易日</th><th>來源</th><th>來源等級</th></tr>{core_rows}</table></div>
-      <p class='muted'>日線 OHLC：{_esc(candle.get('status'))} · {gap} · 最後完整交易日 {_esc(candle.get('last_complete_date'))} · 來源 {_esc(candle.get('source'))}。收盤價歷史不補造 K 線。</p>
+      <h3>收盤價趨勢：{'可分析' if close.get('latest_close') is not None else '資料不足'}</h3>
+      <p class='muted'>同源 LME 3M 參考收盤價 · 最後交易日 {_esc(close.get('as_of'))} · 有效歷史 {_esc(close.get('observations', 0))} 筆 · 連續指標視窗 {_esc(close.get('close_indicator_sessions', 0))} 筆 · {_esc(close.get('source_grade'))} / {_esc(close.get('source'))}</p>
+      <p class='muted'>資料缺口：超過 7 日的中斷 {_esc(close.get('material_gap_count', 0))} 次 · 最長相鄰日期間隔 {_esc(close.get('largest_gap_days'))} 日。此規則不是交易所假日曆；中斷前的數值不參與本期指標與歷史波動。</p>
+      <div class='market-cards'>
+        <div class='mcard'><div class='eyebrow'>最新收盤價 / SMA14</div><div class='mvalue'>{close_metric('latest_close', 1)}</div><div class='muted'>SMA14：{close_metric('sma_14', 14)}</div></div>
+        <div class='mcard'><div class='eyebrow'>SMA30 / EMA20</div><div class='mvalue'>{close_metric('sma_30', 30)}</div><div class='muted'>EMA20：{close_metric('ema_20', 20)}</div></div>
+        <div class='mcard'><div class='eyebrow'>收盤價版 RSI14</div><div class='mvalue'>{close_metric('rsi_14', 15, '/100')}</div><div class='muted'>只依同源 Close，非盤中資料；需 14 筆相鄰收盤變化。</div></div>
+      </div>
+      <p class='source'>SMA14／SMA30 是過去 14／30 筆有效交易日收盤價的算術平均；EMA20 是 20 期指數加權平均。來源中斷超過 7 個日曆日會重啟指標視窗。均線與 RSI 描述歷史，不預測下一日。</p>
+      <p class='muted'>本面板只使用已完成交易日的同源收盤價，不呈現盤中價格。</p>
       <div class='market-cards'>
         <div class='mcard'><div class='eyebrow'>20 筆報酬的歷史波動</div><div class='mvalue'>{fmt(close.get('volatility_20_pct'),2)}<small> % 年化</small></div><div class='muted'>有效報酬 {_esc(close.get('returns_20',0))}/20</div></div>
         <div class='mcard'><div class='eyebrow'>60 筆報酬的歷史波動</div><div class='mvalue'>{fmt(close.get('volatility_60_pct'),2)}<small> % 年化</small></div><div class='muted'>有效報酬 {_esc(close.get('returns_60',0))}/60</div></div>
@@ -167,28 +173,9 @@ def build_dashboard_v27(snapshot: dict, candle_frames: dict[str, pd.DataFrame], 
     gate_class = _freshness_class(gate.get("status"))
     candle_daily = Path(PUBLIC_DIR / "assets" / "candle_daily.png")
     candle_weekly = Path(PUBLIC_DIR / "assets" / "candle_weekly.png")
-    candle_meta = snapshot.get("daily_candle_status", {})
-    chart_ready = (candle_meta.get("complete_sessions", 0) > 0
-                   and candle_meta.get("source") not in (None, "missing", "invalid_verified_history")
-                   and not candle_frames.get("daily", pd.DataFrame()).empty)
-    if not chart_ready:
-        for stale_chart in (candle_daily, candle_weekly):
-            stale_chart.unlink(missing_ok=True)
-    candle_block = ""
-    if chart_ready and candle_daily.exists():
-        candle_meta["image_sha256"] = hashlib.sha256(candle_daily.read_bytes()).hexdigest()
-        candle_block += (
-            "<div class='notice ok'>LME Zinc 3M · daily OHLC · USD · "
-            f"source {_esc(candle_meta.get('source'))} · last {_esc(candle_meta.get('last_complete_date'))} · "
-            f"{_esc(candle_meta.get('complete_sessions'))} verified sessions</div>"
-            "<img src='assets/candle_daily.png' alt='Verified LME zinc 3M daily OHLC'>"
-        )
-    elif technical_mode == "CLOSE_ONLY":
-        candle_block += "<div class='notice warn'>Close-only mode：可計算 EMA / RSI / ROC，但沒有真實 Open/High/Low，所以不產生假 K 線、ATR 或 Paper Trade execution。</div>"
-    else:
-        candle_block += "<div class='notice bad'>No verified OHLC source. Technical execution remains blocked.</div>"
-    if chart_ready and candle_weekly.exists():
-        candle_block += "<details><summary>Weekly chart</summary><img src='assets/candle_weekly.png' alt='Weekly zinc candle'></details>"
+    for stale_chart in (candle_daily, candle_weekly):
+        stale_chart.unlink(missing_ok=True)
+    candle_block = "<div class='notice warn'>Close-only research: SMA14 / SMA30 / EMA20 / RSI14 are historical descriptors; no intraday prices or execution.</div>"
 
     page = f"""<!doctype html>
 <html lang='zh-Hant'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
