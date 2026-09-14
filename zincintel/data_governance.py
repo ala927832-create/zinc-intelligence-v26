@@ -75,6 +75,10 @@ def apply_last_known_good(market: dict, previous_market: dict | None = None) -> 
             continue
         old_value = previous.get(field)
         old_src = previous.get("field_sources", {}).get(field, {})
+        # Older snapshots may have used Grillo's page-modified date as the
+        # price date. Never promote those unverified prices via carry-forward.
+        if field in {"lme_cash", "lme_3m"} and "grillo" in str(old_src.get("provider", "")).lower():
+            continue
         old_as_of = old_src.get("as_of") or previous.get("as_of")
         age = _age_days(old_as_of)
         if old_value is None or age is None or age > float(policy["max_age_days"]):
