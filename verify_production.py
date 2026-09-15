@@ -162,6 +162,11 @@ def main() -> int:
     _expect(text, f"Model {snapshot.get('model_version')}", failures, "model version")
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
     _expect(text, "PAPER RESEARCH ONLY", failures)
+    _expect(raw_html, "class='side-nav'", failures, "left research navigation")
+    _expect(raw_html, "class='compass-gauge'", failures, "semicircular trend compass")
+    _expect(raw_html, "class='trend-band'", failures, "five-color trend regime band")
+    for section_id in ("overview", "market-research", "shfe-zinc", "inventory", "tc-premiums", "data-health", "notes", "methodology"):
+        _expect(raw_html, f"id='{section_id}'", failures, f"navigation target {section_id}")
 
     shfe = snapshot.get("market_research", {}).get("shfe_zinc", {})
     if shfe.get("status") == "AVAILABLE":

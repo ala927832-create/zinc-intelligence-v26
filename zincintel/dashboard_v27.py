@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import math
 from pathlib import Path
 
 import pandas as pd
@@ -268,16 +269,40 @@ def _compass(close: dict) -> str:
     regime = trend.get("regime", "INSUFFICIENT_DATA")
     levels = ["STRONG_BEAR", "BEAR", "NEUTRAL", "BULL", "STRONG_BULL"]
     labels = ["Strong Bear", "Bear", "Neutral", "Bull", "Strong Bull"]
-    cells = "".join(
-        f"<div class='compass-cell {'selected' if level == regime else ''}'><span>{_esc(label)}</span></div>"
-        for level, label in zip(levels, labels)
-    )
+    colors = ["#d94a4f", "#ef8a83", "#c7ced1", "#8dd8cf", "#087b70"]
+    cx, cy, outer, inner = 150.0, 148.0, 126.0, 76.0
+    def point(radius: float, angle: float) -> tuple[float, float]:
+        rad = math.radians(angle)
+        return cx + radius * math.cos(rad), cy - radius * math.sin(rad)
+    segments = []
+    for i, (level, label, color) in enumerate(zip(levels, labels, colors)):
+        a0, a1 = 180 - i * 36, 180 - (i + 1) * 36
+        x0, y0 = point(outer, a0); x1, y1 = point(outer, a1)
+        ix1, iy1 = point(inner, a1); ix0, iy0 = point(inner, a0)
+        path = f"M{x0:.1f},{y0:.1f} A{outer},{outer} 0 0 1 {x1:.1f},{y1:.1f} L{ix1:.1f},{iy1:.1f} A{inner},{inner} 0 0 0 {ix0:.1f},{iy0:.1f} Z"
+        tx, ty = point(101, (a0 + a1) / 2)
+        selected = " gauge-selected" if level == regime else ""
+        segments.append(f"<path d='{path}' fill='{color}' class='gauge-segment{selected}'/><text x='{tx:.1f}' y='{ty:.1f}' text-anchor='middle' class='gauge-label'>{_esc(label)}</text>")
+    angle = {level: 162 - i * 36 for i, level in enumerate(levels)}.get(regime, 90)
+    nx, ny = point(73, angle)
     reasons = "".join(f"<li>{_esc(x)}</li>" for x in trend.get("reasons", [])[:4])
-    return f"""<aside class='cockpit-side'><div class='eyebrow'>LME CLOSE-ONLY MARKET COMPASS</div>
-      <div class='compass'>{cells}</div><div class='compass-result'>{_esc(regime.replace('_',' '))}</div>
+    return f"""<aside class='cockpit-side'><div class='eyebrow'>LME CLOSE-ONLY · TREND COMPASS</div>
+      <svg class='compass-gauge' viewBox='0 0 300 176' role='img' aria-label='Five-level historical trend compass'>{''.join(segments)}<line x1='{cx}' y1='{cy}' x2='{nx:.1f}' y2='{ny:.1f}' class='gauge-needle'/><circle cx='{cx}' cy='{cy}' r='10' class='gauge-hub'/></svg>
+      <div class='compass-result'>{_esc(regime.replace('_',' '))}</div>
       <div class='score-line'><b>Trend Score {_esc(trend.get('score'))} / 100</b><span>{_esc(trend.get('persistence_days',0))} sessions</span></div>
       <ul class='compact-reasons'>{reasons}</ul>
       <p class='source'>描述已發生的趨勢，不是買賣指令或獲利機率。</p></aside>"""
+
+
+def _trend_band(close: dict) -> str:
+    current = close.get("trend", {}).get("regime", "INSUFFICIENT_DATA")
+    levels = [("STRONG_BEAR", "Strong Bear"), ("BEAR", "Bear"), ("NEUTRAL", "Neutral"),
+              ("BULL", "Bull"), ("STRONG_BULL", "Strong Bull")]
+    items = "".join(
+        f"<div class='band-item band-{key.lower()} {'active' if key == current else ''}'><b>{label}</b><span>{'目前狀態' if key == current else ''}</span></div>"
+        for key, label in levels
+    )
+    return f"""<section class='panel s12 trend-ribbon' id='trend-regime'><div class='section-head'><h2>TREND REGIME · FIVE-LEVEL HISTORICAL STATE</h2><span class='muted'>Close-only · descriptive, not a forecast</span></div><div class='trend-band'>{items}</div></section>"""
 
 
 def _shfe_panel(snapshot: dict) -> str:
@@ -286,7 +311,7 @@ def _shfe_panel(snapshot: dict) -> str:
     if not points:
         return "<section class='panel s12'><h2>SHFE ZINC · TRUE DAILY OHLC</h2><div class='notice warn'>MISSING · 本次沒有通過驗證的 SHFE 日線，因此不顯示舊圖。</div></section>"
     payload = json.dumps(points, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-    return f"""<section class='panel s12 shfe-panel'><div class='section-head'><div><h2>SHFE ZINC · TRUE DAILY OHLC</h2>
+    return f"""<section class='panel s12 shfe-panel' id='shfe-zinc'><div class='section-head'><div><h2>SHFE ZINC · TRUE DAILY OHLC</h2>
       <div class='muted'>獨立跨市場參考，絕非 LME K 線 · {_esc(shfe.get('source_grade'))} · 截至 {_esc(shfe.get('as_of'))}</div></div>
       <div class='status-chip'>VALIDATED · {_esc(shfe.get('observations'))} sessions</div></div>
       <div class='period-controls shfe-controls'><button data-shfe-days='20'>20</button><button data-shfe-days='60'>60</button><button class='active' data-shfe-days='120'>120</button><button data-shfe-days='all'>全部</button></div>
@@ -322,7 +347,7 @@ def _cockpit_cards(snapshot: dict) -> str:
     lme_direction = direction(close.get("trend",{}).get("regime", ""))
     shfe_direction = direction(shfe.get("trend",{}).get("regime", ""))
     align = "同向" if lme_direction and lme_direction == shfe_direction else "分歧" if lme_direction and shfe_direction else "待確認"
-    return f"""<section class='panel s12'><h2>RESEARCH SYSTEM MAP</h2><div class='icon-cards'>
+    return f"""<section class='panel s12' id='inventory'><h2>INVENTORY &amp; TC · RESEARCH SYSTEM MAP</h2><div class='icon-cards'>
     <div><i>▥</i><span>LME STOCK</span><b>{fmt(market.get('lme_inventory_t'),0)} t</b></div>
     <div><i>◎</i><span>SHFE OPEN INTEREST</span><b>{fmt(shfe.get('latest_open_interest'),0)}</b></div>
     <div><i>⚙</i><span>IMPORT TC</span><b>{fmt(tc.get('value'),2)} {_esc(tc.get('unit'))}</b></div>
@@ -377,31 +402,60 @@ h1{{margin:0;font-size:28px;line-height:1.12}}h2{{font-size:14px;letter-spacing:
 @media(max-width:1180px){{.tc-grid{{grid-template-columns:repeat(2,1fr)}}}}
 @media(max-width:1000px){{.s8,.s6,.s4,.s3{{grid-column:span 12}}.market-cards{{grid-template-columns:repeat(3,1fr)}}.cockpit-banner{{grid-template-columns:1fr}}.icon-cards{{grid-template-columns:repeat(3,1fr)}}}}
 @media(max-width:680px){{.wrap{{padding:10px}}.top{{align-items:flex-start;flex-direction:column;padding:6px 2px 14px}}h1{{font-size:23px}}.panel{{padding:13px;border-radius:12px}}.hero{{font-size:30px}}.market-cards,.tc-grid,.paper-grid,.trend-summary,.trend-detail,.research-strip{{grid-template-columns:1fr}}.icon-cards{{grid-template-columns:repeat(2,1fr)}}.mvalue,.tc-value{{font-size:25px}}.meta,.kv{{gap:12px}}.health-scroll{{margin:0 -2px;width:calc(100% + 4px)}}.interactive-chart svg{{min-width:760px}}}}
-</style></head><body><div class='wrap'>
-<div class='top'><div><h1>Zn · ZINC RESEARCH COCKPIT</h1><div class='muted'>LME close-only intelligence + separate SHFE true OHLC · provenance first</div></div><div><b>{_esc(snapshot.get('run_date'))}</b><br><span class='muted'>Model {_esc(snapshot.get('model_version'))}</span></div></div>
-<div class='grid'>
-<section class='panel s3'><h2>CORE DATA GATE</h2><div class='hero'>{_esc(gate.get('status'))}</div><span class='pill {gate_class}'>{len(gate.get('usable_core',[]))} core usable</span><p class='muted'>Stale: {_esc(', '.join(gate.get('stale_core',[])) or 'None')}<br>Missing: {_esc(', '.join(gate.get('missing_core',[])) or 'None')}</p></section>
+/* Final ivory industrial research theme */
+:root{{--bg:#f4f1e9;--panel:#fff;--panel2:#f8f6f0;--line:#d7dde2;--text:#153552;--muted:#64798b;--cyan:#147fa3;--green:#087b70;--orange:#c8783d;--red:#d94a4f;--navy:#0b2f4f}}
+html{{scroll-behavior:smooth;scroll-padding-top:92px}}body{{background:#f4f1e9;color:var(--text)}}a{{color:#145f91}}
+.site-header{{background:linear-gradient(112deg,#0a2a48,#123e61);color:#fff;border-bottom:3px solid #c8783d;box-shadow:0 5px 18px rgba(11,47,79,.18)}}
+.site-header .top{{max-width:1760px;margin:0 auto;padding:18px 24px;border:0;align-items:center}}.site-header h1{{font-family:Georgia,serif;font-size:31px;letter-spacing:.035em;color:#fff}}.site-header .muted{{color:#d4e0e8}}
+.site-shell{{max-width:1760px;margin:0 auto;display:grid;grid-template-columns:174px minmax(0,1fr);align-items:start}}.wrap{{max-width:none;width:100%;margin:0;padding:16px;min-width:0}}
+.side-nav{{position:sticky;top:0;align-self:start;min-height:100vh;padding:18px 10px;background:#fbfaf6;border-right:1px solid #d4dce2;z-index:8}}.side-nav a{{display:flex;align-items:center;gap:10px;padding:11px 10px;margin:2px 0;border-left:3px solid transparent;border-radius:5px;color:#244966;text-decoration:none;font-size:11px;font-weight:750;letter-spacing:.02em}}.side-nav a:hover{{background:#edf2f5}}.side-nav a.active{{background:#0b2f4f;color:#fff;border-left-color:#c8783d}}.side-nav .nav-icon{{width:19px;text-align:center;font-size:16px}}.side-nav .nav-sep{{height:1px;background:#d8dfe4;margin:12px 5px}}
+.grid{{gap:10px}}.panel{{background:#fff;border:1px solid #d5dde3;border-radius:7px;padding:14px;box-shadow:0 3px 12px rgba(18,50,76,.055)}}h2{{color:#173d5e;font-family:Georgia,serif;font-size:14px}}h3{{color:#173d5e}}.muted{{color:#687e90}}.eyebrow{{color:#55758e}}.hero{{color:#087b70}}
+.mcard,.tc-card,.paper-card{{background:#fbfaf7;border:1px solid #d8e0e5;border-radius:7px;color:#173750}}.mcard:before,.tc-card:before{{background:#c8783d}}.card-meta{{color:#617b8e;border-top-color:#e1e6e9}}.source{{color:#647d8f}}.ok{{color:#086d63;background:#dcf1ec}}.warn{{color:#8a552e;background:#fae9d9}}.bad{{color:#a7333a;background:#fae0e2}}
+th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart-frame{{fill:#fff;stroke:#cbd7df}}.chart-grid{{stroke:#dfe7ec}}.chart-time-grid,.chart-day-grid{{stroke:#edf1f3}}.chart-week-grid{{stroke:#bdcbd5}}.chart-label,.chart-day-label,.chart-axis-title{{fill:#526f85}}.chart-axis-title{{fill:#173f62}}.chart-line.close{{stroke:#123e76!important}}.chart-line.rsi{{stroke:#6d4cc9!important}}.range-line{{stroke:#147fa3}}.range-close{{fill:#c8783d}}
+.period-controls button{{border-color:#c9d5dd;background:#fff;color:#234f70}}.period-controls button.active{{background:#0b2f4f;color:#fff;border-color:#0b2f4f}}.chart-tooltip{{border-color:#315c7d;background:#0b2f4f;color:#fff}}
+.trend-panel{{background:#f8f6f0;border-color:#d8dfe3}}.trend-regime{{color:#0b5f78}}.trend-detail ul{{color:#536e82}}.cockpit-banner{{grid-template-columns:minmax(0,1.5fr) minmax(285px,.5fr);gap:10px}}.cockpit-copy{{background:#fff;border-color:#d5dde3;color:#173750}}.cockpit-side{{background:#0b2f4f;border-color:#0b2f4f;color:#fff}}.cockpit-side .eyebrow,.cockpit-side .source{{color:#bed0dc}}.cockpit-side .compact-reasons{{color:#e1ebf1}}.compass-gauge{{display:block;width:100%;max-width:330px;margin:6px auto -4px}}.gauge-segment{{stroke:#fff;stroke-width:1.4;opacity:.94}}.gauge-segment.gauge-selected{{stroke:#f2a05d;stroke-width:5;opacity:1}}.gauge-label{{fill:#173750;font-size:8px;font-weight:800;text-transform:uppercase}}.gauge-needle{{stroke:#fff;stroke-width:5;stroke-linecap:round}}.gauge-hub{{fill:#0b2f4f;stroke:#fff;stroke-width:3}}.compass-result{{color:#fff;text-align:center;font-family:Georgia,serif}}
+.status-chip{{border-color:#9fcac2;background:#e0f2ee;color:#086d63}}.research-strip>div,.icon-cards>div{{background:#fbfaf7;border-color:#d8e0e5}}.icon-cards i{{color:#164f78}}
+.trend-ribbon{{padding:12px 14px}}.trend-ribbon h2{{margin:0}}.trend-band{{display:grid;grid-template-columns:repeat(5,1fr);margin-top:9px;border-radius:5px;overflow:hidden}}.band-item{{min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#173750;border-right:1px solid rgba(255,255,255,.8);text-transform:uppercase;font-size:11px}}.band-item span{{min-height:14px;font-size:9px;text-transform:none}}.band-strong_bear{{background:#d94a4f;color:#fff}}.band-bear{{background:#ef8a83}}.band-neutral{{background:#c7ced1}}.band-bull{{background:#8dd8cf}}.band-strong_bull{{background:#087b70;color:#fff}}.band-item.active{{box-shadow:inset 0 0 0 4px #f1a15e;font-weight:900}}
+.notice.warn{{background:#fff3e8;color:#7d4d29}}.footer{{color:#62798a}}
+@media(max-width:1100px){{.site-shell{{grid-template-columns:1fr}}.side-nav{{position:sticky;top:0;min-height:0;display:flex;gap:4px;overflow-x:auto;padding:7px 10px;border-right:0;border-bottom:1px solid #d4dce2}}.side-nav a{{white-space:nowrap;margin:0}}.side-nav .nav-sep{{display:none}}.cockpit-banner{{grid-template-columns:1fr}}}}
+@media(max-width:680px){{.site-header .top{{padding:14px}}.site-header h1{{font-size:22px}}.side-nav .nav-icon{{display:none}}.trend-band{{min-width:560px}}.trend-ribbon{{overflow-x:auto}}}}
+</style></head><body>
+<header class='site-header'><div class='top'><div><h1>Zn · ZINC RESEARCH COCKPIT</h1><div class='muted'>Industrial metals research · LME close-only + separate SHFE true OHLC</div></div><div><b>{_esc(snapshot.get('run_date'))}</b><br><span class='muted'>Model {_esc(snapshot.get('model_version'))} · RESEARCH ONLY</span></div></div></header>
+<div class='site-shell'><nav class='side-nav' aria-label='Research sections'>
+<a class='active' href='#overview'><span class='nav-icon'>⌂</span>OVERVIEW</a>
+<a href='#market-research'><span class='nav-icon'>⌁</span>LME ZINC</a>
+<a href='#shfe-zinc'><span class='nav-icon'>◈</span>SHFE ZINC</a>
+<a href='#inventory'><span class='nav-icon'>▥</span>INVENTORY</a>
+<a href='#tc-premiums'><span class='nav-icon'>⚙</span>TC &amp; PREMIUMS</a>
+<a href='#market-research'><span class='nav-icon'>∿</span>VOLATILITY</a>
+<a href='#inventory'><span class='nav-icon'>⇄</span>CROSS-MARKET</a>
+<a href='#data-health'><span class='nav-icon'>▤</span>DATA &amp; AUDIT</a><div class='nav-sep'></div>
+<a href='#notes'><span class='nav-icon'>□</span>NOTES</a>
+<a href='#methodology'><span class='nav-icon'>◇</span>METHODOLOGY</a></nav>
+<main class='wrap'><div class='grid'>
+<section class='panel s3' id='overview'><h2>CORE DATA GATE</h2><div class='hero'>{_esc(gate.get('status'))}</div><span class='pill {gate_class}'>{len(gate.get('usable_core',[]))} core usable</span><p class='muted'>Stale: {_esc(', '.join(gate.get('stale_core',[])) or 'None')}<br>Missing: {_esc(', '.join(gate.get('missing_core',[])) or 'None')}</p></section>
 <section class='panel s3'><h2>MARKET REGIME</h2><div class='hero'>{_esc(snapshot.get('market_regime'))}</div><div>ZTI / Score <b>{fmt(snapshot.get('market_score'),1)}</b></div><div>Confidence <b>{fmt(iq.get('confidence'),0)}/100</b></div></section>
 <section class='panel s6'><h2>LME ZINC · CORE REFERENCES</h2><div class='market-cards'>
 <div class='mcard'><div class='eyebrow'>Cash</div><div class='mvalue'>{fmt(market.get('lme_cash'),1)} <small>USD/t</small></div><div class='muted'>Cash−3M {fmt(market.get('cash_3m'),1)}</div>{_core_meta(snapshot,'lme_cash')}</div>
 <div class='mcard'><div class='eyebrow'>3M</div><div class='mvalue'>{fmt(market.get('lme_3m'),1)} <small>USD/t</small></div><div class='muted'>Technical mode {_esc(technical_mode)}</div>{_core_meta(snapshot,'lme_3m')}</div>
 <div class='mcard'><div class='eyebrow'>Inventory</div><div class='mvalue'>{fmt(market.get('lme_inventory_t'),0)} <small>t</small></div><div class='muted'>Live {fmt(market.get('live_warrants_t'),0)} · Cancelled {fmt(market.get('cancelled_warrants_t'),0)} · Ratio {fmt(market.get('cancelled_ratio_pct'),1)}%</div>{_core_meta(snapshot,'lme_inventory_t')}</div>
 </div></section>
-<section class='panel s12'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll' role='region' aria-label='Data health table' tabindex='0'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
+<section class='panel s12' id='data-health'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll' role='region' aria-label='Data health table' tabindex='0'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
 <section class='panel s12'><div class='cockpit-banner'><div class='cockpit-copy'><div class='eyebrow'>MIXED VIEW 3 · MARKET MAP</div><h2>同一頁比較，不混合合約與幣別</h2><p>LME 區塊只用同源 3M 參考 Close、均線與 RSI；SHFE 區塊使用交易所公布的完整日線 OHLC。兩者可比對方向，但不互相填補缺值。</p><div class='market-cards'><div class='mcard'><span class='eyebrow'>LME</span><div class='mvalue'>{fmt(snapshot.get('market_research',{}).get('close_series',{}).get('latest_close'),1)}</div><div class='muted'>USD/t · Close-only</div></div><div class='mcard'><span class='eyebrow'>SHFE</span><div class='mvalue'>{fmt(snapshot.get('market_research',{}).get('shfe_zinc',{}).get('latest_close'),0)}</div><div class='muted'>CNY/t · True OHLC</div></div><div class='mcard'><span class='eyebrow'>LME OHLC</span><div class='mvalue'>0</div><div class='muted'>private-only framework</div></div></div></div>{_compass(snapshot.get('market_research',{}).get('close_series',{}))}</div></section>
+{_trend_band(snapshot.get('market_research',{}).get('close_series',{}))}
 {_research_panel(snapshot)}
 {_shfe_panel(snapshot)}
 {_cockpit_cards(snapshot)}
-<section class='panel s12'><h2>CHINA ZINC CONCENTRATE TC</h2><div class='tc-grid'>{tc_html}</div><p class='muted'>不同 basis 不混算：Import TC、Domestic TC、Annual Benchmark 分開保存與判讀。延遲一日/一週/月度可接受，但日期與來源必須可追溯。</p></section>
+<section class='panel s12' id='tc-premiums'><h2>CHINA ZINC CONCENTRATE TC</h2><div class='tc-grid'>{tc_html}</div><p class='muted'>不同 basis 不混算：Import TC、Domestic TC、Annual Benchmark 分開保存與判讀。延遲一日/一週/月度可接受，但日期與來源必須可追溯。</p></section>
 <section class='panel s6'><h2>🏭 PROCUREMENT</h2>{"<div class='notice warn'>Public privacy mode：精確庫存、60D需求與建議採購噸數已遮罩。</div>" if not include_private else ''}<div class='market-cards'>
 <div class='mcard'><div class='eyebrow'>Coverage</div><div class='mvalue'>{fmt(proc.get('coverage_days'),1)} <small>days</small></div><div class='muted'>{_esc(proc.get('inventory_band'))}</div></div>
 <div class='mcard'><div class='eyebrow'>Action</div><div class='mvalue'>{_esc(proc.get('action'))}</div><div class='muted'>Input {_esc(proc_q.get('status'))}</div></div>
 <div class='mcard'><div class='eyebrow'>Private inputs</div><div class='mvalue'>{private_value(proc_state.get('current_inventory_t'),0)} / {private_value(proc_state.get('demand_60d_t'),0)}</div><div class='muted'>inventory / 60D demand</div></div>
 </div></section>
-<section class='panel s6'><h2>📈 PAPER RESEARCH</h2><div class='paper-grid'>{_paper_card(inv.get('conservative',{}),'Conservative',snapshot)}{_paper_card(inv.get('aggressive',{}),'Aggressive',snapshot)}</div></section>
-<section class='panel s8'><h2>TECHNICAL DATA</h2>{candle_block}</section>
+<section class='panel s6' id='notes'><h2>📈 PAPER RESEARCH NOTES</h2><div class='paper-grid'>{_paper_card(inv.get('conservative',{}),'Conservative',snapshot)}{_paper_card(inv.get('aggressive',{}),'Aggressive',snapshot)}</div></section>
+<section class='panel s8' id='methodology'><h2>TECHNICAL DATA · METHODOLOGY</h2>{candle_block}</section>
 <section class='panel s4'><h2>MODEL / PIPELINE STATUS</h2><table><tr><td>Technical mode</td><td>{_esc(technical_mode)}</td></tr><tr><td>Close-history points</td><td>{_esc(snapshot.get('free_close_history_points'))}</td></tr><tr><td>Market confidence</td><td>{fmt(iq.get('confidence'),0)}</td></tr><tr><td>Provider failures</td><td>{sum(1 for v in market.get('provider_status',{}).values() if str(v.get('status')).upper()=='ERROR')}</td></tr></table><p><a href='research.html'>Research Lab →</a></p></section>
-</div><div class='footer'>Zinc Research Cockpit · PAPER RESEARCH ONLY · LME and SHFE identities remain separate · private LME transparency data is never deployed.</div></div></body></html>"""
+</div><div class='footer'>Zinc Research Cockpit · PAPER RESEARCH ONLY · LME and SHFE identities remain separate · private LME transparency data is never deployed.</div></main></div></body></html>"""
 
     out = PUBLIC_DIR / "index.html"
     out.write_text(page, encoding="utf-8")
