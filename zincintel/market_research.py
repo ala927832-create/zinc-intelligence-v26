@@ -8,6 +8,43 @@ import numpy as np
 import pandas as pd
 
 
+def _trend_state(frame: pd.DataFrame) -> dict:
+    missing = {"status": "INSUFFICIENT_DATA", "score": None, "regime": "INSUFFICIENT_DATA",
+               "reasons": ["至少需要 40 個連續交易日才能判定趨勢"], "components": {}}
+    if len(frame) < 40:
+        return missing
+    row = frame.iloc[-1]
+    if any(pd.isna(row.get(k)) for k in ("Close", "ema20", "sma30", "rsi14")):
+        return missing
+    close, ema, sma, rsi = (float(row[k]) for k in ("Close", "ema20", "sma30", "rsi14"))
+    ema_slope = (ema / float(frame["ema20"].iloc[-6]) - 1) * 100
+    sma_slope = (sma / float(frame["sma30"].iloc[-11]) - 1) * 100
+    recent = frame["Close"].tail(20)
+    span = float(recent.max() - recent.min())
+    position = .5 if span == 0 else float((close - recent.min()) / span)
+    components = {
+        "close_vs_ema20": 20 if close > ema else -20 if close < ema else 0,
+        "ema20_vs_sma30": 20 if ema > sma else -20 if ema < sma else 0,
+        "ema20_slope_5d": 15 if ema_slope > .05 else -15 if ema_slope < -.05 else 0,
+        "sma30_slope_10d": 15 if sma_slope > .05 else -15 if sma_slope < -.05 else 0,
+        "rsi14": 20 if 55 <= rsi <= 70 else 10 if 50 <= rsi < 55 or rsi > 70 else -20 if 30 <= rsi <= 45 else -10 if rsi < 30 or 45 < rsi < 50 else 0,
+        "close_position_20d": 10 if position >= .75 else -10 if position <= .25 else 0,
+    }
+    score = int(sum(components.values()))
+    regime = "STRONG_BULL" if score >= 60 else "BULL" if score >= 25 else "STRONG_BEAR" if score <= -60 else "BEAR" if score <= -25 else "NEUTRAL"
+    reasons = [
+        f"Close {'高於' if close > ema else '低於' if close < ema else '等於'} EMA20",
+        f"EMA20 {'高於' if ema > sma else '低於' if ema < sma else '等於'} SMA30",
+        f"EMA20 近 5 個交易日斜率 {ema_slope:+.2f}%",
+        f"SMA30 近 10 個交易日斜率 {sma_slope:+.2f}%",
+        f"RSI14 {rsi:.2f}",
+        f"Close 位於近 20 日收盤區間的 {position*100:.0f}% 位置",
+    ]
+    return {"status": "AVAILABLE", "score": score, "regime": regime, "reasons": reasons,
+            "components": components, "ema20_slope_5d_pct": round(ema_slope, 2),
+            "sma30_slope_10d_pct": round(sma_slope, 2), "close_position_20d_pct": round(position*100, 1)}
+
+
 def describe_close_series(history: pd.DataFrame, source: str) -> dict:
     """Use only one date-stamped 3M reference series for observed volatility."""
     result = {"status": "MISSING", "source": source if source != "missing" else None,
@@ -19,6 +56,11 @@ def describe_close_series(history: pd.DataFrame, source: str) -> dict:
               "material_gap_count": 0, "largest_gap_days": None,
               "open_status": "MISSING_UNVERIFIED_SOURCE", "chart_points": [],
               "weekly_close_ranges": [],
+              "coverage_start": None, "coverage_end": None, "coverage_by_year": {},
+              "requested_history_start": "2025-01-01", "requested_start_covered": False,
+              "trend": {"status": "INSUFFICIENT_DATA", "score": None, "regime": "INSUFFICIENT_DATA",
+                        "persistence_days": 0, "data_confidence": "LOW", "risk_level": "INSUFFICIENT_DATA",
+                        "reasons": ["收盤價歷史不足"], "components": {}},
               "returns_60": 0, "volatility_20_pct": None, "volatility_60_pct": None,
               "method": "Sample standard deviation of daily log returns × √252; historical, not a forecast"}
     if source != "westmetall_lme_3m_reference" or history is None or history.empty or "Close" not in history:
@@ -36,6 +78,10 @@ def describe_close_series(history: pd.DataFrame, source: str) -> dict:
     if work.empty:
         return result
     result["as_of"] = work.index[-1].date().isoformat()
+    result["coverage_start"] = work.index[0].date().isoformat()
+    result["coverage_end"] = work.index[-1].date().isoformat()
+    result["coverage_by_year"] = {str(int(year)): int(count) for year, count in work.groupby(work.index.year).size().items()}
+    result["requested_start_covered"] = pd.Timestamp(result["coverage_start"]) <= pd.Timestamp(result["requested_history_start"]) + pd.Timedelta(days=7)
     # A material interruption invalidates rolling indicators until a new
     # contiguous segment is established. Weekends and ordinary holidays fit
     # the seven-calendar-day allowance; this is not a full exchange calendar.
@@ -95,5 +141,19 @@ def describe_close_series(history: pd.DataFrame, source: str) -> dict:
         result[f"returns_{length}"] = count
         if count == length:
             result[f"volatility_{length}_pct"] = round(float(returns.tail(length).std(ddof=1) * math.sqrt(252) * 100), 2)
+    trend_frame = chart_frames[-1]
+    trend = _trend_state(trend_frame)
+    if trend["status"] == "AVAILABLE":
+        persistence = 0
+        for end in range(len(trend_frame), 39, -1):
+            if _trend_state(trend_frame.iloc[:end]).get("regime") != trend["regime"]:
+                break
+            persistence += 1
+        trend["persistence_days"] = persistence
+        trend["data_confidence"] = "HIGH" if result["source_grade"] == "A_OFFICIAL" and len(trend_frame) >= 60 else "MEDIUM"
+        v20, v60 = result.get("volatility_20_pct"), result.get("volatility_60_pct")
+        trend["risk_level"] = ("INSUFFICIENT_DATA" if v20 is None else "ELEVATED" if v60 and v20 > v60*1.2
+                               else "SUBDUED" if v60 and v20 < v60*.8 else "NORMAL")
+    result["trend"] = trend
     result["status"] = "AVAILABLE" if result["volatility_20_pct"] is not None else "INSUFFICIENT_HISTORY"
     return result

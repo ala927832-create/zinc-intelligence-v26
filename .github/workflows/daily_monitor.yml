@@ -61,6 +61,9 @@ jobs:
       - name: Market research data test
         run: python test_market_research.py
 
+      - name: Westmetall multi-year history test
+        run: python test_westmetall_history.py
+
       - name: Public data isolation test
         run: python test_public_isolation.py
 
@@ -69,6 +72,9 @@ jobs:
 
       - name: Private research notes test
         run: python test_private_notes.py
+
+      - name: Discord payload and privacy test
+        run: python test_discord.py
 
   build:
     if: github.event_name != 'pull_request'

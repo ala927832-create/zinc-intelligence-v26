@@ -29,6 +29,10 @@ def main() -> None:
     assert ready["chart_points"][-1]["ema20"] == ready["ema_20"]
     assert ready["open_status"] == "MISSING_UNVERIFIED_SOURCE"
     assert ready["weekly_close_ranges"][-1]["last_close"] == ready["latest_close"]
+    assert ready["trend"]["status"] == "AVAILABLE"
+    assert ready["trend"]["regime"] in {"STRONG_BULL", "BULL", "NEUTRAL", "BEAR", "STRONG_BEAR"}
+    assert -100 <= ready["trend"]["score"] <= 100 and ready["trend"]["persistence_days"] >= 1
+    assert sum(ready["trend"]["components"].values()) == ready["trend"]["score"]
     assert ready["ema_20"] is not None and 0 <= ready["rsi_14"] <= 100
     assert short["sma_30"] is None and short["ema_20"] is not None
     assert describe_close_series(series(14), "westmetall_lme_3m_reference")["rsi_14"] is None
@@ -50,6 +54,9 @@ def main() -> None:
     assert ready["chart_points"][0]["date"] in page and ready["chart_points"][-1]["date"] in page
     assert "週收盤價區間圖" in page and "非真實 OHLC／週 K" in page
     assert "MISSING_UNVERIFIED_SOURCE" in page
+    for token in ("20交易日", "60交易日", "120交易日", "data-hover", "Trend Score", "透明計分", "交易日"):
+        assert token in page
+    assert ready["trend"]["regime"] in page
     assert "ATR" not in page
     assert ready["as_of"] in page and "B_PUBLIC_REFERENCE" in page
     assert "獲利機率" in page

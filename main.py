@@ -241,9 +241,11 @@ def main() -> None:
     if os.getenv("DISCORD_WEBHOOK_URL"):
         try:
             send_discord(snapshot)
-            print("Discord sent")
+            print("Discord status: SENT")
         except Exception as exc:
-            print(f"Discord error: {exc}")
+            print(f"Discord status: FAILED ({exc})")
+    else:
+        print("Discord status: DISABLED (DISCORD_WEBHOOK_URL not configured)")
 
 
 if __name__ == "__main__":

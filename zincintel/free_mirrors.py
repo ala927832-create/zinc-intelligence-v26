@@ -236,19 +236,36 @@ def parse_westmetall(html_text: str) -> tuple[dict, str | None, pd.DataFrame]:
 def fetch_westmetall() -> tuple[dict, str | None, str, str | None, pd.DataFrame]:
     if os.getenv("ENABLE_WESTMETALL_FALLBACK", "1").strip().lower() in {"0", "false", "no"}:
         return {}, None, "DISABLED", None, pd.DataFrame()
-    year = datetime.now(timezone.utc).year
-    url = WESTMETALL_ZINC_URL.format(year=year)
+    current_year = datetime.now(timezone.utc).year
     try:
-        r = requests.get(url, headers=_headers(), timeout=25)
-        r.raise_for_status()
-        values, as_of, hist = parse_westmetall(r.text)
-        age = _age_days(as_of)
-        status = "PUBLIC_REFERENCE_DAY_DELAYED" if values else "MISSING"
-        if age is not None and age > 10:
-            status = "STALE_PUBLIC_REFERENCE"
-        return values, as_of, status, None, hist
-    except Exception as exc:
-        return {}, None, "ERROR", str(exc), pd.DataFrame()
+        start_year = max(2008, min(current_year, int(os.getenv("WESTMETALL_HISTORY_START_YEAR", "2025"))))
+    except ValueError:
+        start_year = 2025
+    histories, candidates, errors = [], [], []
+    for year in range(start_year, current_year + 1):
+        url = WESTMETALL_ZINC_URL.format(year=year)
+        try:
+            r = requests.get(url, headers=_headers(), timeout=25)
+            r.raise_for_status()
+            values, as_of, hist = parse_westmetall(r.text)
+            if not hist.empty:
+                histories.append(hist)
+            if values and as_of:
+                candidates.append((as_of, values))
+            elif hist.empty:
+                errors.append(f"{year}: no parseable rows")
+        except Exception as exc:
+            errors.append(f"{year}: {exc}")
+    if not histories or not candidates:
+        return {}, None, "ERROR" if errors else "MISSING", "; ".join(errors) or None, pd.DataFrame()
+    hist = pd.concat(histories).sort_index()
+    hist = hist[~hist.index.duplicated(keep="last")]
+    as_of, values = max(candidates, key=lambda item: item[0])
+    age = _age_days(as_of)
+    status = "PUBLIC_REFERENCE_DAY_DELAYED"
+    if age is not None and age > 10:
+        status = "STALE_PUBLIC_REFERENCE"
+    return values, as_of, status, "; ".join(errors) or None, hist
 
 
 def _parse_smm_single(html_text: str) -> tuple[float | None, str | None]:
