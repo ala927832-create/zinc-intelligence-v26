@@ -22,6 +22,7 @@ from zincintel.models import (
 from zincintel.paper import empirical_stats, performance_summary, process_paper_trades, queue_trade_if_actionable
 from zincintel.providers import fetch_macro, fetch_market_snapshot
 from zincintel.quality import assess_market_quality, procurement_quality
+from zincintel.shfe_research import describe_history as describe_shfe_history, update_history as update_shfe_history
 from zincintel.state import (
     append_history, append_signal, load_trades, save_latest, save_trades, update_procurement_state,
 )
@@ -95,6 +96,13 @@ def main() -> None:
     if not mirror_history.empty:
         close_history_source = mirror_history_source
     research_close = describe_close_series(mirror_history, mirror_history_source)
+    # Plan A: a separate, explicitly-labelled SHFE zinc series.  It never
+    # fills or replaces LME fields and roll boundaries remain visible.
+    try:
+        shfe_research = describe_shfe_history(update_shfe_history())
+    except Exception as exc:
+        shfe_research = describe_shfe_history(pd.DataFrame())
+        shfe_research["error"] = type(exc).__name__
 
     daily = add_indicators(daily_raw) if not daily_raw.empty else pd.DataFrame()
     weekly = pd.DataFrame()
@@ -178,7 +186,7 @@ def main() -> None:
         "candle_sources": {"daily": candle_source, "1h": candle_1h_source, "15m": candle_15m_source, "close_history": close_history_source},
         "technical_mode": technical_mode,
         "daily_candle_status": candle_status,
-        "market_research": {"close_series": research_close},
+        "market_research": {"close_series": research_close, "shfe_zinc": shfe_research},
         "free_close_history_points": int(len(close_history)),
         "indicators": indicators,
         "components": components,
@@ -199,6 +207,7 @@ def main() -> None:
             "No synthetic LME zinc OHLC, stock, TC or price is generated.",
             "China import TC, domestic TC and annual benchmark remain separate series.",
             "Close-only technical mode is analysis-only; paper execution requires true OHLC.",
+            "SHFE zinc OHLC is a separate CNY/tonne exchange series and is never represented as LME.",
             "Public procurement inputs remain masked by default.",
         ]
     }

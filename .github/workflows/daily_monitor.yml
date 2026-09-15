@@ -67,6 +67,12 @@ jobs:
       - name: Public data isolation test
         run: python test_public_isolation.py
 
+      - name: SHFE official daily OHLC test
+        run: python -m unittest -q test_shfe_research.py
+
+      - name: Private LME transparency reconstruction test
+        run: python -m unittest -q test_private_lme_transparency.py
+
       - name: Private archive and local chart test
         run: python test_private_research.py
 

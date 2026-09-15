@@ -13,6 +13,7 @@ def _number(value, digits=2) -> str:
 
 def build_discord_payload(snapshot: dict) -> dict:
     close = snapshot.get("market_research", {}).get("close_series", {})
+    shfe = snapshot.get("market_research", {}).get("shfe_zinc", {})
     trend = close.get("trend", {})
     reasons = "\n".join(f"• {item}" for item in trend.get("reasons", [])[:4]) or "• 資料不足"
     dashboard_url = os.getenv("PUBLIC_DASHBOARD_URL", "https://ala927832-create.github.io/zinc-intelligence-v26/")
@@ -39,7 +40,18 @@ def build_discord_payload(snapshot: dict) -> dict:
                     {"name":"Coverage","value":f"{close.get('coverage_start','—')} → {close.get('coverage_end','—')}", "inline":False},
                     {"name":"Dashboard","value":dashboard_url, "inline":False},
                 ],
-                "footer":{"text":"No OHLC, ATR, private inventory, forecast probability or expected profit is included."}
+                "footer":{"text":"No LME OHLC, ATR, private inventory, forecast probability or expected profit is included."}
+            },
+            {
+                "title": "SHFE Zinc · separate true daily OHLC",
+                "description": "Cross-market observation only; never represented as LME",
+                "color": 3447003,
+                "fields": [
+                    {"name":"Latest","value":f"{_number(shfe.get('latest_close'),0)} CNY/t\n{shfe.get('latest_contract','—')}","inline":True},
+                    {"name":"Data","value":f"{shfe.get('observations',0)} sessions\nAs of {shfe.get('as_of','—')}","inline":True},
+                    {"name":"Source","value":f"{shfe.get('source_grade','—')} · SHFE official daily data","inline":False},
+                ],
+                "footer":{"text":"Representative contract: highest open interest, then volume; roll dates retained."}
             }
         ]
     }

@@ -124,10 +124,10 @@ def _fetch(url: str, run_id: str, attempts: int = 12, sleep_seconds: int = 10) -
         try:
             with urlopen(req, timeout=30) as resp:
                 body = resp.read().decode("utf-8", errors="replace")
-                if resp.status == 200 and "ZINC INTELLIGENCE V2.7" in body:
+                if resp.status == 200 and "ZINC RESEARCH COCKPIT" in body:
                     print(f"production fetch ok: HTTP {resp.status}, attempt {attempt}")
                     return body
-                last_error = RuntimeError(f"unexpected response HTTP {resp.status}; V2.7 marker={ 'ZINC INTELLIGENCE V2.7' in body }")
+                last_error = RuntimeError(f"unexpected response HTTP {resp.status}; cockpit marker={ 'ZINC RESEARCH COCKPIT' in body }")
         except (HTTPError, URLError, TimeoutError, OSError) as exc:
             last_error = exc
         print(f"production not ready on attempt {attempt}: {last_error}")
@@ -158,10 +158,18 @@ def main() -> int:
         failures.append("private candle element rendered on public page")
 
     # Version and integrity markers.
-    _expect(text, "Zn · ZINC INTELLIGENCE V2.7", failures)
+    _expect(text, "Zn · ZINC RESEARCH COCKPIT", failures)
     _expect(text, f"Model {snapshot.get('model_version')}", failures, "model version")
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
     _expect(text, "PAPER RESEARCH ONLY", failures)
+
+    shfe = snapshot.get("market_research", {}).get("shfe_zinc", {})
+    if shfe.get("status") == "AVAILABLE":
+        _expect(text, "SHFE ZINC · TRUE DAILY OHLC", failures, "SHFE panel identity")
+        _expect(text, str(shfe.get("as_of")), failures, "SHFE latest date")
+        _expect(text, str(shfe.get("latest_contract")), failures, "SHFE contract")
+        _expect(text, str(shfe.get("observations")), failures, "SHFE observations")
+        _expect(raw_html, "shfe-chart-data", failures, "SHFE chart payload")
 
     # A descriptive research panel must match the same deployed snapshot.
     research_section = re.search(r"<section\b[^>]*id=['\"]market-research['\"][^>]*>(.*?)</section>",
