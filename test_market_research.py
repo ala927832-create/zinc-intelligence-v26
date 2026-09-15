@@ -45,7 +45,9 @@ def main() -> None:
     assert "收盤價趨勢：可分析" in page and "SMA14" in page and "SMA30" in page
     assert "EMA20" in page and "RSI14" in page
     assert "資料缺口" in page and "最後交易日" in page
-    assert "Long-term LME zinc 3M reference Close" in page
+    assert "Long-term LME zinc 3M reference Close with moving averages by trading day" in page
+    assert "交易日時間軸" in page and "第 1/61 交易日" in page and "第 61/61 交易日" in page
+    assert ready["chart_points"][0]["date"] in page and ready["chart_points"][-1]["date"] in page
     assert "週收盤價區間圖" in page and "非真實 OHLC／週 K" in page
     assert "MISSING_UNVERIFIED_SOURCE" in page
     assert "ATR" not in page

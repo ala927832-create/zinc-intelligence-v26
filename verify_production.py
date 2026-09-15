@@ -174,8 +174,15 @@ def main() -> int:
         _expect(research_text, str(research.get("as_of") or "—"), failures, "close series date")
         _expect(research_text, str(research.get("source") or "—"), failures, "close series source")
         _expect(research_text, str(research.get("observations", 0)), failures, "close series count")
-        _expect(research_section.group(1), "Long-term LME zinc 3M reference Close", failures, "long-term close chart")
+        _expect(research_section.group(1), "Long-term LME zinc 3M reference Close with moving averages by trading day", failures, "long-term close chart")
         _expect(research_section.group(1), f"data-chart-points='{len(research.get('chart_points') or [])}'", failures, "close chart point count")
+        chart_points = research.get("chart_points") or []
+        if chart_points:
+            _expect(research_text, "交易日時間軸", failures, "trading-day axis label")
+            _expect(research_text, str(chart_points[0].get("date")), failures, "chart first trading date")
+            _expect(research_text, str(chart_points[-1].get("date")), failures, "chart last trading date")
+            _expect(research_text, f"第 1/{len(chart_points)} 交易日", failures, "chart first trading-day index")
+            _expect(research_text, f"第 {len(chart_points)}/{len(chart_points)} 交易日", failures, "chart last trading-day index")
         _expect(research_text, "週收盤價區間圖", failures, "weekly close-range chart")
         _expect(research_text, "非真實 OHLC／週 K", failures, "weekly close-range disclosure")
         _expect(research_text, str(research.get("open_status") or "—"), failures, "Open source status")
