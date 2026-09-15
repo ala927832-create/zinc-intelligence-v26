@@ -17,6 +17,8 @@ def describe_close_series(history: pd.DataFrame, source: str) -> dict:
               "latest_close": None, "sma_14": None, "sma_30": None,
               "ema_20": None, "rsi_14": None, "close_indicator_sessions": 0,
               "material_gap_count": 0, "largest_gap_days": None,
+              "open_status": "MISSING_UNVERIFIED_SOURCE", "chart_points": [],
+              "weekly_close_ranges": [],
               "returns_60": 0, "volatility_20_pct": None, "volatility_60_pct": None,
               "method": "Sample standard deviation of daily log returns × √252; historical, not a forecast"}
     if source != "westmetall_lme_3m_reference" or history is None or history.empty or "Close" not in history:
@@ -43,6 +45,36 @@ def describe_close_series(history: pd.DataFrame, source: str) -> dict:
     last_break = gaps[gaps > 7].index.max() if (gaps > 7).any() else None
     segment = work.loc[last_break:] if last_break is not None else work
     close = segment["Close"]
+    chart_frames = []
+    for _, frame in work.groupby((gaps > 7).cumsum()):
+        chart = frame.copy()
+        chart["sma14"] = chart["Close"].rolling(14, min_periods=14).mean()
+        chart["sma30"] = chart["Close"].rolling(30, min_periods=30).mean()
+        chart["ema20"] = chart["Close"].ewm(span=20, adjust=False, min_periods=20).mean()
+        delta = chart["Close"].diff()
+        gain = delta.clip(lower=0).ewm(alpha=1/14, adjust=False, min_periods=14).mean()
+        loss = (-delta.clip(upper=0)).ewm(alpha=1/14, adjust=False, min_periods=14).mean()
+        chart["rsi14"] = 100 - 100 / (1 + gain / loss.replace(0, np.nan))
+        chart.loc[(loss == 0) & (gain > 0), "rsi14"] = 100.0
+        chart.loc[(loss == 0) & (gain == 0), "rsi14"] = 50.0
+        chart_frames.append(chart)
+    chart = pd.concat(chart_frames).tail(1250)
+    def finite_or_none(value):
+        return round(float(value), 2) if pd.notna(value) and np.isfinite(value) else None
+    result["chart_points"] = [
+        {"date": idx.date().isoformat(), "close": finite_or_none(row.Close),
+         "sma14": finite_or_none(row.sma14), "sma30": finite_or_none(row.sma30),
+         "ema20": finite_or_none(row.ema20), "rsi14": finite_or_none(row.rsi14)}
+        for idx, row in chart.iterrows()
+    ]
+    weekly = work["Close"].resample("W-FRI").agg(["first", "max", "min", "last", "count"])
+    weekly = weekly[weekly["count"] > 0].tail(260)
+    result["weekly_close_ranges"] = [
+        {"week": idx.date().isoformat(), "first_close": finite_or_none(row["first"]),
+         "highest_close": finite_or_none(row["max"]), "lowest_close": finite_or_none(row["min"]),
+         "last_close": finite_or_none(row["last"]), "sessions": int(row["count"])}
+        for idx, row in weekly.iterrows()
+    ]
     result["close_indicator_sessions"] = len(close)
     result["latest_close"] = round(float(close.iloc[-1]), 2)
     for window in (14, 30):

@@ -174,6 +174,11 @@ def main() -> int:
         _expect(research_text, str(research.get("as_of") or "—"), failures, "close series date")
         _expect(research_text, str(research.get("source") or "—"), failures, "close series source")
         _expect(research_text, str(research.get("observations", 0)), failures, "close series count")
+        _expect(research_section.group(1), "Long-term LME zinc 3M reference Close", failures, "long-term close chart")
+        _expect(research_section.group(1), f"data-chart-points='{len(research.get('chart_points') or [])}'", failures, "close chart point count")
+        _expect(research_text, "週收盤價區間圖", failures, "weekly close-range chart")
+        _expect(research_text, "非真實 OHLC／週 K", failures, "weekly close-range disclosure")
+        _expect(research_text, str(research.get("open_status") or "—"), failures, "Open source status")
         for field, min_sessions in (("latest_close", 1), ("sma_14", 14), ("sma_30", 30), ("ema_20", 20), ("rsi_14", 15)):
             value = research.get(field)
             expected = _fmt(value, 2) if value is not None and research.get("close_indicator_sessions", 0) >= min_sessions else "資料不足"
