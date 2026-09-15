@@ -112,6 +112,7 @@ jobs:
         env:
           CURRENT_INVENTORY_T: ${{ github.event.inputs.current_inventory_t || '' }}
           DEMAND_60D_T: ${{ github.event.inputs.demand_60d_t || '' }}
+          # Inject only through the repository secret; application logs report status, never the URL.
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
           # Official/free public sources and accuracy-first reference fallbacks.
