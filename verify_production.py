@@ -161,6 +161,8 @@ def main() -> int:
     _expect(text, "Zn · ZINC RESEARCH COCKPIT", failures)
     _expect(text, f"Model {snapshot.get('model_version')}", failures, "model version")
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
+    _expect(text, "FUNDAMENTAL / PROCUREMENT REGIME", failures, "fundamental regime label")
+    _expect(text, "Close-only 技術趨勢", failures, "regime boundary explanation")
     _expect(text, "PAPER RESEARCH ONLY", failures)
     _expect(raw_html, "class='side-nav'", failures, "left research navigation")
     _expect(raw_html, "class='compass-gauge'", failures, "semicircular trend compass")
