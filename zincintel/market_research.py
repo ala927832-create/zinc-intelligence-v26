@@ -8,6 +8,58 @@ import numpy as np
 import pandas as pd
 
 
+def recover_verified_close_history(snapshots: list[dict], max_age_days: int = 10) -> tuple[pd.DataFrame, dict]:
+    """Recover only a recent, previously validated Westmetall Close series.
+
+    A provider timeout must not erase an already verified public history.  The
+    recovery is deliberately fail-closed: source identity, grade, dates,
+    observation counts and the last value must all agree with the snapshot.
+    """
+    candidates: list[tuple[pd.Timestamp, pd.DataFrame, dict]] = []
+    now = pd.Timestamp.now(tz="UTC").normalize()
+    for snapshot in snapshots:
+        close = snapshot.get("market_research", {}).get("close_series", {}) if isinstance(snapshot, dict) else {}
+        if close.get("status") != "AVAILABLE":
+            continue
+        if close.get("source") != "westmetall_lme_3m_reference" or close.get("source_grade") != "B_PUBLIC_REFERENCE":
+            continue
+        points = close.get("chart_points") or []
+        records = []
+        for point in points:
+            ts = pd.to_datetime(point.get("date"), errors="coerce", utc=True)
+            value = pd.to_numeric(point.get("close"), errors="coerce")
+            if pd.isna(ts) or pd.isna(value) or not np.isfinite(value) or float(value) <= 0:
+                records = []
+                break
+            records.append((ts, float(value)))
+        if len(records) < 60:
+            continue
+        frame = pd.DataFrame(records, columns=["timestamp", "Close"]).set_index("timestamp").sort_index()
+        if frame.index.duplicated().any():
+            continue
+        as_of = pd.to_datetime(close.get("as_of"), errors="coerce", utc=True)
+        if pd.isna(as_of) or as_of.normalize() != frame.index[-1].normalize():
+            continue
+        age_days = int((now - as_of.normalize()).days)
+        if age_days < 0 or age_days > max_age_days:
+            continue
+        if int(close.get("observations") or 0) < len(frame):
+            continue
+        latest = pd.to_numeric(close.get("latest_close"), errors="coerce")
+        if pd.isna(latest) or not np.isclose(float(latest), float(frame["Close"].iloc[-1]), rtol=0, atol=.011):
+            continue
+        meta = {
+            "source": close.get("source"), "source_grade": close.get("source_grade"),
+            "as_of": close.get("as_of"), "age_days": age_days,
+            "recovered_from_run_time": snapshot.get("run_time"),
+        }
+        candidates.append((as_of, frame, meta))
+    if not candidates:
+        return pd.DataFrame(), {}
+    _, frame, meta = max(candidates, key=lambda item: item[0])
+    return frame, meta
+
+
 def _trend_state(frame: pd.DataFrame) -> dict:
     missing = {"status": "INSUFFICIENT_DATA", "score": None, "regime": "INSUFFICIENT_DATA",
                "reasons": ["至少需要 40 個連續交易日才能判定趨勢"], "components": {}}

@@ -13,7 +13,7 @@ from zincintel.discord import send_discord
 from zincintel.free_data import enrich_market_with_free_sources, update_close_history
 from zincintel.free_mirrors import enrich_market_with_free_mirrors
 from zincintel.indicators import add_close_indicators, add_indicators, latest_indicator_dict
-from zincintel.market_research import describe_close_series
+from zincintel.market_research import describe_close_series, recover_verified_close_history
 from zincintel.models import (
     event_overlay, macro_score, market_regime, market_structure_score, multi_horizon_scores,
     physical_score, procurement_metrics, smelter_score, strategy_recommendation,
@@ -57,6 +57,19 @@ def _apply_china_tc_to_legacy_model_field(market: dict, china_tc: dict) -> dict:
     return market
 
 
+def _prior_snapshot_candidates() -> list[dict]:
+    paths = [DATA_DIR / "latest_snapshot.json"]
+    paths.extend(sorted((DATA_DIR / "snapshots").glob("*.json"), reverse=True))
+    snapshots, seen = [], set()
+    for path in paths:
+        snapshot = read_json(path, {})
+        marker = snapshot.get("run_time") if isinstance(snapshot, dict) else None
+        if snapshot and marker not in seen:
+            snapshots.append(snapshot)
+            seen.add(marker)
+    return snapshots
+
+
 def main() -> None:
     settings = load_settings()
     model_version = settings.get("model_version", "2.7.0")
@@ -72,6 +85,12 @@ def main() -> None:
     # licensed/official adapters -> official public LME -> public reference mirrors -> verified carry-forward.
     market = enrich_market_with_free_sources(fetch_market_snapshot())
     market, mirror_history, mirror_history_source = enrich_market_with_free_mirrors(market)
+    close_history_recovery = {}
+    if mirror_history.empty:
+        recovered, close_history_recovery = recover_verified_close_history(_prior_snapshot_candidates())
+        if not recovered.empty:
+            mirror_history = recovered
+            mirror_history_source = str(close_history_recovery["source"])
 
     china_tc = fetch_china_tc()
     market = _apply_china_tc_to_legacy_model_field(market, china_tc)
@@ -96,6 +115,10 @@ def main() -> None:
     if not mirror_history.empty:
         close_history_source = mirror_history_source
     research_close = describe_close_series(mirror_history, mirror_history_source)
+    research_close["retrieval_status"] = ("CARRY_FORWARD_LAST_VERIFIED" if close_history_recovery else "CURRENT_FETCH")
+    research_close["retrieval_age_days"] = close_history_recovery.get("age_days")
+    research_close["recovered_from_run_time"] = close_history_recovery.get("recovered_from_run_time")
+    research_close["current_provider_status"] = market.get("provider_status", {}).get("westmetall_lme_zinc", {}).get("status")
     # Plan A: a separate, explicitly-labelled SHFE zinc series.  It never
     # fills or replaces LME fields and roll boundaries remain visible.
     try:

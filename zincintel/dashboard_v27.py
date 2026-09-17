@@ -244,6 +244,7 @@ def _research_panel(snapshot: dict) -> str:
       <div class='health-scroll'><table><tr><th>資料</th><th>交易日</th><th>來源</th><th>來源等級</th></tr>{core_rows}</table></div>
       <h3>收盤價趨勢：{'可分析' if close.get('latest_close') is not None else '資料不足'}</h3>
       <p class='muted'>同源 LME 3M 參考收盤價 · 最後交易日 {_esc(close.get('as_of'))} · 有效歷史 {_esc(close.get('observations', 0))} 筆 · 連續指標視窗 {_esc(close.get('close_indicator_sessions', 0))} 筆 · {_esc(close.get('source_grade'))} / {_esc(close.get('source'))}</p>
+      <p class='muted'>取得狀態：{_esc(close.get('retrieval_status') or 'CURRENT_FETCH')} · 當前來源狀態 {_esc(close.get('current_provider_status') or '—')}{' · 沿用最近一次已驗證歷史，未新增或改寫價格' if close.get('retrieval_status') == 'CARRY_FORWARD_LAST_VERIFIED' else ''}</p>
       <p class='muted'>資料缺口：超過 7 日的中斷 {_esc(close.get('material_gap_count', 0))} 次 · 最長相鄰日期間隔 {_esc(close.get('largest_gap_days'))} 日。此規則不是交易所假日曆；中斷前的數值不參與本期指標與歷史波動。</p>
       <p class='muted'>歷史覆蓋：{_esc(close.get('coverage_start'))} → {_esc(close.get('coverage_end'))} · 分年筆數 {_esc(close.get('coverage_by_year'))} · 目標起始 {_esc(close.get('requested_history_start'))} · {'已覆蓋' if close.get('requested_start_covered') else '尚有缺口'}</p>
       <div class='market-cards'>

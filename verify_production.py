@@ -189,6 +189,7 @@ def main() -> int:
         _expect(research_text, str(research.get("as_of") or "—"), failures, "close series date")
         _expect(research_text, str(research.get("source") or "—"), failures, "close series source")
         _expect(research_text, str(research.get("observations", 0)), failures, "close series count")
+        _expect(research_text, str(research.get("retrieval_status") or "CURRENT_FETCH"), failures, "close retrieval status")
         _expect(research_text, str(research.get("coverage_start") or "—"), failures, "coverage start")
         _expect(research_text, str(research.get("coverage_end") or "—"), failures, "coverage end")
         _expect(research_section.group(1), "Long-term LME zinc 3M reference Close with moving averages by trading day", failures, "long-term close chart")

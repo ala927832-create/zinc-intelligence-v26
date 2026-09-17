@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 import pandas as pd
 
 from zincintel.dashboard_v27 import _research_panel
-from zincintel.market_research import describe_close_series
+from zincintel.market_research import describe_close_series, recover_verified_close_history
 
 
 def series(count: int) -> pd.DataFrame:
@@ -36,6 +36,12 @@ def main() -> None:
     assert ready["ema_20"] is not None and 0 <= ready["rsi_14"] <= 100
     assert short["sma_30"] is None and short["ema_20"] is not None
     assert describe_close_series(series(14), "westmetall_lme_3m_reference")["rsi_14"] is None
+    prior = {"run_time": "verified-run", "market_research": {"close_series": ready}}
+    recovered, meta = recover_verified_close_history([prior])
+    assert len(recovered) == 61 and meta["source"] == "westmetall_lme_3m_reference"
+    assert recovered.iloc[-1]["Close"] == ready["latest_close"]
+    bad = {"run_time": "bad", "market_research": {"close_series": {**ready, "source": "mixed_reference"}}}
+    assert recover_verified_close_history([bad])[0].empty
     broken = pd.concat([series(60).iloc[:40], series(60).iloc[50:]])
     interrupted = describe_close_series(broken, "westmetall_lme_3m_reference")
     assert interrupted["material_gap_count"] == 1
