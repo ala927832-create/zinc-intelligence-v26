@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-04T02:53:58.663809+00:00",
+  "run_time": "2026-10-04T02:57:32.822464+00:00",
   "run_date": "2026-10-04",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-04T02:53:58.665943+00:00",
+    "as_of": "2026-10-04T02:57:32.825260+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-04T02:53:58.665943+00:00",
+        "as_of": "2026-10-04T02:57:32.825260+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -10747,21 +10747,21 @@
   },
   "procurement_state": {
     "current_inventory_t": 200.0,
-    "demand_60d_t": 170.0,
-    "inventory_updated_at": "2026-09-21T01:40:47.168482+00:00",
-    "demand_updated_at": "2026-09-21T01:40:47.168482+00:00",
+    "demand_60d_t": 160.0,
+    "inventory_updated_at": "2026-10-04T02:57:32.822546+00:00",
+    "demand_updated_at": "2026-10-04T02:57:32.822546+00:00",
     "inventory_source": "workflow/manual input",
     "demand_source": "workflow/manual input"
   },
   "procurement_quality": {
-    "confidence": 60,
-    "status": "STALE",
-    "max_age_days": 13.051031103587961
+    "confidence": 95,
+    "status": "CURRENT",
+    "max_age_days": 0.0001872230208333333
   },
   "procurement": {
     "status": "OK",
-    "daily_demand_t": 2.8333333333333335,
-    "coverage_days": 70.58823529411764,
+    "daily_demand_t": 2.6666666666666665,
+    "coverage_days": 75.0,
     "inventory_band": "EXCESS",
     "uncovered_demand_t": 0,
     "action": "WAIT",
