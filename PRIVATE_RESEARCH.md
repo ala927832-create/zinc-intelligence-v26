@@ -31,6 +31,21 @@ factory's volume-weighted purchase cost. A shorter series still shows the
 available bars, while each MA requires its full 5/20/50-session window. No
 signals, probabilities, synthetic bars, remote JavaScript, or public exports.
 
+The same loopback page also contains a private **Execution Check**. Paste the
+broker-observed contract, timestamped Bid/Ask, technical stop/targets, account
+equity, risk percentage, multiplier, tick size, fees and a conservative
+slippage allowance. It rejects stale quotes, excessive spreads, risk above 2%,
+zero-size plans and T1 R:R below 1:2. An approval means only
+`APPROVED_FOR_SIMULATION`; the program has no broker connection and never sends
+an order. An optional mark price estimates open P&L for the simulation.
+
+After closing a simulated or real trade, the **post-trade Journal** records the
+planned entry, actual fill, exit, fees, quantity, slippage, net P&L, Actual R
+and rule adherence in `execution_journal.jsonl` under `ZINC_PRIVATE_DIR`.
+Repeated setup IDs are rejected. Performance remains `INSUFFICIENT_SAMPLE`
+until at least 30 closed records. The journal and account inputs are never read
+by the public GitHub Actions pipeline or copied into Pages.
+
 This service binds **only to loopback** and has **no login system**. Never port
 forward it or bind it to `0.0.0.0`. Remote browser access is **not deployed**:
 it requires a separate authenticated hosting environment, reviewed access

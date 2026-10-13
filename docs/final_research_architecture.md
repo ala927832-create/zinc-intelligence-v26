@@ -3,7 +3,7 @@
 ## Reading flow
 
 1. **Today (`index.html`)** — zinc core data, daily conclusion and links to detail.
-2. **Markets (`markets.html`)** — LME Zinc, SHFE Zinc, Gold, USD/JPY and DXY. Each market uses the same six gates: Data, Regime, Strategy, Trigger, Execution/Risk and Review.
+2. **Markets (`markets.html`)** — LME Zinc, SHFE Zinc, Gold, USD/JPY and DXY. Each market shows validated price structure, asset-specific evidence, the six gates, a conditional research plan and the same eight-question audit.
 3. **Radar (`radar.html`)** — cross-market direction, evidence agreement and event discipline.
 4. **Journal (`journal.html`)** — daily facts, interpretation, invalidation and next observation.
 5. **System status (`system-status.html`)** — operations-only data health page. It is not linked from normal navigation. GitHub Pages does not provide authentication, so this is navigation hiding rather than access control.
@@ -14,9 +14,18 @@ The daily plan may publish Setup Zone, Trigger Price, Maximum Entry, Hard Stop, 
 
 Bid/Ask, spread, actual fill, slippage, actual R:R and contract quantity belong to the execution-time layer. A plan cannot become executable until these fields are checked and Actual R:R is at least 1:2.
 
+## Four-stage decision chain
+
+1. **Asset-specific evidence** — price identity, as-of, source grade and the drivers relevant to that asset. Missing OI, yield spreads, COT, ETF flow or arbitrage costs are shown as `NOT_INTEGRATED`; technical indicators alone are never labelled full evidence agreement.
+2. **Conditional plan** — setup zone, trigger, maximum entry, structural stop, close invalidation, T1/T2 and planned R:R. A level is a research candidate, not a fill.
+3. **Private execution approval** — the loopback-only tool validates timestamped Bid/Ask, spread, risk budget, multiplier, fees, slippage, whole contract quantity and T1 R:R ≥ 2. It never transmits an order.
+4. **Post-trade review** — actual fill, exit, fees, slippage, net P&L, Actual R and rule adherence are written outside the repository. Fewer than 30 closed records remains an insufficient performance sample.
+
+Every market must answer: direction, evidence consistency, risk location, entry permission, loss if wrong, exit plan, planned R:R and No-Trade reason. The deploy gate rejects a missing answer or an incomplete conditional plan.
+
 ## Data identities
 
-- LME Zinc remains a same-source close-only reference. It cannot generate a candle pattern or ATR trade trigger.
+- LME Zinc shows Cash as the headline spot reference and 3M as the close-only technical series. It can publish a daily-close trigger but cannot generate a candle pattern or ATR trigger.
 - SHFE Zinc uses official daily OHLC and retains representative-contract and roll identity.
 - Gold (`GC=F`), USD/JPY (`JPY=X`) and DXY (`DX-Y.NYB`) are delayed public references. They are not exchange-certified settlements or live executable quotes.
 - When `ALPHA_VANTAGE_API_KEY` is configured, USD/JPY daily OHLC becomes the preferred public API series. Gold historical data is retained separately as `Gold spot research / Close-only`; it never replaces COMEX futures OHLC.
@@ -39,3 +48,10 @@ The daily message includes the five market closes/references and state. A second
 > No complete data, no signal. No trigger, no order. No acceptable Bid/Ask, no executable price. Actual R:R below 1:2, reject. Unclear structure, No Trade.
 
 The system does not publish uncalibrated win rates, profit probabilities or invented LME OHLC.
+
+## Critical limitations
+
+- Evidence availability is not accuracy, confidence or win probability.
+- Free public data can be rate-limited; the affected asset must degrade to carry-forward or `MISSING / NO_TRADE` rather than fabricate a current price.
+- Continuous-futures references are unsuitable for claiming an executable contract price until the broker contract and live quote are verified.
+- LME Close-only levels cannot answer candle-pattern questions. A true LME candle trigger remains unavailable until licensed or otherwise permitted OHLC is integrated.

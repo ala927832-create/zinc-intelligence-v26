@@ -9,7 +9,7 @@ import time
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode, urlsplit, urlunsplit
+from urllib.parse import urlencode, urljoin, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 SNAPSHOT_PATH = Path("data/latest_snapshot.json")
@@ -112,7 +112,8 @@ def _cache_bust(url: str, run_id: str) -> str:
     return urlunsplit((parts.scheme, parts.netloc, parts.path, q, parts.fragment))
 
 
-def _fetch(url: str, run_id: str, attempts: int = 12, sleep_seconds: int = 10) -> str:
+def _fetch(url: str, run_id: str, attempts: int = 12, sleep_seconds: int = 10,
+           marker: str = "ZINC RESEARCH COCKPIT") -> str:
     last_error: Exception | None = None
     for attempt in range(1, attempts + 1):
         target = _cache_bust(url, run_id)
@@ -124,10 +125,10 @@ def _fetch(url: str, run_id: str, attempts: int = 12, sleep_seconds: int = 10) -
         try:
             with urlopen(req, timeout=30) as resp:
                 body = resp.read().decode("utf-8", errors="replace")
-                if resp.status == 200 and "ZINC RESEARCH COCKPIT" in body:
+                if resp.status == 200 and marker in body:
                     print(f"production fetch ok: HTTP {resp.status}, attempt {attempt}")
                     return body
-                last_error = RuntimeError(f"unexpected response HTTP {resp.status}; cockpit marker={ 'ZINC RESEARCH COCKPIT' in body }")
+                last_error = RuntimeError(f"unexpected response HTTP {resp.status}; page marker={marker in body}")
         except (HTTPError, URLError, TimeoutError, OSError) as exc:
             last_error = exc
         print(f"production not ready on attempt {attempt}: {last_error}")
@@ -153,6 +154,18 @@ def main() -> int:
     raw_html = _fetch(page_url, run_id)
     text = _visible_text(raw_html)
     failures: list[str] = []
+
+    markets_html = _fetch(urljoin(page_url, "markets.html"), run_id, marker="GLOBAL MACRO RESEARCH DESK")
+    for key, plan in snapshot.get("decision_book", {}).get("markets", {}).items():
+        _expect(markets_html, f"id='{key}'", failures, f"Markets card {key}")
+        for number, label in enumerate(("市場方向", "證據一致性", "風險位置", "准許進場條件",
+                                        "看錯損失", "出場計畫", "理論風報比", "No-Trade 理由"), 1):
+            _expect(markets_html, f"{number}. {label}", failures, f"{key} audit question {number}")
+    for marker in ("Asset-specific evidence", "Conditional plan · RESEARCH ONLY", "Execution approval boundary"):
+        _expect(markets_html, marker, failures, f"Markets decision chain: {marker}")
+    for private_marker in ("name=\"account_equity\"", "name='account_equity'", "/api/execution/preview", "/api/trades"):
+        if private_marker in markets_html:
+            failures.append(f"private execution control rendered publicly: {private_marker}")
     chart_src = "assets/candle_daily.png"
     if chart_src in raw_html or "assets/candle_weekly.png" in raw_html:
         failures.append("private candle element rendered on public page")

@@ -134,7 +134,7 @@ def main() -> None:
         shfe_research = describe_shfe_history(pd.DataFrame())
         shfe_research["error"] = type(exc).__name__
     cross_assets = recover_cross_assets(fetch_reference_markets(), prior_snapshots)
-    decision_book = build_decision_book(research_close, shfe_research, cross_assets)
+    decision_book = build_decision_book(research_close, shfe_research, cross_assets, market)
 
     daily = add_indicators(daily_raw) if not daily_raw.empty else pd.DataFrame()
     weekly = pd.DataFrame()

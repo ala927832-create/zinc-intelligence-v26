@@ -45,6 +45,9 @@ class PrivateResearchTest(unittest.TestCase):
         self.assertIn("MA20", page())
         self.assertIn("MA50", page())
         self.assertIn("較早", page())
+        self.assertIn("Execution Check", page())
+        self.assertIn("account_equity", page())
+        self.assertIn("成交後 Journal", page())
 
 
 if __name__ == "__main__":

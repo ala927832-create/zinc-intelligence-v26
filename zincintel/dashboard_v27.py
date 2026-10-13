@@ -357,6 +357,25 @@ def _cockpit_cards(snapshot: dict) -> str:
     <div><i>!</i><span>DATA GAP</span><b>LME OHLC 0 · private</b></div></div></section>"""
 
 
+def _global_decision_strip(snapshot: dict) -> str:
+    plans = snapshot.get("decision_book", {}).get("markets", {})
+    cards = []
+    for key, plan in plans.items():
+        ref = plan.get("reference", {})
+        value = ref.get("cash") if key == "lme_zinc" else ref.get("close")
+        if value is None:
+            value = snapshot.get("market_research", {}).get("cross_assets", {}).get(key, {}).get("latest_close")
+        label = "LME Cash" if key == "lme_zinc" else plan.get("market", key)
+        reasons = plan.get("no_trade_reasons", [])
+        cards.append(
+            f"<div><span>{_esc(label)}</span><b>{fmt(value,2)}</b>"
+            f"<small>{_esc(plan.get('direction'))} · {_esc(plan.get('decision'))}</small>"
+            f"<small>{_esc(plan.get('as_of'))} · {_esc((reasons or ['No blocker'])[0])}</small></div>"
+        )
+    return ("<div class='research-strip'>" + "".join(cards) + "</div>" if cards else
+            "<div class='notice warn'>Decision book unavailable; no cross-market conclusion is published.</div>")
+
+
 def build_dashboard_v27(snapshot: dict, candle_frames: dict[str, pd.DataFrame], trades: list[dict], perf: dict) -> Path:
     build_legacy_dashboard(snapshot, candle_frames, trades, perf)
     PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
@@ -441,7 +460,7 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 <div class='mcard'><div class='eyebrow'>Inventory</div><div class='mvalue'>{fmt(market.get('lme_inventory_t'),0)} <small>t</small></div><div class='muted'>Live {fmt(market.get('live_warrants_t'),0)} · Cancelled {fmt(market.get('cancelled_warrants_t'),0)} · Ratio {fmt(market.get('cancelled_ratio_pct'),1)}%</div>{_core_meta(snapshot,'lme_inventory_t')}</div>
 </div></section>
 <section class='panel s12' id='data-health' hidden aria-hidden='true'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
-<section class='panel s12'><div class='section-head'><div><div class='eyebrow'>DAILY DECISION DESK</div><h2>五市場研究摘要</h2></div><a href='markets.html'>完整六道閘門、候選價位與 No-Trade 理由 →</a></div><p class='muted'>Today 只保留結論；詳細規劃移至 Markets，事件脈絡移至 Radar，學習紀錄移至 Journal。Data Health 已自一般閱讀導覽隱藏。</p></section>
+<section class='panel s12'><div class='section-head'><div><div class='eyebrow'>DAILY DECISION DESK</div><h2>跨市場研究摘要</h2></div><a href='markets.html'>完整證據、條件式價位與八問審核 →</a></div><p class='muted'>Today 只保留結論；Markets 顯示每個市場的專屬證據、候選價位與 No-Trade 理由，Radar 顯示跨市場脈絡，Journal 保留研究過程。Data Health 已自一般閱讀導覽隱藏。</p>{_global_decision_strip(snapshot)}</section>
 <section class='panel s12'><div class='cockpit-banner'><div class='cockpit-copy'><div class='eyebrow'>MIXED VIEW 3 · MARKET MAP</div><h2>同一頁比較，不混合合約與幣別</h2><p>LME 區塊只用同源 3M 參考 Close、均線與 RSI；SHFE 區塊使用交易所公布的完整日線 OHLC。兩者可比對方向，但不互相填補缺值。</p><div class='market-cards'><div class='mcard'><span class='eyebrow'>LME</span><div class='mvalue'>{fmt(snapshot.get('market_research',{}).get('close_series',{}).get('latest_close'),1)}</div><div class='muted'>USD/t · Close-only</div></div><div class='mcard'><span class='eyebrow'>SHFE</span><div class='mvalue'>{fmt(snapshot.get('market_research',{}).get('shfe_zinc',{}).get('latest_close'),0)}</div><div class='muted'>CNY/t · True OHLC</div></div><div class='mcard'><span class='eyebrow'>LME OHLC</span><div class='mvalue'>0</div><div class='muted'>private-only framework</div></div></div></div>{_compass(snapshot.get('market_research',{}).get('close_series',{}))}</div></section>
 {_trend_band(snapshot.get('market_research',{}).get('close_series',{}))}
 {_research_panel(snapshot)}

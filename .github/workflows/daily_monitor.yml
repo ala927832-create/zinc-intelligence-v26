@@ -79,6 +79,9 @@ jobs:
       - name: Private research notes test
         run: python test_private_notes.py
 
+      - name: Private execution simulation and journal test
+        run: python -m unittest -q test_execution.py
+
       - name: Discord payload and privacy test
         run: python test_discord.py
 

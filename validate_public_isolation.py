@@ -40,6 +40,12 @@ def validate(root: Path) -> None:
         raise ValueError("Public page must not reference a private candle chart")
     if shfe.get("status") == "AVAILABLE" and "SHFE ZINC" not in page.upper():
         raise ValueError("SHFE chart identity missing from public page")
+    public_text = "\n".join(path.read_text(encoding="utf-8") for path in public.glob("*.html"))
+    private_fields = ("name=\"account_equity\"", "name='account_equity'", "/api/execution/preview",
+                      "/api/trades", "execution_journal.jsonl")
+    leaked = [field for field in private_fields if field in public_text]
+    if leaked:
+        raise ValueError("Private execution controls referenced by public Pages: " + ", ".join(leaked))
 
 
 if __name__ == "__main__":
