@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-13T11:30:16.127106+00:00",
+  "run_time": "2026-10-13T11:34:30.999560+00:00",
   "run_date": "2026-10-13",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-13T11:30:16.181964+00:00",
+    "as_of": "2026-10-13T11:34:31.002817+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-13T11:30:16.181964+00:00",
+        "as_of": "2026-10-13T11:34:31.002817+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -326,26 +326,26 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 104.80999755859375,
-      "change_pct": -1.7252732685978156,
+      "value": 104.81999969482422,
+      "change_pct": -1.715894800630291,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.124000072479248,
-      "change_pct": -1.3577512498531008,
+      "value": 3.121000051498413,
+      "change_pct": -1.452478781537292,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.29000091552734,
-      "change_pct": -0.2827070679965127,
+      "value": 102.2760009765625,
+      "change_pct": -0.29635489283073024,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.755499839782715,
-      "change_pct": 0.8509320302940493,
+      "value": 6.762499809265137,
+      "change_pct": 0.9554325799541408,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -356,14 +356,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 32.11600112915039,
-      "change_pct": 0.5970210246035057,
+      "value": 32.14799880981445,
+      "change_pct": 0.6972474301748965,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 60.58000183105469,
-      "change_pct": 0.7299562680828764,
+      "value": 60.6349983215332,
+      "change_pct": 0.8214021893994339,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -27454,12 +27454,13 @@
           ],
           "trigger_price": 4086.842,
           "maximum_entry": 4069.4101,
-          "hard_stop": 4452.8737,
+          "hard_stop": 4262.4499,
           "close_invalidation": 4249.376,
-          "t1": 3354.7786,
-          "t2": 2988.7469,
+          "t1": 3735.6262,
+          "t2": 3560.0183,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
+          "risk_distance_atr": 2.01,
           "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
         },
         "execution_check": {
@@ -27479,7 +27480,9 @@
           "ema20": 4249.376,
           "sma60": 4327.6083,
           "rsi14": 41.3698,
-          "atr14": 87.1596
+          "atr14": 87.1596,
+          "support20": 4091.2,
+          "resistance20": 4439.7998
         },
         "no_trade_reasons": [
           "Trigger has not been confirmed.",
@@ -27501,6 +27504,11 @@
             "factor": "Observed volatility",
             "status": "AVAILABLE",
             "value": "ATR14 87.1596"
+          },
+          {
+            "factor": "20-session range",
+            "status": "AVAILABLE",
+            "value": "Support 4091.2; resistance 4439.7998"
           },
           {
             "factor": "COMEX contract-specific OI",
@@ -27537,12 +27545,12 @@
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 383.4636,
+            "price_units_per_contract_unit": 193.0398,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 3354.7786,
-            "t2": 2988.7469,
+            "t1": 3735.6262,
+            "t2": 3560.0183,
             "close_invalidation": 4249.376
           },
           "7_planned_rr": {
@@ -27555,7 +27563,7 @@
             "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
           ]
         },
-        "evidence_completeness": 42.9
+        "evidence_completeness": 50.0
       },
       "usdjpy": {
         "market": "USD/JPY",
@@ -27646,12 +27654,13 @@
           ],
           "trigger_price": 102.6344,
           "maximum_entry": 102.7322,
-          "hard_stop": 99.4067,
+          "hard_stop": 101.3224,
           "close_invalidation": 101.3957,
-          "t1": 109.09,
-          "t2": 112.3178,
+          "t1": 105.2586,
+          "t2": 106.5707,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
+          "risk_distance_atr": 2.68,
           "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
         },
         "execution_check": {
@@ -27671,7 +27680,9 @@
           "ema20": 101.3957,
           "sma60": 100.2995,
           "rsi14": 72.2864,
-          "atr14": 0.4889
+          "atr14": 0.4889,
+          "support20": 99.48,
+          "resistance20": 102.61
         },
         "no_trade_reasons": [
           "Trigger has not been confirmed.",
@@ -27693,6 +27704,11 @@
             "factor": "Observed volatility",
             "status": "AVAILABLE",
             "value": "ATR14 0.4889"
+          },
+          {
+            "factor": "20-session range",
+            "status": "AVAILABLE",
+            "value": "Support 99.48; resistance 102.61"
           },
           {
             "factor": "Fed rate path",
@@ -27724,12 +27740,12 @@
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 3.3255,
+            "price_units_per_contract_unit": 1.4098,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 109.09,
-            "t2": 112.3178,
+            "t1": 105.2586,
+            "t2": 106.5707,
             "close_invalidation": 101.3957
           },
           "7_planned_rr": {
@@ -27742,7 +27758,7 @@
             "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
           ]
         },
-        "evidence_completeness": 50.0
+        "evidence_completeness": 57.1
       },
       "gold_spot": {
         "market": "Gold spot research",
@@ -27826,16 +27842,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99955688950206,
     "physical_market": 99.63157601005639,
-    "macro": 51.48623570550802,
+    "macro": 51.81977505534985,
     "technical": 57.60882523389534
   },
   "component_coverage": 0.8,
-  "market_score": 73.68274005424796,
+  "market_score": 73.7244324729782,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 62.43099968000112,
-    "20D": 66.4494783850893,
-    "60D": 69.6642613491598
+    "5D": 62.44350740562019,
+    "20D": 66.47240921539091,
+    "60D": 69.69553066320748
   },
   "market_quality": {
     "confidence": 93.0,
@@ -27863,7 +27879,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 0.23068385565972221
+    "max_age_days": 0.23365179155092594
   },
   "procurement": {
     "status": "OK",
