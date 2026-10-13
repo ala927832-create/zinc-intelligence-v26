@@ -16,7 +16,9 @@ from zincintel.free_data import enrich_market_with_free_sources, update_close_hi
 from zincintel.free_mirrors import enrich_market_with_free_mirrors
 from zincintel.indicators import add_close_indicators, add_indicators, latest_indicator_dict
 from zincintel.market_research import describe_close_series, recover_verified_close_history
-from zincintel.line_notify import build_alert_message, build_daily_message, send_line_text
+from zincintel.line_notify import (
+    build_alert_message, build_daily_message, notification_plan, send_line_text,
+)
 from zincintel.models import (
     event_overlay, macro_score, market_regime, market_structure_score, multi_horizon_scores,
     physical_score, procurement_metrics, smelter_score, strategy_recommendation,
@@ -290,20 +292,22 @@ def main() -> None:
     else:
         print("Discord status: DISABLED (DISCORD_WEBHOOK_URL not configured)")
 
-    if os.getenv("LINE_CHANNEL_ACCESS_TOKEN") and os.getenv("LINE_USER_ID"):
+    line_mode = os.getenv("LINE_NOTIFICATION_MODE", "disabled")
+    if os.getenv("LINE_CHANNEL_ACCESS_TOKEN") and os.getenv("LINE_USER_ID") and line_mode != "disabled":
         try:
-            send_line_text(build_daily_message(snapshot))
-            previous = next((x for x in _prior_snapshot_candidates() if x.get("run_time") != run_time), {})
-            old = previous.get("decision_book", {}).get("markets", {})
-            changed = [key for key, value in decision_book.get("markets", {}).items()
-                       if old.get(key, {}).get("direction") not in (None, value.get("direction"))]
-            if changed:
-                send_line_text(build_alert_message(snapshot, changed))
-            print(f"LINE status: SENT (alerts={len(changed)})")
+            previous = prior_snapshots[0] if prior_snapshots else {}
+            plan = notification_plan(snapshot, previous, line_mode)
+            sent = 0
+            if plan["daily"]:
+                sent += int(send_line_text(build_daily_message(snapshot)))
+            if plan["alerts"]:
+                sent += int(send_line_text(build_alert_message(snapshot, plan["alerts"])))
+            status = "SENT" if sent else "SKIPPED_NO_NEW_EVENT"
+            print(f"LINE status: {status} (mode={line_mode}, daily={int(plan['daily'])}, alerts={len(plan['alerts'])})")
         except Exception as exc:
             print(f"LINE status: FAILED ({type(exc).__name__})")
     else:
-        print("LINE status: DISABLED (LINE credentials not configured)")
+        print(f"LINE status: DISABLED (mode={line_mode})")
 
 
 if __name__ == "__main__":

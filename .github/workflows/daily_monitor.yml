@@ -123,6 +123,10 @@ jobs:
           DEMAND_60D_T: ${{ github.event.inputs.demand_60d_t || '' }}
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
           LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+          # 10:30 Taiwan sends one daily digest. 17:30 sends only material
+          # direction/trigger/data-health changes. Manual dispatch is a safe
+          # daily-mode test; code pushes never send LINE messages.
+          LINE_NOTIFICATION_MODE: ${{ github.event_name == 'workflow_dispatch' && 'daily' || (github.event_name == 'schedule' && github.event.schedule == '30 2 * * 1-5' && 'daily' || (github.event_name == 'schedule' && 'alert_only' || 'disabled')) }}
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
           ENABLE_USD_RESEARCH_BASKET: "1"
           # Inject only through the repository secret; application logs report status, never the URL.
