@@ -1,6 +1,6 @@
 <!doctype html><html lang='zh-Hant'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>System Status</title><style>
 :root{--ivory:#f4f1e9;--white:#fff;--navy:#0b2f4f;--ink:#153552;--muted:#687e90;--line:#d5dde3;--teal:#087b70;--orange:#c8783d;--red:#d94a4f}
-*{box-sizing:border-box}body{margin:0;background:var(--ivory);color:var(--ink);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}.head{background:linear-gradient(112deg,#0a2a48,#123e61);color:#fff;border-bottom:3px solid var(--orange);padding:18px 24px}.head h1{font:700 29px Georgia,serif;margin:0}.head small{color:#d4e0e8}.shell{display:grid;grid-template-columns:190px minmax(0,1fr);max-width:1760px;margin:auto}.nav{min-height:100vh;background:#fbfaf6;border-right:1px solid var(--line);padding:16px 10px}.nav a{display:block;padding:11px;color:#244966;text-decoration:none;border-left:3px solid transparent}.nav a.on,.nav a:hover{background:var(--navy);color:#fff;border-left-color:var(--orange)}main{padding:16px;min-width:0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}.card{grid-column:span 12;background:#fff;border:1px solid var(--line);border-radius:7px;padding:15px;box-shadow:0 3px 12px rgba(18,50,76,.05)}.half{grid-column:span 6}.third{grid-column:span 4}h2{font:700 16px Georgia,serif;margin:0 0 10px}.pill{display:inline-block;border-radius:99px;padding:4px 9px;font-size:11px;background:#e8edf0}.good{background:#dcf1ec;color:#086d63}.wait{background:#fae9d9;color:#8a552e}.bad{background:#fae0e2;color:#a7333a}.price{font-size:25px;font-weight:800}.muted{color:var(--muted)}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #e1e6e9;padding:8px;text-align:left;vertical-align:top}th{background:#f3f5f4}.gates{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}.gate{background:#f8f6f0;border:1px solid var(--line);padding:9px;border-radius:5px}.gate b,.gate span{display:block}.gate span{font-size:11px;color:var(--muted)}.rules{border-left:4px solid var(--orange);padding:12px;background:#fff8f1}.dark{background:#0b2f4f;color:#fff}.dark .muted{color:#bed0dc}.chart{height:180px;background:linear-gradient(#103c60,#092d4b);border-radius:6px;display:grid;place-items:center;color:#bed0dc}.journal{border-left:3px solid var(--teal);padding-left:12px}.footer{padding:25px;color:var(--muted);text-align:center}@media(max-width:900px){.shell{grid-template-columns:1fr}.nav{min-height:0;display:flex;overflow:auto}.nav a{white-space:nowrap}.half,.third{grid-column:span 12}.gates{grid-template-columns:repeat(2,1fr)}}
+*{box-sizing:border-box}body{margin:0;background:var(--ivory);color:var(--ink);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}.head{background:linear-gradient(112deg,#0a2a48,#123e61);color:#fff;border-bottom:3px solid var(--orange);padding:18px 24px}.head h1{font:700 29px Georgia,serif;margin:0}.head small{color:#d4e0e8}.shell{display:grid;grid-template-columns:190px minmax(0,1fr);max-width:1760px;margin:auto}.nav{min-height:100vh;background:#fbfaf6;border-right:1px solid var(--line);padding:16px 10px}.nav a{display:block;padding:11px;color:#244966;text-decoration:none;border-left:3px solid transparent}.nav a.on,.nav a:hover{background:var(--navy);color:#fff;border-left-color:var(--orange)}main{padding:16px;min-width:0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}.card{grid-column:span 12;background:#fff;border:1px solid var(--line);border-radius:7px;padding:15px;box-shadow:0 3px 12px rgba(18,50,76,.05)}.half{grid-column:span 6}h2{font:700 16px Georgia,serif;margin:0 0 10px}.pill{display:inline-block;border-radius:99px;padding:4px 9px;font-size:11px;background:#e8edf0}.good{background:#dcf1ec;color:#086d63}.wait{background:#fae9d9;color:#8a552e}.bad{background:#fae0e2;color:#a7333a}.price{font-size:25px;font-weight:800}.muted{color:var(--muted)}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #e1e6e9;padding:8px;text-align:left;vertical-align:top}th{background:#f3f5f4}.gates{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}.gate{background:#f8f6f0;border:1px solid var(--line);padding:9px;border-radius:5px}.gate b,.gate span{display:block}.gate span{font-size:11px;color:var(--muted)}.rules{border-left:4px solid var(--orange);padding:12px;background:#fff8f1}.dark{background:#0b2f4f;color:#fff}.dark .muted{color:#bed0dc}.chart{height:190px;background:linear-gradient(#103c60,#092d4b);border-radius:6px;padding:8px;color:#bed0dc}.chart svg{width:100%;height:100%}.journal{border-left:3px solid var(--teal);padding-left:12px}.footer{padding:25px;color:var(--muted);text-align:center}.status-ok{color:var(--teal);font-weight:700}.status-missing{color:var(--red);font-weight:700}.audit td:first-child{width:32%;font-weight:700}.market-head{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}.market-meta{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin:10px 0}.market-meta div{padding:8px;background:#f7f6f2;border:1px solid var(--line);border-radius:5px}.market-meta span{display:block;color:var(--muted);font-size:11px}.primary{border-left:5px solid var(--teal)}@media(max-width:900px){.shell{grid-template-columns:1fr}.nav{min-height:0;display:flex;overflow:auto}.nav a{white-space:nowrap}.half{grid-column:span 12}.gates,.market-meta{grid-template-columns:repeat(2,1fr)}}
 </style></head><body><header class='head'><h1>GLOBAL MACRO RESEARCH DESK</h1><small>2026-10-13 · delayed research data · execution requires live quote</small></header><div class='shell'><nav class='nav'><a class='' href='index.html'>Today</a><a class='' href='markets.html'>Markets</a><a class='' href='radar.html'>Radar</a><a class='' href='journal.html'>Journal</a></nav><main><div class='grid'><section class='card'><h2>Data Health · internal operations view</h2><p>This page is intentionally absent from normal navigation.</p><pre>{
   &quot;lme_cash&quot;: {
     &quot;value_present&quot;: true,
@@ -8,7 +8,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_REFERENCE_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-12&quot;,
-    &quot;age_days&quot;: 1.4,
+    &quot;age_days&quot;: 1.48,
     &quot;expected_update&quot;: &quot;T+1 business day&quot;,
     &quot;max_age_days&quot;: 4,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -20,7 +20,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_REFERENCE_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-12&quot;,
-    &quot;age_days&quot;: 1.4,
+    &quot;age_days&quot;: 1.48,
     &quot;expected_update&quot;: &quot;T+1 business day&quot;,
     &quot;max_age_days&quot;: 4,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -32,7 +32,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-09&quot;,
-    &quot;age_days&quot;: 4.4,
+    &quot;age_days&quot;: 4.48,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -44,7 +44,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-09&quot;,
-    &quot;age_days&quot;: 4.4,
+    &quot;age_days&quot;: 4.48,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -56,7 +56,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-09&quot;,
-    &quot;age_days&quot;: 4.4,
+    &quot;age_days&quot;: 4.48,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -68,7 +68,7 @@
     &quot;source_grade&quot;: &quot;B_MARKET_SOURCE_RESTRICTED&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_WEB_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-09-30&quot;,
-    &quot;age_days&quot;: 13.4,
+    &quot;age_days&quot;: 13.48,
     &quot;expected_update&quot;: &quot;Weekly or better&quot;,
     &quot;max_age_days&quot;: 14,
     &quot;importance&quot;: &quot;SECONDARY&quot;,
@@ -80,7 +80,7 @@
     &quot;source_grade&quot;: &quot;B_MARKET_SOURCE_RESTRICTED&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_WEB_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-13&quot;,
-    &quot;age_days&quot;: 0.4,
+    &quot;age_days&quot;: 0.48,
     &quot;expected_update&quot;: &quot;Weekly or better&quot;,
     &quot;max_age_days&quot;: 14,
     &quot;importance&quot;: &quot;SECONDARY&quot;,

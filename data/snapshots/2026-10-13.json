@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-13T09:39:09.259718+00:00",
+  "run_time": "2026-10-13T11:30:16.127106+00:00",
   "run_date": "2026-10-13",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-13T09:39:09.262925+00:00",
+    "as_of": "2026-10-13T11:30:16.181964+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-13T09:39:09.262925+00:00",
+        "as_of": "2026-10-13T11:30:16.181964+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -165,7 +165,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 1.4,
+        "age_days": 1.48,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -177,7 +177,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 1.4,
+        "age_days": 1.48,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -189,7 +189,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-09",
-        "age_days": 4.4,
+        "age_days": 4.48,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -201,7 +201,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-09",
-        "age_days": 4.4,
+        "age_days": 4.48,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -213,7 +213,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-09",
-        "age_days": 4.4,
+        "age_days": 4.48,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -225,7 +225,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-09-30",
-        "age_days": 13.4,
+        "age_days": 13.48,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -237,7 +237,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-10-13",
-        "age_days": 0.4,
+        "age_days": 0.48,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -268,7 +268,7 @@
       "source": "SMM_PUBLIC",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 13.4,
+      "age_days": 13.48,
       "url": "https://www-old.metal.com/Zinc/202506030011",
       "error": null
     },
@@ -282,7 +282,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 4.4,
+      "age_days": 4.48,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -296,7 +296,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Monthly",
-      "age_days": 12.4,
+      "age_days": 12.48,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -309,7 +309,7 @@
       "source": "Fastmarkets reported Teck / Korea Zinc annual benchmark",
       "source_grade": "B_VERIFIED_BENCHMARK",
       "expected_update": "Annual",
-      "age_days": 221.4,
+      "age_days": 221.48,
       "url": "https://www.fastmarkets.com/insights/teck-korea-zinc-benchmark-zinc-concentrate-tcs-85-per-tonne/",
       "notes": "Annual benchmark reference only. Do not substitute for China import spot TC or China domestic TC."
     },
@@ -326,26 +326,26 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 104.83000183105469,
-      "change_pct": -1.7065163326627664,
+      "value": 104.80999755859375,
+      "change_pct": -1.7252732685978156,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.135999917984009,
-      "change_pct": -0.9788486513315431,
+      "value": 3.124000072479248,
+      "change_pct": -1.3577512498531008,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.35600280761719,
-      "change_pct": -0.21836519734754756,
+      "value": 102.29000091552734,
+      "change_pct": -0.2827070679965127,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.760000228881836,
-      "change_pct": 0.9181170567035712,
+      "value": 6.755499839782715,
+      "change_pct": 0.8509320302940493,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -356,14 +356,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 32.154998779296875,
-      "change_pct": 0.7191734499917057,
+      "value": 32.11600112915039,
+      "change_pct": 0.5970210246035057,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 60.72999954223633,
-      "change_pct": 0.9793663445265111,
+      "value": 60.58000183105469,
+      "change_pct": 0.7299562680828764,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -27252,31 +27252,123 @@
     "minimum_actual_rr": 2.0,
     "markets": {
       "lme_zinc": {
-        "market": "LME Zinc 3M reference",
+        "market": "LME Zinc Cash primary / 3M technical reference",
         "as_of": "2026-10-12",
-        "decision": "NO_TRADE",
+        "decision": "WAIT_FOR_TRIGGER",
         "direction": "STRONG_BEAR",
-        "evidence_alignment": "CLOSE_ONLY",
+        "evidence_alignment": "PARTIAL_CLOSE_AND_FUNDAMENTAL",
         "data_gate": "PASS_CLOSE_ONLY",
         "regime_gate": "STRONG_BEAR",
-        "strategy_gate": "RESEARCH_ONLY",
-        "trigger_gate": "BLOCKED_NO_LME_OHLC",
-        "execution_gate": "BLOCKED_NO_BID_ASK",
-        "daily_plan": {},
+        "strategy_gate": "CLOSE_CONFIRMED_RESEARCH_ONLY",
+        "trigger_gate": "NOT_TRIGGERED_CLOSE_ONLY",
+        "execution_gate": "PENDING_PRIVATE_EXECUTION_CHECK",
+        "daily_plan": {
+          "plan_basis": "LME_3M_CLOSE_ONLY_RESEARCH",
+          "setup_zone": [
+            3760.0,
+            3810.51
+          ],
+          "trigger_price": 3711.1,
+          "maximum_entry": 3711.1,
+          "hard_stop": 3954.9,
+          "close_invalidation": 3862.8,
+          "t1": 3223.5,
+          "t2": 2979.7,
+          "planned_rr_t1": 2.0,
+          "planned_rr_t2": 3.0,
+          "conditional_order": "DAILY_CLOSE_CONFIRMATION_RESEARCH_ONLY"
+        },
         "reference": {
+          "cash": 3811.0,
+          "three_month": 3760.0,
+          "cash_3m": 51.0,
           "close": 3760.0,
+          "price_basis": "Cash headline; 3M close-only technical levels",
           "sma14": 3809.93,
           "sma30": 3862.8,
           "ema20": 3810.51,
           "rsi14": 44.17
         },
         "execution_check": {
-          "status": "NOT_AVAILABLE"
+          "status": "PRIVATE_INPUT_REQUIRED",
+          "required": [
+            "contract",
+            "quote_time",
+            "bid",
+            "ask",
+            "account_risk",
+            "multiplier",
+            "fees"
+          ]
         },
         "no_trade_reasons": [
-          "LME series is close-only; no candle trigger or ATR may be inferred.",
-          "No verified executable contract bid/ask, spread or fill."
-        ]
+          "Close-based trigger has not been confirmed; no candle pattern or ATR is inferred.",
+          "Live bid/ask and acceptable spread are unavailable."
+        ],
+        "evidence": [
+          {
+            "factor": "Cash headline",
+            "status": "AVAILABLE",
+            "value": 3811.0
+          },
+          {
+            "factor": "3M technical reference",
+            "status": "AVAILABLE",
+            "value": 3760.0
+          },
+          {
+            "factor": "Cash−3M curve",
+            "status": "BACKWARDATION",
+            "value": 51.0
+          },
+          {
+            "factor": "Inventory",
+            "status": "AVAILABLE",
+            "value": 132850.0
+          },
+          {
+            "factor": "Cancelled warrants",
+            "status": "AVAILABLE",
+            "value": 9.446744448626271
+          },
+          {
+            "factor": "TC",
+            "status": "AVAILABLE",
+            "value": -135.72
+          }
+        ],
+        "decision_audit": {
+          "1_market_direction": "STRONG_BEAR",
+          "2_evidence_consistency": "PARTIAL_CLOSE_AND_FUNDAMENTAL",
+          "3_risk_location": [
+            3760.0,
+            3810.51
+          ],
+          "4_entry_permission": {
+            "trigger": 3711.1,
+            "maximum_entry": 3711.1,
+            "condition": "DAILY_CLOSE_CONFIRMATION_RESEARCH_ONLY",
+            "execution_check": "PENDING_PRIVATE_EXECUTION_CHECK"
+          },
+          "5_loss_if_wrong": {
+            "price_units_per_contract_unit": 243.8,
+            "note": "Account loss requires live fill, multiplier, fees and quantity."
+          },
+          "6_exit_plan": {
+            "t1": 3223.5,
+            "t2": 2979.7,
+            "close_invalidation": 3862.8
+          },
+          "7_planned_rr": {
+            "t1": 2.0,
+            "t2": 3.0
+          },
+          "8_no_trade_reason": [
+            "Close-based trigger has not been confirmed; no candle pattern or ATR is inferred.",
+            "Live bid/ask and acceptable spread are unavailable."
+          ]
+        },
+        "evidence_completeness": 100.0
       },
       "shfe_zinc": {
         "market": "SHFE Zinc",
@@ -27294,6 +27386,45 @@
         "no_trade_reasons": [
           "Close, EMA20 and SMA60 are not directionally aligned."
         ],
+        "evidence": [
+          {
+            "factor": "Trend structure",
+            "status": "MIXED",
+            "value": "Close 26115.0; EMA20 26402.22; SMA60 25859.17"
+          },
+          {
+            "factor": "Momentum",
+            "status": "AVAILABLE",
+            "value": "RSI14 45.58"
+          },
+          {
+            "factor": "Observed volatility",
+            "status": "AVAILABLE",
+            "value": "ATR14 385.57"
+          },
+          {
+            "factor": "cross-market FX-adjusted parity",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          },
+          {
+            "factor": "verified LME/SHFE arbitrage costs",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          }
+        ],
+        "decision_audit": {
+          "1_market_direction": "NEUTRAL",
+          "2_evidence_consistency": "MIXED",
+          "3_risk_location": "NO_VALIDATED_SETUP_ZONE",
+          "4_entry_permission": "ENTRY_NOT_PERMITTED",
+          "5_loss_if_wrong": "NOT_COMPUTABLE",
+          "6_exit_plan": "NOT_AVAILABLE",
+          "7_planned_rr": "NOT_AVAILABLE",
+          "8_no_trade_reason": [
+            "Close, EMA20 and SMA60 are not directionally aligned."
+          ]
+        },
         "regime_gate": "RANGE_OR_TRANSITION",
         "reference": {
           "close": 26115.0,
@@ -27301,7 +27432,8 @@
           "sma60": 25859.17,
           "rsi14": 45.58,
           "atr14": 385.57
-        }
+        },
+        "evidence_completeness": 60.0
       },
       "gold": {
         "market": "COMEX Gold continuous reference",
@@ -27309,7 +27441,7 @@
         "as_of": "2026-10-12",
         "decision": "WAIT_FOR_TRIGGER",
         "direction": "BEAR",
-        "evidence_alignment": "ALIGNED",
+        "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
         "data_gate": "PASS",
         "regime_gate": "BEAR",
         "strategy_gate": "BREAKDOWN_OR_RALLY_SHORT",
@@ -27351,8 +27483,79 @@
         },
         "no_trade_reasons": [
           "Trigger has not been confirmed.",
-          "Live bid/ask and acceptable spread are unavailable."
-        ]
+          "Live bid/ask and acceptable spread are unavailable.",
+          "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
+        ],
+        "evidence": [
+          {
+            "factor": "Trend structure",
+            "status": "SUPPORTS",
+            "value": "Close 4190.6001; EMA20 4249.376; SMA60 4327.6083"
+          },
+          {
+            "factor": "Momentum",
+            "status": "SUPPORTS",
+            "value": "RSI14 41.3698"
+          },
+          {
+            "factor": "Observed volatility",
+            "status": "AVAILABLE",
+            "value": "ATR14 87.1596"
+          },
+          {
+            "factor": "COMEX contract-specific OI",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          },
+          {
+            "factor": "real yield",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          },
+          {
+            "factor": "ETF flow",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          },
+          {
+            "factor": "COT positioning",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          }
+        ],
+        "decision_audit": {
+          "1_market_direction": "BEAR",
+          "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
+          "3_risk_location": [
+            4190.6001,
+            4249.376
+          ],
+          "4_entry_permission": {
+            "trigger": 4086.842,
+            "maximum_entry": 4069.4101,
+            "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
+            "execution_check": "PENDING_LIVE_QUOTE"
+          },
+          "5_loss_if_wrong": {
+            "price_units_per_contract_unit": 383.4636,
+            "note": "Account loss requires live fill, multiplier, fees and quantity."
+          },
+          "6_exit_plan": {
+            "t1": 3354.7786,
+            "t2": 2988.7469,
+            "close_invalidation": 4249.376
+          },
+          "7_planned_rr": {
+            "t1": 2.0,
+            "t2": 3.0
+          },
+          "8_no_trade_reason": [
+            "Trigger has not been confirmed.",
+            "Live bid/ask and acceptable spread are unavailable.",
+            "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
+          ]
+        },
+        "evidence_completeness": 42.9
       },
       "usdjpy": {
         "market": "USD/JPY",
@@ -27370,6 +27573,50 @@
         "no_trade_reasons": [
           "Close, EMA20 and SMA60 are not directionally aligned."
         ],
+        "evidence": [
+          {
+            "factor": "Trend structure",
+            "status": "MIXED",
+            "value": "Close 158.61; EMA20 157.673; SMA60 158.4093"
+          },
+          {
+            "factor": "Momentum",
+            "status": "AVAILABLE",
+            "value": "RSI14 57.9695"
+          },
+          {
+            "factor": "Observed volatility",
+            "status": "AVAILABLE",
+            "value": "ATR14 1.0725"
+          },
+          {
+            "factor": "US-Japan 2Y yield spread",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          },
+          {
+            "factor": "BoJ/Fed policy differential",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          },
+          {
+            "factor": "intervention risk",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          }
+        ],
+        "decision_audit": {
+          "1_market_direction": "NEUTRAL",
+          "2_evidence_consistency": "MIXED",
+          "3_risk_location": "NO_VALIDATED_SETUP_ZONE",
+          "4_entry_permission": "ENTRY_NOT_PERMITTED",
+          "5_loss_if_wrong": "NOT_COMPUTABLE",
+          "6_exit_plan": "NOT_AVAILABLE",
+          "7_planned_rr": "NOT_AVAILABLE",
+          "8_no_trade_reason": [
+            "Close, EMA20 and SMA60 are not directionally aligned."
+          ]
+        },
         "regime_gate": "RANGE_OR_TRANSITION",
         "reference": {
           "close": 158.61,
@@ -27377,7 +27624,8 @@
           "sma60": 158.4093,
           "rsi14": 57.9695,
           "atr14": 1.0725
-        }
+        },
+        "evidence_completeness": 50.0
       },
       "dxy": {
         "market": "US Dollar Index",
@@ -27385,7 +27633,7 @@
         "as_of": "2026-10-12",
         "decision": "WAIT_FOR_TRIGGER",
         "direction": "BULL",
-        "evidence_alignment": "ALIGNED",
+        "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
         "data_gate": "PASS",
         "regime_gate": "BULL",
         "strategy_gate": "BREAKOUT_OR_PULLBACK_LONG",
@@ -27427,8 +27675,74 @@
         },
         "no_trade_reasons": [
           "Trigger has not been confirmed.",
-          "Live bid/ask and acceptable spread are unavailable."
-        ]
+          "Live bid/ask and acceptable spread are unavailable.",
+          "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
+        ],
+        "evidence": [
+          {
+            "factor": "Trend structure",
+            "status": "SUPPORTS",
+            "value": "Close 102.58; EMA20 101.3957; SMA60 100.2995"
+          },
+          {
+            "factor": "Momentum",
+            "status": "CAUTION",
+            "value": "RSI14 72.2864"
+          },
+          {
+            "factor": "Observed volatility",
+            "status": "AVAILABLE",
+            "value": "ATR14 0.4889"
+          },
+          {
+            "factor": "Fed rate path",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          },
+          {
+            "factor": "US 2Y yield",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          },
+          {
+            "factor": "constituent contribution",
+            "status": "NOT_INTEGRATED",
+            "value": null
+          }
+        ],
+        "decision_audit": {
+          "1_market_direction": "BULL",
+          "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
+          "3_risk_location": [
+            101.3957,
+            102.58
+          ],
+          "4_entry_permission": {
+            "trigger": 102.6344,
+            "maximum_entry": 102.7322,
+            "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
+            "execution_check": "PENDING_LIVE_QUOTE"
+          },
+          "5_loss_if_wrong": {
+            "price_units_per_contract_unit": 3.3255,
+            "note": "Account loss requires live fill, multiplier, fees and quantity."
+          },
+          "6_exit_plan": {
+            "t1": 109.09,
+            "t2": 112.3178,
+            "close_invalidation": 101.3957
+          },
+          "7_planned_rr": {
+            "t1": 2.0,
+            "t2": 3.0
+          },
+          "8_no_trade_reason": [
+            "Trigger has not been confirmed.",
+            "Live bid/ask and acceptable spread are unavailable.",
+            "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
+          ]
+        },
+        "evidence_completeness": 50.0
       },
       "gold_spot": {
         "market": "Gold spot research",
@@ -27445,7 +27759,21 @@
         },
         "no_trade_reasons": [
           "At least 60 validated close sessions are required."
-        ]
+        ],
+        "evidence": [],
+        "decision_audit": {
+          "1_market_direction": "UNDETERMINED",
+          "2_evidence_consistency": "INSUFFICIENT",
+          "3_risk_location": "NO_VALIDATED_SETUP_ZONE",
+          "4_entry_permission": "ENTRY_NOT_PERMITTED",
+          "5_loss_if_wrong": "NOT_COMPUTABLE",
+          "6_exit_plan": "NOT_AVAILABLE",
+          "7_planned_rr": "NOT_AVAILABLE",
+          "8_no_trade_reason": [
+            "At least 60 validated close sessions are required."
+          ]
+        },
+        "evidence_completeness": 0.0
       },
       "usd_basket": {
         "market": "USD Research Basket",
@@ -27462,7 +27790,21 @@
         },
         "no_trade_reasons": [
           "At least 60 validated close sessions are required."
-        ]
+        ],
+        "evidence": [],
+        "decision_audit": {
+          "1_market_direction": "UNDETERMINED",
+          "2_evidence_consistency": "INSUFFICIENT",
+          "3_risk_location": "NO_VALIDATED_SETUP_ZONE",
+          "4_entry_permission": "ENTRY_NOT_PERMITTED",
+          "5_loss_if_wrong": "NOT_COMPUTABLE",
+          "6_exit_plan": "NOT_AVAILABLE",
+          "7_planned_rr": "NOT_AVAILABLE",
+          "8_no_trade_reason": [
+            "At least 60 validated close sessions are required."
+          ]
+        },
+        "evidence_completeness": 0.0
       }
     }
   },
@@ -27484,16 +27826,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99955688950206,
     "physical_market": 99.63157601005639,
-    "macro": 51.46967980970525,
+    "macro": 51.48623570550802,
     "technical": 57.60882523389534
   },
   "component_coverage": 0.8,
-  "market_score": 73.6806705672726,
+  "market_score": 73.68274005424796,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 62.430378833908506,
-    "20D": 66.44834016725284,
-    "60D": 69.66270923392828
+    "5D": 62.43099968000112,
+    "20D": 66.4494783850893,
+    "60D": 69.6642613491598
   },
   "market_quality": {
     "confidence": 93.0,
@@ -27521,7 +27863,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 0.1535341810648148
+    "max_age_days": 0.23068385565972221
   },
   "procurement": {
     "status": "OK",
