@@ -7,13 +7,16 @@ import pandas as pd
 
 from zincintel.china_tc import fetch_china_tc
 from zincintel.config import load_settings
+from zincintel.cross_asset_research import fetch_reference_markets, recover_last_verified as recover_cross_assets
 from zincintel.dashboard_v27 import build_dashboard_v27
 from zincintel.data_governance import annotate_data_health, apply_last_known_good, core_data_gate
+from zincintel.decision_framework import build_decision_book
 from zincintel.discord import send_discord
 from zincintel.free_data import enrich_market_with_free_sources, update_close_history
 from zincintel.free_mirrors import enrich_market_with_free_mirrors
 from zincintel.indicators import add_close_indicators, add_indicators, latest_indicator_dict
 from zincintel.market_research import describe_close_series, recover_verified_close_history
+from zincintel.line_notify import build_alert_message, build_daily_message, send_line_text
 from zincintel.models import (
     event_overlay, macro_score, market_regime, market_structure_score, multi_horizon_scores,
     physical_score, procurement_metrics, smelter_score, strategy_recommendation,
@@ -22,6 +25,7 @@ from zincintel.models import (
 from zincintel.paper import empirical_stats, performance_summary, process_paper_trades, queue_trade_if_actionable
 from zincintel.providers import fetch_macro, fetch_market_snapshot
 from zincintel.quality import assess_market_quality, procurement_quality
+from zincintel.research_pages import build_research_pages
 from zincintel.shfe_research import describe_history as describe_shfe_history, update_history as update_shfe_history
 from zincintel.state import (
     append_history, append_signal, load_trades, save_latest, save_trades, update_procurement_state,
@@ -86,8 +90,9 @@ def main() -> None:
     market = enrich_market_with_free_sources(fetch_market_snapshot())
     market, mirror_history, mirror_history_source = enrich_market_with_free_mirrors(market)
     close_history_recovery = {}
+    prior_snapshots = _prior_snapshot_candidates()
     if mirror_history.empty:
-        recovered, close_history_recovery = recover_verified_close_history(_prior_snapshot_candidates())
+        recovered, close_history_recovery = recover_verified_close_history(prior_snapshots)
         if not recovered.empty:
             mirror_history = recovered
             mirror_history_source = str(close_history_recovery["source"])
@@ -126,6 +131,8 @@ def main() -> None:
     except Exception as exc:
         shfe_research = describe_shfe_history(pd.DataFrame())
         shfe_research["error"] = type(exc).__name__
+    cross_assets = recover_cross_assets(fetch_reference_markets(), prior_snapshots)
+    decision_book = build_decision_book(research_close, shfe_research, cross_assets)
 
     daily = add_indicators(daily_raw) if not daily_raw.empty else pd.DataFrame()
     weekly = pd.DataFrame()
@@ -209,7 +216,8 @@ def main() -> None:
         "candle_sources": {"daily": candle_source, "1h": candle_1h_source, "15m": candle_15m_source, "close_history": close_history_source},
         "technical_mode": technical_mode,
         "daily_candle_status": candle_status,
-        "market_research": {"close_series": research_close, "shfe_zinc": shfe_research},
+        "market_research": {"close_series": research_close, "shfe_zinc": shfe_research, "cross_assets": cross_assets},
+        "decision_book": decision_book,
         "free_close_history_points": int(len(close_history)),
         "indicators": indicators,
         "components": components,
@@ -232,6 +240,8 @@ def main() -> None:
             "Close-only technical mode is analysis-only; paper execution requires true OHLC.",
             "SHFE zinc OHLC is a separate CNY/tonne exchange series and is never represented as LME.",
             "Public procurement inputs remain masked by default.",
+            "Cross-asset public references are delayed research inputs, not executable quotes.",
+            "No trigger, no order; live bid/ask and Actual R:R >= 1:2 are required at execution time.",
         ]
     }
 
@@ -264,6 +274,7 @@ def main() -> None:
     })
 
     out = build_dashboard_v27(snapshot, {"daily": daily, "weekly": weekly, "1h": h1_raw, "15m": m15_raw}, trades, perf)
+    build_research_pages(snapshot)
     # The chart digest is known only after rendering and must travel with the
     # exact snapshot used by the production verifier.
     save_latest(snapshot)
@@ -278,6 +289,21 @@ def main() -> None:
             print(f"Discord status: FAILED ({exc})")
     else:
         print("Discord status: DISABLED (DISCORD_WEBHOOK_URL not configured)")
+
+    if os.getenv("LINE_CHANNEL_ACCESS_TOKEN") and os.getenv("LINE_USER_ID"):
+        try:
+            send_line_text(build_daily_message(snapshot))
+            previous = next((x for x in _prior_snapshot_candidates() if x.get("run_time") != run_time), {})
+            old = previous.get("decision_book", {}).get("markets", {})
+            changed = [key for key, value in decision_book.get("markets", {}).items()
+                       if old.get(key, {}).get("direction") not in (None, value.get("direction"))]
+            if changed:
+                send_line_text(build_alert_message(snapshot, changed))
+            print(f"LINE status: SENT (alerts={len(changed)})")
+        except Exception as exc:
+            print(f"LINE status: FAILED ({type(exc).__name__})")
+    else:
+        print("LINE status: DISABLED (LINE credentials not configured)")
 
 
 if __name__ == "__main__":

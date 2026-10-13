@@ -82,6 +82,9 @@ jobs:
       - name: Discord payload and privacy test
         run: python test_discord.py
 
+      - name: Decision framework, LINE and research pages test
+        run: python -m unittest -q test_decision_framework.py test_line_notify.py test_research_pages.py test_cross_asset_research.py test_n8n_templates.py
+
   build:
     if: github.event_name != 'pull_request'
     needs: test
@@ -118,6 +121,10 @@ jobs:
         env:
           CURRENT_INVENTORY_T: ${{ github.event.inputs.current_inventory_t || '' }}
           DEMAND_60D_T: ${{ github.event.inputs.demand_60d_t || '' }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          ENABLE_USD_RESEARCH_BASKET: "1"
           # Inject only through the repository secret; application logs report status, never the URL.
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 

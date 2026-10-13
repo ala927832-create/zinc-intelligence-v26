@@ -1,0 +1,15 @@
+{
+  "name":"Zinc Intelligence - Official Macro News Digest",
+  "nodes":[
+    {"id":"schedule","name":"Weekday official news","type":"n8n-nodes-base.scheduleTrigger","typeVersion":1.2,"position":[0,0],"parameters":{"rule":{"interval":[{"field":"cronExpression","expression":"0 19 * * 1-5"}]}}},
+    {"id":"fed","name":"Federal Reserve monetary RSS","type":"n8n-nodes-base.rssFeedRead","typeVersion":1.2,"position":[260,-160],"parameters":{"url":"https://www.federalreserve.gov/feeds/press_monetary.xml"}},
+    {"id":"bls","name":"BLS latest RSS","type":"n8n-nodes-base.rssFeedRead","typeVersion":1.2,"position":[260,0],"parameters":{"url":"https://www.bls.gov/feed/bls_latest.rss"}},
+    {"id":"boj","name":"BOJ whats-new RSS","type":"n8n-nodes-base.rssFeedRead","typeVersion":1.2,"position":[260,160],"parameters":{"url":"https://www.boj.or.jp/en/rss/whatsnew.xml"}},
+    {"id":"merge1","name":"Merge Fed and BLS","type":"n8n-nodes-base.merge","typeVersion":3,"position":[520,-70],"parameters":{"mode":"append"}},
+    {"id":"merge2","name":"Merge BOJ","type":"n8n-nodes-base.merge","typeVersion":3,"position":[740,0],"parameters":{"mode":"append"}},
+    {"id":"filter","name":"Keep recent official items","type":"n8n-nodes-base.code","typeVersion":2,"position":[960,0],"parameters":{"jsCode":"const cutoff=Date.now()-72*3600*1000; return $input.all().filter(x=>{const d=Date.parse(x.json.isoDate||x.json.pubDate||''); return Number.isFinite(d)&&d>=cutoff;}).slice(0,20).map(x=>({json:{title:x.json.title,link:x.json.link,published:x.json.isoDate||x.json.pubDate,summary:(x.json.contentSnippet||x.json.content||'').slice(0,600)}}));"}},
+    {"id":"note","name":"Human-readable official feed output","type":"n8n-nodes-base.noOp","typeVersion":1,"position":[1200,0],"parameters":{}}
+  ],
+  "connections":{"Weekday official news":{"main":[[{"node":"Federal Reserve monetary RSS","type":"main","index":0},{"node":"BLS latest RSS","type":"main","index":0},{"node":"BOJ whats-new RSS","type":"main","index":0}]]},"Federal Reserve monetary RSS":{"main":[[{"node":"Merge Fed and BLS","type":"main","index":0}]]},"BLS latest RSS":{"main":[[{"node":"Merge Fed and BLS","type":"main","index":1}]]},"Merge Fed and BLS":{"main":[[{"node":"Merge BOJ","type":"main","index":0}]]},"BOJ whats-new RSS":{"main":[[{"node":"Merge BOJ","type":"main","index":1}]]},"Merge BOJ":{"main":[[{"node":"Keep recent official items","type":"main","index":0}]]},"Keep recent official items":{"main":[[{"node":"Human-readable official feed output","type":"main","index":0}]]}},
+  "settings":{"timezone":"Asia/Taipei","executionOrder":"v1"},"active":false,"versionId":"template-official-news-v1"
+}

@@ -167,13 +167,22 @@ def describe_history(frame: pd.DataFrame) -> dict:
     valid.loc[valid.index[0], "roll"] = False
     valid["sma20"] = valid.close.rolling(20, min_periods=20).mean()
     valid["sma50"] = valid.close.rolling(50, min_periods=50).mean()
+    valid["sma60"] = valid.close.rolling(60, min_periods=60).mean()
     valid["ema20"] = valid.close.ewm(span=20, adjust=False, min_periods=20).mean()
+    previous = valid.close.shift(1)
+    true_range = pd.concat([(valid.high-valid.low), (valid.high-previous).abs(), (valid.low-previous).abs()], axis=1).max(axis=1)
+    valid["atr14"] = true_range.ewm(alpha=1/14, adjust=False, min_periods=14).mean()
+    change = valid.close.diff()
+    gain = change.clip(lower=0).ewm(alpha=1/14, adjust=False, min_periods=14).mean()
+    loss = (-change.clip(upper=0)).ewm(alpha=1/14, adjust=False, min_periods=14).mean()
+    valid["rsi14"] = 100 - 100 / (1 + gain / loss.replace(0, float("nan")))
     def val(x): return round(float(x), 2) if pd.notna(x) and math.isfinite(float(x)) else None
     points = []
     for _, r in valid.tail(500).iterrows():
         points.append({"date": str(r.date), "contract": str(r.contract), "open": val(r.open),
                        "high": val(r.high), "low": val(r.low), "close": val(r.close),
-                       "sma20": val(r.sma20), "sma50": val(r.sma50), "ema20": val(r.ema20),
+                       "sma20": val(r.sma20), "sma50": val(r.sma50), "sma60": val(r.sma60),
+                       "ema20": val(r.ema20), "atr14": val(r.atr14), "rsi14": val(r.rsi14),
                        "volume": int(r.volume), "open_interest": int(r.open_interest), "roll": bool(r.roll)})
     latest = valid.iloc[-1]
     regime = "INSUFFICIENT_DATA"
@@ -184,5 +193,7 @@ def describe_history(frame: pd.DataFrame) -> dict:
                  "coverage_start": str(valid.iloc[0].date), "coverage_end": str(latest.date),
                  "latest_contract": str(latest.contract), "latest_close": val(latest.close),
                  "latest_open_interest": int(latest.open_interest), "roll_count": int(valid.roll.sum()),
+                 "latest_session": {name: val(latest[name]) for name in
+                                    ("open", "high", "low", "close", "sma20", "sma50", "sma60", "ema20", "atr14", "rsi14")},
                  "chart_points": points, "trend": {"regime": regime, "method": "Close vs SMA20 and SMA20 vs SMA50"}})
     return base

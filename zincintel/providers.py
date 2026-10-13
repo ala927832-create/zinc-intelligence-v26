@@ -356,9 +356,16 @@ def fetch_macro(tickers: dict[str, str]) -> dict[str, dict[str, Any]]:
     results: dict[str, dict[str, Any]] = {}
     if yf is None:
         return {name: {"value": None, "change_pct": None, "ticker": ticker, "status": "MISSING", "error": "yfinance not installed"} for name, ticker in tickers.items()}
+    try:
+        # One batch request materially reduces public-endpoint throttling.
+        batch = yf.download(list(tickers.values()), period="7d", interval="1d", auto_adjust=True,
+                            group_by="ticker", progress=False, timeout=15, threads=True)
+    except Exception as exc:
+        return {name: {"value": None, "change_pct": None, "ticker": ticker, "status": "MISSING", "error": type(exc).__name__}
+                for name, ticker in tickers.items()}
     for name, ticker in tickers.items():
         try:
-            df = yf.download(ticker, period="7d", interval="1d", auto_adjust=True, progress=False, timeout=12)
+            df = batch[ticker] if isinstance(batch.columns, pd.MultiIndex) else batch
             if df is None or df.empty:
                 raise ValueError("empty response")
             close = df["Close"]

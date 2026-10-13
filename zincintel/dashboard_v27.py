@@ -423,15 +423,14 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 </style></head><body>
 <header class='site-header'><div class='top'><div><h1>Zn · ZINC RESEARCH COCKPIT</h1><div class='muted'>Industrial metals research · LME close-only + separate SHFE true OHLC</div></div><div><b>{_esc(snapshot.get('run_date'))}</b><br><span class='muted'>Model {_esc(snapshot.get('model_version'))} · RESEARCH ONLY</span></div></div></header>
 <div class='site-shell'><nav class='side-nav' aria-label='Research sections'>
-<a class='active' href='#overview'><span class='nav-icon'>⌂</span>OVERVIEW</a>
+<a class='active' href='index.html'><span class='nav-icon'>⌂</span>TODAY</a>
+<a href='markets.html'><span class='nav-icon'>◫</span>MARKETS</a>
+<a href='radar.html'><span class='nav-icon'>⌁</span>RADAR</a>
+<a href='journal.html'><span class='nav-icon'>□</span>JOURNAL</a><div class='nav-sep'></div>
 <a href='#market-research'><span class='nav-icon'>⌁</span>LME ZINC</a>
 <a href='#shfe-zinc'><span class='nav-icon'>◈</span>SHFE ZINC</a>
 <a href='#inventory'><span class='nav-icon'>▥</span>INVENTORY</a>
 <a href='#tc-premiums'><span class='nav-icon'>⚙</span>TC &amp; PREMIUMS</a>
-<a href='#market-research'><span class='nav-icon'>∿</span>VOLATILITY</a>
-<a href='#inventory'><span class='nav-icon'>⇄</span>CROSS-MARKET</a>
-<a href='#data-health'><span class='nav-icon'>▤</span>DATA &amp; AUDIT</a><div class='nav-sep'></div>
-<a href='#notes'><span class='nav-icon'>□</span>NOTES</a>
 <a href='#methodology'><span class='nav-icon'>◇</span>METHODOLOGY</a></nav>
 <main class='wrap'><div class='grid'>
 <section class='panel s3' id='overview'><h2>CORE DATA GATE</h2><div class='hero'>{_esc(gate.get('status'))}</div><span class='pill {gate_class}'>{len(gate.get('usable_core',[]))} core usable</span><p class='muted'>Stale: {_esc(', '.join(gate.get('stale_core',[])) or 'None')}<br>Missing: {_esc(', '.join(gate.get('missing_core',[])) or 'None')}</p></section>
@@ -441,7 +440,8 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 <div class='mcard'><div class='eyebrow'>3M</div><div class='mvalue'>{fmt(market.get('lme_3m'),1)} <small>USD/t</small></div><div class='muted'>Technical mode {_esc(technical_mode)}</div>{_core_meta(snapshot,'lme_3m')}</div>
 <div class='mcard'><div class='eyebrow'>Inventory</div><div class='mvalue'>{fmt(market.get('lme_inventory_t'),0)} <small>t</small></div><div class='muted'>Live {fmt(market.get('live_warrants_t'),0)} · Cancelled {fmt(market.get('cancelled_warrants_t'),0)} · Ratio {fmt(market.get('cancelled_ratio_pct'),1)}%</div>{_core_meta(snapshot,'lme_inventory_t')}</div>
 </div></section>
-<section class='panel s12' id='data-health'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll' role='region' aria-label='Data health table' tabindex='0'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
+<section class='panel s12' id='data-health' hidden aria-hidden='true'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
+<section class='panel s12'><div class='section-head'><div><div class='eyebrow'>DAILY DECISION DESK</div><h2>五市場研究摘要</h2></div><a href='markets.html'>完整六道閘門、候選價位與 No-Trade 理由 →</a></div><p class='muted'>Today 只保留結論；詳細規劃移至 Markets，事件脈絡移至 Radar，學習紀錄移至 Journal。Data Health 已自一般閱讀導覽隱藏。</p></section>
 <section class='panel s12'><div class='cockpit-banner'><div class='cockpit-copy'><div class='eyebrow'>MIXED VIEW 3 · MARKET MAP</div><h2>同一頁比較，不混合合約與幣別</h2><p>LME 區塊只用同源 3M 參考 Close、均線與 RSI；SHFE 區塊使用交易所公布的完整日線 OHLC。兩者可比對方向，但不互相填補缺值。</p><div class='market-cards'><div class='mcard'><span class='eyebrow'>LME</span><div class='mvalue'>{fmt(snapshot.get('market_research',{}).get('close_series',{}).get('latest_close'),1)}</div><div class='muted'>USD/t · Close-only</div></div><div class='mcard'><span class='eyebrow'>SHFE</span><div class='mvalue'>{fmt(snapshot.get('market_research',{}).get('shfe_zinc',{}).get('latest_close'),0)}</div><div class='muted'>CNY/t · True OHLC</div></div><div class='mcard'><span class='eyebrow'>LME OHLC</span><div class='mvalue'>0</div><div class='muted'>private-only framework</div></div></div></div>{_compass(snapshot.get('market_research',{}).get('close_series',{}))}</div></section>
 {_trend_band(snapshot.get('market_research',{}).get('close_series',{}))}
 {_research_panel(snapshot)}
