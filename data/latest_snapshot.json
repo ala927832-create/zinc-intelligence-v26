@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-13T05:58:20.146678+00:00",
+  "run_time": "2026-10-13T06:00:04.942562+00:00",
   "run_date": "2026-10-13",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-13T05:58:20.149556+00:00",
+    "as_of": "2026-10-13T06:00:04.945381+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-13T05:58:20.149556+00:00",
+        "as_of": "2026-10-13T06:00:04.945381+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -326,8 +326,8 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 105.5999984741211,
-      "change_pct": -0.9845316800141113,
+      "value": 105.75,
+      "change_pct": -0.8438832752013736,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -338,14 +338,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.40899658203125,
-      "change_pct": -0.16670427565899093,
+      "value": 102.4000015258789,
+      "change_pct": -0.17547309608381134,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.76200008392334,
-      "change_pct": 0.9479723227304504,
+      "value": 6.763999938964844,
+      "change_pct": 0.9778275887573074,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -356,14 +356,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 32.07099914550781,
-      "change_pct": 0.4560612121898622,
+      "value": 31.925399780273438,
+      "change_pct": 0.24208150568443276,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 60.849998474121094,
-      "change_pct": 1.178895674266034,
+      "value": 60.86000061035156,
+      "change_pct": 1.1955268184494328,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -27484,16 +27484,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99955688950206,
     "physical_market": 99.63157601005639,
-    "macro": 52.099075432797065,
+    "macro": 52.348567281764154,
     "technical": 57.60882523389534
   },
   "component_coverage": 0.8,
-  "market_score": 73.75934502015909,
+  "market_score": 73.79053150127997,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 62.45398116977446,
-    "20D": 66.49161111634041,
-    "60D": 69.72171507359315
+    "5D": 62.46333711411072,
+    "20D": 66.50876368095689,
+    "60D": 69.74510493443381
   },
   "market_quality": {
     "confidence": 93.0,
@@ -27521,7 +27521,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 0.0001648946875
+    "max_age_days": 0.0013919431134259259
   },
   "procurement": {
     "status": "OK",
