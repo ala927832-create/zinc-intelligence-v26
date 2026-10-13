@@ -83,17 +83,23 @@ def build_ohlc_plan(series: dict) -> dict:
     recent = points[-20:]
     support = min(_num(p.get("low")) for p in recent if _num(p.get("low")) is not None)
     resistance = max(_num(p.get("high")) for p in recent if _num(p.get("high")) is not None)
+    evidence = [
+        {"factor":"Trend structure", "status":"SUPPORTS", "value":f"Close {close}; EMA20 {ema}; SMA60 {sma}"},
+        {"factor":"Momentum", "status":"SUPPORTS" if 40 <= rsi <= 70 else "CAUTION", "value":f"RSI14 {rsi}"},
+        {"factor":"Observed volatility", "status":"AVAILABLE", "value":f"ATR14 {atr}"},
+        {"factor":"20-session range", "status":"AVAILABLE", "value":f"Support {support}; resistance {resistance}"},
+    ]
     if close > ema > sma:
         direction, setup = "BULL", "BREAKOUT_OR_PULLBACK_LONG"
         trigger = resistance + 0.05 * atr
-        stop = min(ema, support) - 0.15 * atr
+        stop = ema - 0.15 * atr
         maximum = trigger + 0.20 * atr
         t1, t2 = trigger + 2 * (trigger - stop), trigger + 3 * (trigger - stop)
         invalidation = ema
     elif close < ema < sma:
         direction, setup = "BEAR", "BREAKDOWN_OR_RALLY_SHORT"
         trigger = support - 0.05 * atr
-        stop = max(ema, resistance) + 0.15 * atr
+        stop = ema + 0.15 * atr
         maximum = trigger - 0.20 * atr
         t1, t2 = trigger - 2 * (stop - trigger), trigger - 3 * (stop - trigger)
         invalidation = ema
@@ -108,12 +114,25 @@ def build_ohlc_plan(series: dict) -> dict:
                 {"factor":"Observed volatility", "status":"AVAILABLE", "value":f"ATR14 {atr}"},
             ],
         })
+    risk_atr = abs(trigger - stop) / atr
+    if risk_atr > 3:
+        return _finalize({
+            **_blocked(series.get("name", "Market"),
+                       f"Structural stop distance {risk_atr:.2f} ATR exceeds the 3.00 ATR limit.", "PASS"),
+            "symbol": series.get("symbol"), "as_of": series.get("as_of"), "direction": direction,
+            "evidence_alignment": "TREND_ALIGNED_RISK_INEFFICIENT", "regime_gate": direction,
+            "strategy_gate": "BLOCKED_RISK_DISTANCE", "reference": {
+                "close": close, "ema20": ema, "sma60": sma, "rsi14": rsi, "atr14": atr,
+                "support20": support, "resistance20": resistance, "candidate_risk_atr": round(risk_atr, 2),
+            }, "evidence": evidence,
+        })
     plan = {
         "setup_zone": [round(min(ema, close), 4), round(max(ema, close), 4)],
         "trigger_price": round(trigger, 4), "maximum_entry": round(maximum, 4),
         "hard_stop": round(stop, 4), "close_invalidation": round(invalidation, 4),
         "t1": round(t1, 4), "t2": round(t2, 4), "planned_rr_t1": _rr(trigger, stop, t1),
-        "planned_rr_t2": _rr(trigger, stop, t2), "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
+        "planned_rr_t2": _rr(trigger, stop, t2), "risk_distance_atr": round(risk_atr, 2),
+        "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
     }
     return _finalize({
         "market": series.get("name"), "symbol": series.get("symbol"), "as_of": series.get("as_of"),
@@ -124,13 +143,10 @@ def build_ohlc_plan(series: dict) -> dict:
         "execution_check": {"status": "REQUIRED_AT_ORDER_TIME", "required": [
             "bid", "ask", "spread", "actual_fill", "slippage", "actual_rr", "contract_quantity"
         ]},
-        "reference": {"close": close, "ema20": ema, "sma60": sma, "rsi14": rsi, "atr14": atr},
+        "reference": {"close": close, "ema20": ema, "sma60": sma, "rsi14": rsi, "atr14": atr,
+                      "support20": support, "resistance20": resistance},
         "no_trade_reasons": ["Trigger has not been confirmed.", "Live bid/ask and acceptable spread are unavailable."],
-        "evidence": [
-            {"factor":"Trend structure", "status":"SUPPORTS", "value":f"Close {close}; EMA20 {ema}; SMA60 {sma}"},
-            {"factor":"Momentum", "status":"SUPPORTS" if 40 <= rsi <= 70 else "CAUTION", "value":f"RSI14 {rsi}"},
-            {"factor":"Observed volatility", "status":"AVAILABLE", "value":f"ATR14 {atr}"},
-        ],
+        "evidence": evidence,
     })
 
 

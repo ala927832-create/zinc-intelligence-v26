@@ -17,7 +17,7 @@ Bid/Ask, spread, actual fill, slippage, actual R:R and contract quantity belong 
 ## Four-stage decision chain
 
 1. **Asset-specific evidence** — price identity, as-of, source grade and the drivers relevant to that asset. Missing OI, yield spreads, COT, ETF flow or arbitrage costs are shown as `NOT_INTEGRATED`; technical indicators alone are never labelled full evidence agreement.
-2. **Conditional plan** — setup zone, trigger, maximum entry, structural stop, close invalidation, T1/T2 and planned R:R. A level is a research candidate, not a fill.
+2. **Conditional plan** — setup zone, trigger, maximum entry, structural stop, close invalidation, T1/T2 and planned R:R. For true-OHLC markets the trigger-to-stop distance must not exceed 3 ATR; otherwise the output is `NO_TRADE`. A level is a research candidate, not a fill.
 3. **Private execution approval** — the loopback-only tool validates timestamped Bid/Ask, spread, risk budget, multiplier, fees, slippage, whole contract quantity and T1 R:R ≥ 2. It never transmits an order.
 4. **Post-trade review** — actual fill, exit, fees, slippage, net P&L, Actual R and rule adherence are written outside the repository. Fewer than 30 closed records remains an insufficient performance sample.
 

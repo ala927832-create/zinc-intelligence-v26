@@ -76,6 +76,9 @@ def _validate_decision_book(snapshot: dict) -> list[str]:
                 errors.append(f"decision_book.{key}: incomplete conditional plan {sorted(missing_plan)}")
             if plan.get("execution_gate") not in {"PENDING_LIVE_QUOTE", "PENDING_PRIVATE_EXECUTION_CHECK"}:
                 errors.append(f"decision_book.{key}: public plan crossed the private execution boundary")
+            risk_atr = daily.get("risk_distance_atr")
+            if key != "lme_zinc" and (risk_atr is None or float(risk_atr) > 3):
+                errors.append(f"decision_book.{key}: OHLC plan risk distance exceeds 3 ATR or is missing")
         elif plan.get("decision") != "NO_TRADE":
             errors.append(f"decision_book.{key}: non-No-Trade decision has no conditional plan")
     lme = markets.get("lme_zinc", {})

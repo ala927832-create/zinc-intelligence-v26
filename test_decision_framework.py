@@ -17,6 +17,20 @@ class DecisionFrameworkTest(unittest.TestCase):
         self.assertEqual(result["decision"], "WAIT_FOR_TRIGGER")
         self.assertEqual(result["execution_gate"], "PENDING_LIVE_QUOTE")
         self.assertGreaterEqual(result["daily_plan"]["planned_rr_t1"], 2)
+        self.assertLessEqual(result["daily_plan"]["risk_distance_atr"], 3)
+
+    def test_excessive_structural_stop_distance_forces_no_trade(self):
+        points = []
+        for i in range(80):
+            close = 100 + i
+            points.append({"date":f"2026-01-{(i%28)+1:02d}", "open":close-1, "high":close+2,
+                           "low":close-2, "close":close, "ema20":100, "sma60":90,
+                           "atr14":4, "rsi14":58})
+        result = build_ohlc_plan({"status":"AVAILABLE", "name":"Wide risk", "observations":80,
+                                  "chart_points":points, "latest_session":points[-1]})
+        self.assertEqual(result["decision"], "NO_TRADE")
+        self.assertEqual(result["strategy_gate"], "BLOCKED_RISK_DISTANCE")
+        self.assertIn("exceeds the 3.00 ATR limit", result["no_trade_reasons"][0])
 
     def test_close_only_lme_never_creates_candle_plan(self):
         points = [{"date":f"2026-09-{i+1:02d}", "close":3800+i*5} for i in range(20)]
