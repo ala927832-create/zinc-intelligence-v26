@@ -68,6 +68,40 @@ class _ClassBlockExtractor(HTMLParser):
             self.current = None
 
 
+class _IdBlockExtractor(HTMLParser):
+    """Collect visible text from the element carrying an exact id."""
+
+    VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+
+    def __init__(self, target_id: str) -> None:
+        super().__init__()
+        self.target_id = target_id
+        self.depth = 0
+        self.current: list[str] | None = None
+        self.block = ""
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self.current is not None:
+            if tag not in self.VOID_TAGS:
+                self.depth += 1
+            return
+        if any(key == "id" and value == self.target_id for key, value in attrs):
+            self.current = []
+            self.depth = 1
+
+    def handle_data(self, data: str) -> None:
+        if self.current is not None and data.strip():
+            self.current.append(data.strip())
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.current is None:
+            return
+        self.depth -= 1
+        if self.depth == 0:
+            self.block = " ".join(html_lib.unescape(x) for x in self.current)
+            self.current = None
+
+
 def _visible_text(raw_html: str) -> str:
     parser = _TextExtractor()
     parser.feed(raw_html)
@@ -78,6 +112,12 @@ def _class_blocks(raw_html: str, class_name: str) -> list[str]:
     parser = _ClassBlockExtractor(class_name)
     parser.feed(raw_html)
     return parser.blocks
+
+
+def _id_block(raw_html: str, element_id: str) -> str:
+    parser = _IdBlockExtractor(element_id)
+    parser.feed(raw_html)
+    return parser.block
 
 
 def _table_row_text(raw_html: str, label: str) -> str:
@@ -113,7 +153,7 @@ def _cache_bust(url: str, run_id: str) -> str:
 
 
 def _fetch(url: str, run_id: str, attempts: int = 12, sleep_seconds: int = 10,
-           marker: str = "ZINC RESEARCH COCKPIT") -> str:
+           marker: str = "GLOBAL MACRO RESEARCH DESK") -> str:
     last_error: Exception | None = None
     for attempt in range(1, attempts + 1):
         target = _cache_bust(url, run_id)
@@ -155,14 +195,18 @@ def main() -> int:
     text = _visible_text(raw_html)
     failures: list[str] = []
 
-    markets_html = _fetch(urljoin(page_url, "markets.html"), run_id, marker="GLOBAL MACRO RESEARCH DESK")
+    markets_html = _fetch(urljoin(page_url, "markets.html"), run_id, marker="Market comparison · first decision layer")
+    markets_text = _visible_text(markets_html)
     for key, plan in snapshot.get("decision_book", {}).get("markets", {}).items():
         _expect(markets_html, f"id='{key}'", failures, f"Markets card {key}")
         for number, label in enumerate(("市場方向", "證據一致性", "風險位置", "准許進場條件",
                                         "看錯損失", "出場計畫", "理論風報比", "No-Trade 理由"), 1):
             _expect(markets_html, f"{number}. {label}", failures, f"{key} audit question {number}")
-    for marker in ("Asset-specific evidence", "Conditional plan · RESEARCH ONLY", "Execution approval boundary"):
+    for marker in ("Market comparison · first decision layer", "Decision brief · eight required questions",
+                   "Asset-specific evidence", "Conditional plan · RESEARCH ONLY", "Execution approval boundary"):
         _expect(markets_html, marker, failures, f"Markets decision chain: {marker}")
+    if markets_html.count("Execution approval boundary") != 1:
+        failures.append("Markets must render the public/private execution boundary exactly once")
     for private_marker in ("name=\"account_equity\"", "name='account_equity'", "/api/execution/preview", "/api/trades"):
         if private_marker in markets_html:
             failures.append(f"private execution control rendered publicly: {private_marker}")
@@ -171,94 +215,50 @@ def main() -> int:
         failures.append("private candle element rendered on public page")
 
     # Version and integrity markers.
-    _expect(text, "Zn · ZINC RESEARCH COCKPIT", failures)
+    _expect(text, "GLOBAL MACRO RESEARCH DESK", failures)
     _expect(text, f"Model {snapshot.get('model_version')}", failures, "model version")
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
-    _expect(text, "FUNDAMENTAL / PROCUREMENT REGIME", failures, "fundamental regime label")
-    _expect(text, "Close-only 技術趨勢", failures, "regime boundary explanation")
-    _expect(text, "PAPER RESEARCH ONLY", failures)
+    for marker in ("TODAY'S MARKET POSTURE", "CROSS-MARKET DECISION MATRIX", "PRIMARY WATCH",
+                   "LME ZINC · CONTEXT SPLIT", "WHAT PERMITS ACTION", "RESEARCH ONLY"):
+        _expect(text, marker, failures, f"Today information architecture: {marker}")
     _expect(raw_html, "class='side-nav'", failures, "left research navigation")
-    _expect(raw_html, "class='compass-gauge'", failures, "semicircular trend compass")
-    _expect(raw_html, "class='trend-band'", failures, "five-color trend regime band")
-    for section_id in ("overview", "market-research", "shfe-zinc", "inventory", "tc-premiums", "data-health", "notes", "methodology"):
-        _expect(raw_html, f"id='{section_id}'", failures, f"navigation target {section_id}")
+    for section_id in ("overview", "data-health"):
+        _expect(raw_html, f"id='{section_id}'", failures, f"Today section {section_id}")
+    for obsolete_anchor in ("#market-research", "#shfe-zinc", "#inventory", "#tc-premiums", "#methodology"):
+        if f"href='{obsolete_anchor}'" in raw_html:
+            failures.append(f"obsolete mixed page/anchor navigation remains: {obsolete_anchor}")
 
     shfe = snapshot.get("market_research", {}).get("shfe_zinc", {})
     if shfe.get("status") == "AVAILABLE":
-        _expect(text, "SHFE ZINC · TRUE DAILY OHLC", failures, "SHFE panel identity")
-        _expect(text, str(shfe.get("as_of")), failures, "SHFE latest date")
-        _expect(text, str(shfe.get("latest_contract")), failures, "SHFE contract")
-        _expect(text, str(shfe.get("observations")), failures, "SHFE observations")
-        _expect(raw_html, "shfe-chart-data", failures, "SHFE chart payload")
+        shfe_block = _id_block(markets_html, "shfe_zinc")
+        _expect(shfe_block, "SHFE Zinc", failures, "SHFE panel identity")
+        _expect(shfe_block, str(shfe.get("as_of")), failures, "SHFE latest date")
+        _expect(shfe_block, str(shfe.get("latest_contract")), failures, "SHFE contract")
+        _expect(shfe_block, str(shfe.get("observations")), failures, "SHFE observations")
+        _expect(markets_html, "data-chart-mode='OHLC'", failures, "SHFE candlestick chart")
 
-    # A descriptive research panel must match the same deployed snapshot.
-    research_section = re.search(r"<section\b[^>]*id=['\"]market-research['\"][^>]*>(.*?)</section>",
-                                 raw_html, flags=re.IGNORECASE | re.DOTALL)
-    if not research_section:
-        failures.append("missing market research panel")
-    else:
-        research_text = _visible_text(research_section.group(1))
-        research = snapshot.get("market_research", {}).get("close_series", {})
-        _expect(research_text, str(research.get("as_of") or "—"), failures, "close series date")
-        _expect(research_text, str(research.get("source") or "—"), failures, "close series source")
-        _expect(research_text, str(research.get("observations", 0)), failures, "close series count")
-        _expect(research_text, str(research.get("retrieval_status") or "CURRENT_FETCH"), failures, "close retrieval status")
-        _expect(research_text, str(research.get("coverage_start") or "—"), failures, "coverage start")
-        _expect(research_text, str(research.get("coverage_end") or "—"), failures, "coverage end")
-        _expect(research_section.group(1), "Long-term LME zinc 3M reference Close with moving averages by trading day", failures, "long-term close chart")
-        _expect(research_section.group(1), f"data-chart-points='{len(research.get('chart_points') or [])}'", failures, "close chart point count")
-        chart_points = research.get("chart_points") or []
-        if chart_points:
-            _expect(research_text, "交易日時間軸", failures, "trading-day axis label")
-            _expect(research_text, str(chart_points[0].get("date")), failures, "chart first trading date")
-            _expect(research_text, str(chart_points[-1].get("date")), failures, "chart last trading date")
-            _expect(research_text, f"第 1/{len(chart_points)} 交易日", failures, "chart first trading-day index")
-            _expect(research_text, f"第 {len(chart_points)}/{len(chart_points)} 交易日", failures, "chart last trading-day index")
-        _expect(research_text, "週收盤價區間圖", failures, "weekly close-range chart")
-        _expect(research_text, "非真實 OHLC／週 K", failures, "weekly close-range disclosure")
-        _expect(research_text, str(research.get("open_status") or "—"), failures, "Open source status")
-        for days in (20, 60, 120):
-            _expect(research_section.group(1), f"data-close-days='{days}'", failures, f"{days}-day chart control")
-        trend = research.get("trend") or {}
-        _expect(research_text, str(trend.get("regime") or "INSUFFICIENT_DATA"), failures, "trend regime")
-        _expect(research_text, str(trend.get("score") if trend.get("score") is not None else "—"), failures, "trend score")
-        _expect(research_text, str(trend.get("persistence_days", 0)), failures, "trend persistence")
-        _expect(research_text, str(trend.get("data_confidence") or "LOW"), failures, "trend data confidence")
-        for field, min_sessions in (("latest_close", 1), ("sma_14", 14), ("sma_30", 30), ("ema_20", 20), ("rsi_14", 15)):
-            value = research.get(field)
-            expected = _fmt(value, 2) if value is not None and research.get("close_indicator_sessions", 0) >= min_sessions else "資料不足"
-            _expect(research_text, expected, failures, f"close-only {field}")
-        for length in (20, 60):
-            _expect(research_text, _fmt(research.get(f"volatility_{length}_pct"), 2),
-                    failures, f"historical volatility {length}")
-
-    # Verify the core figures inside their actual KPI cards, so the deployment
-    # cannot pass merely because the same number appears elsewhere on the page.
-    market_cards = _class_blocks(raw_html, "mcard")
-    cash_card = _find_block(market_cards, "Cash−3M")
-    three_m_card = _find_block(market_cards, "Technical mode")
-    inventory_card = _find_block(market_cards, "Cancelled")
-
-    _expect(cash_card, _fmt(market.get("lme_cash"), 1), failures, "LME Cash card value")
-    _expect(cash_card, f"Cash−3M {_fmt(market.get('cash_3m'), 1)}", failures, "Cash-3M card value")
-    _expect(three_m_card, _fmt(market.get("lme_3m"), 1), failures, "LME 3M card value")
-    _expect(inventory_card, _fmt(market.get("lme_inventory_t"), 0), failures, "inventory card value")
-    _expect(inventory_card, f"Live {_fmt(market.get('live_warrants_t'), 0)}", failures, "live warrants card value")
-    _expect(inventory_card, f"Cancelled {_fmt(market.get('cancelled_warrants_t'), 0)}", failures, "cancelled warrants card value")
-    _expect(inventory_card, f"Ratio {_fmt(market.get('cancelled_ratio_pct'), 1)}%", failures, "cancelled ratio card value")
-
-    # The headline cards must retain their visible date/age/source-grade context.
-    for card, field, label in [
-        (cash_card, "lme_cash", "LME Cash card"),
-        (three_m_card, "lme_3m", "LME 3M card"),
-        (inventory_card, "lme_inventory_t", "Inventory card"),
-    ]:
+    # The LME detail is the single source of truth for price structure, indicators and physical context.
+    lme_block = _id_block(markets_html, "lme_zinc")
+    research = snapshot.get("market_research", {}).get("close_series", {})
+    _expect(lme_block, str(research.get("as_of") or "—"), failures, "LME close series date")
+    _expect(lme_block, str(research.get("source") or "—"), failures, "LME close series source")
+    _expect(lme_block, str(research.get("observations", 0)), failures, "LME close series count")
+    _expect(lme_block, str(research.get("coverage_start") or "—"), failures, "LME coverage start")
+    _expect(lme_block, str(research.get("coverage_end") or "—"), failures, "LME coverage end")
+    for label, value in (("Close", research.get("latest_close")), ("SMA14", research.get("sma_14")),
+                         ("SMA30", research.get("sma_30")), ("EMA20", research.get("ema_20")),
+                         ("RSI14", research.get("rsi_14"))):
+        _expect(lme_block, label, failures, f"LME indicator label {label}")
+        _expect(lme_block, str(value if value is not None else "—"), failures, f"LME indicator {label}")
+    _expect(markets_html, "data-chart-mode='CLOSE_ONLY'", failures, "LME close-only chart")
+    for field, label in (("lme_cash", "LME Cash"), ("lme_3m", "LME 3M"),
+                         ("lme_inventory_t", "Opening / Total Stock"), ("live_warrants_t", "Live Warrants"),
+                         ("cancelled_warrants_t", "Cancelled Warrants")):
         h = health.get(field, {})
-        _expect(card, str(h.get("as_of") or "—"), failures, f"{label} as-of")
-        _expect(card, str(h.get("source_grade") or "—"), failures, f"{label} source grade")
-        age = h.get("age_days")
-        if age is not None:
-            _expect(card, f"{float(age):.1f} d", failures, f"{label} age")
+        _expect(lme_block, label, failures, f"LME physical field {label}")
+        _expect(lme_block, str(market.get(field) if market.get(field) is not None else "—"), failures, f"{label} value")
+        _expect(lme_block, str(h.get("as_of") or "—"), failures, f"{label} as-of")
+        _expect(lme_block, str(h.get("source_grade") or "—"), failures, f"{label} source grade")
 
     # Data-health provenance must be correct in each field's own table row.
     # This prevents a source/date token belonging to one series from satisfying
@@ -285,9 +285,7 @@ def main() -> int:
         if age is not None:
             _expect(row_text, f"{float(age):.1f} d", failures, f"{field} age")
 
-    # China TC series are verified card-by-card, preserving their different
-    # units/bases and preventing provenance from one TC series satisfying another.
-    tc_cards = _class_blocks(raw_html, "tc-card")
+    # China TC series are verified row-by-row inside the LME physical appendix.
     tc_specs = [
         ("import_weekly", "China Import TC · Weekly"),
         ("domestic_weekly", "China Domestic TC · Weekly"),
@@ -296,33 +294,33 @@ def main() -> int:
     ]
     for key, title in tc_specs:
         item = tc.get(key, {})
-        card = _find_block(tc_cards, title)
-        if not card:
-            failures.append(f"missing rendered TC card: {title}")
+        row = _table_row_text(markets_html, title)
+        if not row:
+            failures.append(f"missing rendered TC row: {title}")
             continue
         value = item.get("value")
-        _expect(card, _fmt(value, 2) if value is not None else "—", failures, f"{key} value")
-        _expect(card, str(item.get("unit") or "—"), failures, f"{key} unit")
-        _expect(card, f"As of {item.get('as_of') or '—'}", failures, f"{key} as-of")
-        _expect(card, str(item.get("expected_update") or "—"), failures, f"{key} cadence")
-        _expect(card, str(item.get("source_grade") or "—"), failures, f"{key} source grade")
-        _expect(card, str(item.get("source") or "—"), failures, f"{key} source")
+        _expect(row, str(value) if value is not None else "—", failures, f"{key} value")
+        _expect(row, str(item.get("unit") or "—"), failures, f"{key} unit")
+        _expect(row, str(item.get("as_of") or "—"), failures, f"{key} as-of")
+        _expect(row, str(item.get("expected_update") or "—"), failures, f"{key} cadence")
+        _expect(row, str(item.get("source_grade") or "—"), failures, f"{key} source grade")
+        _expect(row, str(item.get("source") or "—"), failures, f"{key} source")
         status = str(item.get("status") or "—")
-        _expect(card, status, failures, f"{key} status")
+        _expect(row, status, failures, f"{key} status")
         age = item.get("age_days")
         if age is not None:
-            _expect(card, f"{float(age):.1f} d", failures, f"{key} age")
+            _expect(row, f"{age} d", failures, f"{key} age")
         elif status in {"AVAILABLE", "VERIFIED_REFERENCE"}:
             failures.append(f"snapshot governance failure: {key} has status {status} but no age_days")
 
     # Public privacy guarantee: exact internal inventory and demand must not be rendered.
     if not snapshot.get("privacy", {}).get("public_dashboard_include_private", False):
-        _expect(text, "Public privacy mode", failures, "privacy banner")
-        _expect(text, "•••• / ••••", failures, "masked procurement inputs")
+        _expect(lme_block, "Public privacy mode", failures, "privacy boundary")
         current_inventory = snapshot.get("procurement_state", {}).get("current_inventory_t")
         demand_60d = snapshot.get("procurement_state", {}).get("demand_60d_t")
         private_pair = f"{_fmt(current_inventory, 0)} / {_fmt(demand_60d, 0)}"
-        if private_pair in _norm(text):
+        public_text = _norm(text + " " + markets_text)
+        if private_pair in public_text:
             failures.append("privacy failure: exact inventory / demand pair is visible on public page")
 
     if failures:

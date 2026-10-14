@@ -20,12 +20,14 @@ A static, auditable zinc decision-support system designed around:
 
 The investment module is intentionally research/paper-trading only. There is no broker login, order API, or live leveraged execution logic.
 
-The public Markets page follows one auditable chain for LME Zinc, SHFE Zinc,
-Gold, USD/JPY and DXY: asset-specific evidence → conditional research plan →
-private execution approval → post-trade review. Each card answers the same eight
-decision questions. Live Bid/Ask, account equity, quantities and fills are
-accepted only by the loopback tool documented in `PRIVATE_RESEARCH.md`; they are
-never deployed to Pages.
+The public Today page is a compact decision layer: current posture, a five-market
+comparison, one primary watch and the rules that permit action. Markets starts
+with the same comparison and opens one market detail at a time. LME Zinc, SHFE
+Zinc, Gold, USD/JPY and DXY then follow one auditable chain: asset-specific
+evidence → conditional research plan → private execution approval → post-trade
+review. Each detail answers the same eight decision questions. Live Bid/Ask,
+account equity, quantities and fills are accepted only by the loopback tool
+documented in `PRIVATE_RESEARCH.md`; they are never deployed to Pages.
 
 
 ## Security / privacy before publishing

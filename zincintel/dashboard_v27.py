@@ -376,6 +376,80 @@ def _global_decision_strip(snapshot: dict) -> str:
             "<div class='notice warn'>Decision book unavailable; no cross-market conclusion is published.</div>")
 
 
+def _decision_reference(snapshot: dict, key: str, plan: dict):
+    reference = plan.get("reference") or {}
+    if key == "lme_zinc":
+        return reference.get("cash"), "USD/t"
+    value = reference.get("close")
+    series = snapshot.get("market_research", {}).get("cross_assets", {}).get(key, {})
+    if key == "shfe_zinc":
+        series = snapshot.get("market_research", {}).get("shfe_zinc", {})
+    return value if value is not None else series.get("latest_close"), series.get("unit") or ("CNY/t" if key == "shfe_zinc" else "")
+
+
+def _decision_class(value: str | None) -> str:
+    return "ok" if value == "READY" else "warn" if value == "WAIT_FOR_TRIGGER" else "bad"
+
+
+def _today_posture(snapshot: dict) -> str:
+    plans = snapshot.get("decision_book", {}).get("markets", {})
+    decisions = [plan.get("decision") for plan in plans.values()]
+    if "READY" in decisions:
+        posture, explanation = "SETUP READY", "At least one research setup has passed its pre-execution gates; a private live-quote check is still required."
+    elif "WAIT_FOR_TRIGGER" in decisions:
+        posture, explanation = "WAIT FOR TRIGGER", "A conditional research plan exists, but its trigger has not been confirmed. No order is permitted."
+    else:
+        posture, explanation = "NO TRADE", "No market currently has a compliant conditional setup. Capital preservation is the active decision."
+    actionable = sum(item in {"READY", "WAIT_FOR_TRIGGER"} for item in decisions)
+    blocked = sum(item == "NO_TRADE" for item in decisions)
+    return f"""<section class='panel s12 today-hero' id='overview'><div><div class='eyebrow'>TODAY'S MARKET POSTURE</div><div class='posture'>{_esc(posture)}</div><p>{_esc(explanation)}</p></div><div class='today-metrics'><div><span>Core data</span><b>{_esc(snapshot.get('core_data_gate', {}).get('status'))}</b></div><div><span>Watch / ready</span><b>{actionable}</b></div><div><span>No Trade</span><b>{blocked}</b></div><div><span>Snapshot</span><b>{_esc(snapshot.get('run_date'))}</b></div></div></section>"""
+
+
+def _today_market_matrix(snapshot: dict) -> str:
+    plans = snapshot.get("decision_book", {}).get("markets", {})
+    rows = []
+    for key, plan in plans.items():
+        value, unit = _decision_reference(snapshot, key, plan)
+        reason = (plan.get("no_trade_reasons") or ["No blocker registered."])[0]
+        as_of = plan.get("as_of")
+        if not as_of:
+            if key == "shfe_zinc":
+                as_of = snapshot.get("market_research", {}).get("shfe_zinc", {}).get("as_of")
+            else:
+                as_of = snapshot.get("market_research", {}).get("cross_assets", {}).get(key, {}).get("as_of")
+        rows.append(
+            f"<tr><td><b>{_esc(plan.get('market', key))}</b></td><td>{fmt(value,2)} {_esc(unit)}<br><small>{_esc(as_of)}</small></td>"
+            f"<td>{_esc(plan.get('direction'))}</td><td>{_esc(plan.get('evidence_alignment'))}</td>"
+            f"<td><span class='pill {_decision_class(plan.get('decision'))}'>{_esc(plan.get('decision'))}</span></td>"
+            f"<td>{_esc(reason)}</td></tr>"
+        )
+    return f"""<section class='panel s12'><div class='section-head'><div><div class='eyebrow'>FIRST DECISION LAYER</div><h2>CROSS-MARKET DECISION MATRIX</h2></div><a href='markets.html'>Open market evidence and levels →</a></div><div class='health-scroll'><table class='decision-matrix'><tr><th>Market</th><th>Validated reference</th><th>Technical direction</th><th>Evidence</th><th>Trade state</th><th>Next condition / blocker</th></tr>{''.join(rows)}</table></div></section>"""
+
+
+def _primary_watch(snapshot: dict) -> str:
+    plans = snapshot.get("decision_book", {}).get("markets", {})
+    ranked = sorted(plans.items(), key=lambda item: {"READY": 3, "WAIT_FOR_TRIGGER": 2, "NO_TRADE": 1}.get(item[1].get("decision"), 0), reverse=True)
+    if not ranked:
+        return "<section class='panel s12'><h2>PRIMARY WATCH</h2><div class='notice bad'>Decision book unavailable.</div></section>"
+    key, plan = ranked[0]
+    daily = plan.get("daily_plan") or {}
+    reason = (plan.get("no_trade_reasons") or ["No blocker registered."])[0]
+    if daily:
+        fields = [
+            ("Setup zone", daily.get("setup_zone")), ("Trigger", daily.get("trigger_price")),
+            ("Hard stop", daily.get("hard_stop")), ("T1 / T2", f"{daily.get('t1')} / {daily.get('t2')}"),
+        ]
+        levels = "".join(f"<div><span>{_esc(label)}</span><b>{_esc(value)}</b></div>" for label, value in fields)
+    else:
+        levels = "<div><span>Setup</span><b>NOT AVAILABLE</b></div><div><span>Entry permission</span><b>BLOCKED</b></div>"
+    return f"""<section class='panel s8'><div class='section-head'><div><div class='eyebrow'>PRIMARY WATCH · EXISTING DECISION ONLY</div><h2>{_esc(plan.get('market', key))}</h2></div><span class='pill {_decision_class(plan.get('decision'))}'>{_esc(plan.get('decision'))}</span></div><div class='watch-levels'>{levels}</div><p><b>Current blocker:</b> {_esc(reason)}</p><p class='muted'>These are delayed research levels, not executable quotes. Bid/Ask, spread, fill, quantity and Actual R:R remain private execution inputs.</p></section>"""
+
+
+def _zinc_context(snapshot: dict) -> str:
+    plan = snapshot.get("decision_book", {}).get("markets", {}).get("lme_zinc", {})
+    return f"""<section class='panel s4'><div class='eyebrow'>DO NOT CONFUSE THE LAYERS</div><h2>LME ZINC · CONTEXT SPLIT</h2><div class='context-row'><span>Physical / procurement condition</span><b>{_esc(snapshot.get('market_regime'))}</b></div><div class='context-row'><span>Close-only technical trend</span><b>{_esc(plan.get('direction'))}</b></div><div class='context-row'><span>Trade permission</span><b>{_esc(plan.get('decision'))}</b></div><p class='muted'>Physical tightness and price direction can diverge. Only the existing trigger and execution gates determine whether action is permitted.</p><a href='markets.html#lme_zinc'>Review LME evidence →</a></section>"""
+
+
 def build_dashboard_v27(snapshot: dict, candle_frames: dict[str, pd.DataFrame], trades: list[dict], perf: dict) -> Path:
     build_legacy_dashboard(snapshot, candle_frames, trades, perf)
     PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
@@ -410,7 +484,7 @@ def build_dashboard_v27(snapshot: dict, candle_frames: dict[str, pd.DataFrame], 
 
     page = f"""<!doctype html>
 <html lang='zh-Hant'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Zinc Research Cockpit</title>
+<title>Today · Global Macro Research</title>
 <style>
 :root{{--bg:#06111f;--panel:#0b1d31;--panel2:#0e263f;--line:#1c4668;--text:#edf7ff;--muted:#8ca9c1;--cyan:#5cd4ff;--green:#2ce6a6;--orange:#ffb253;--red:#ff6879}}
 *{{box-sizing:border-box}}body{{margin:0;background:radial-gradient(circle at 10% 0,#123454 0,#06111f 36%);color:var(--text);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif}}
@@ -435,47 +509,26 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 .period-controls button{{border-color:#c9d5dd;background:#fff;color:#234f70}}.period-controls button.active{{background:#0b2f4f;color:#fff;border-color:#0b2f4f}}.chart-tooltip{{border-color:#315c7d;background:#0b2f4f;color:#fff}}
 .trend-panel{{background:#f8f6f0;border-color:#d8dfe3}}.trend-regime{{color:#0b5f78}}.trend-detail ul{{color:#536e82}}.cockpit-banner{{grid-template-columns:minmax(0,1.5fr) minmax(285px,.5fr);gap:10px}}.cockpit-copy{{background:#fff;border-color:#d5dde3;color:#173750}}.cockpit-side{{background:#0b2f4f;border-color:#0b2f4f;color:#fff}}.cockpit-side .eyebrow,.cockpit-side .source{{color:#bed0dc}}.cockpit-side .compact-reasons{{color:#e1ebf1}}.compass-gauge{{display:block;width:100%;max-width:330px;margin:6px auto -4px}}.gauge-segment{{stroke:#fff;stroke-width:1.4;opacity:.94}}.gauge-segment.gauge-selected{{stroke:#f2a05d;stroke-width:5;opacity:1}}.gauge-label{{fill:#173750;font-size:8px;font-weight:800;text-transform:uppercase}}.gauge-needle{{stroke:#fff;stroke-width:5;stroke-linecap:round}}.gauge-hub{{fill:#0b2f4f;stroke:#fff;stroke-width:3}}.compass-result{{color:#fff;text-align:center;font-family:Georgia,serif}}
 .status-chip{{border-color:#9fcac2;background:#e0f2ee;color:#086d63}}.research-strip>div,.icon-cards>div{{background:#fbfaf7;border-color:#d8e0e5}}.icon-cards i{{color:#164f78}}
+.today-hero{{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(420px,.55fr);gap:18px;align-items:center;border-left:5px solid #c8783d}}.today-hero .posture{{font:800 38px Georgia,serif;color:#0b2f4f;margin:5px 0}}.today-hero p{{max-width:760px;margin:4px 0}}.today-metrics{{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}}.today-metrics>div,.watch-levels>div{{background:#f8f6f0;border:1px solid #d8e0e5;border-radius:6px;padding:10px}}.today-metrics span,.watch-levels span{{display:block;color:#687e90;font-size:10px;text-transform:uppercase;letter-spacing:.05em}}.today-metrics b{{font-size:17px}}.decision-matrix{{min-width:980px}}.decision-matrix td:first-child{{min-width:180px}}.decision-matrix td:last-child{{min-width:290px}}.watch-levels{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}}.watch-levels b{{font-size:16px}}.context-row{{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #dfe5e8}}.context-row span{{color:#687e90}}.today-rules{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}}.today-rules>div{{padding:11px;background:#fbfaf7;border:1px solid #d8e0e5;border-radius:6px}}.today-rules b,.today-rules span{{display:block}}.today-rules span{{color:#687e90;font-size:11px;margin-top:4px}}
 .trend-ribbon{{padding:12px 14px}}.trend-ribbon h2{{margin:0}}.trend-band{{display:grid;grid-template-columns:repeat(5,1fr);margin-top:9px;border-radius:5px;overflow:hidden}}.band-item{{min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#173750;border-right:1px solid rgba(255,255,255,.8);text-transform:uppercase;font-size:11px}}.band-item span{{min-height:14px;font-size:9px;text-transform:none}}.band-strong_bear{{background:#d94a4f;color:#fff}}.band-bear{{background:#ef8a83}}.band-neutral{{background:#c7ced1}}.band-bull{{background:#8dd8cf}}.band-strong_bull{{background:#087b70;color:#fff}}.band-item.active{{box-shadow:inset 0 0 0 4px #f1a15e;font-weight:900}}
 .notice.warn{{background:#fff3e8;color:#7d4d29}}.footer{{color:#62798a}}
-@media(max-width:1100px){{.site-shell{{grid-template-columns:1fr}}.side-nav{{position:sticky;top:0;min-height:0;display:flex;gap:4px;overflow-x:auto;padding:7px 10px;border-right:0;border-bottom:1px solid #d4dce2}}.side-nav a{{white-space:nowrap;margin:0}}.side-nav .nav-sep{{display:none}}.cockpit-banner{{grid-template-columns:1fr}}}}
-@media(max-width:680px){{.site-header .top{{padding:14px}}.site-header h1{{font-size:22px}}.side-nav .nav-icon{{display:none}}.trend-band{{min-width:560px}}.trend-ribbon{{overflow-x:auto}}}}
+@media(max-width:1100px){{.site-shell{{grid-template-columns:1fr}}.side-nav{{position:sticky;top:0;min-height:0;display:flex;gap:4px;overflow-x:auto;padding:7px 10px;border-right:0;border-bottom:1px solid #d4dce2}}.side-nav a{{white-space:nowrap;margin:0}}.side-nav .nav-sep{{display:none}}.cockpit-banner,.today-hero{{grid-template-columns:1fr}}}}
+@media(max-width:680px){{.site-header .top{{padding:14px}}.site-header h1{{font-size:22px}}.side-nav .nav-icon{{display:none}}.trend-band{{min-width:560px}}.trend-ribbon{{overflow-x:auto}}.today-metrics,.watch-levels,.today-rules{{grid-template-columns:1fr 1fr}}.today-hero .posture{{font-size:31px}}}}
 </style></head><body>
-<header class='site-header'><div class='top'><div><h1>Zn · ZINC RESEARCH COCKPIT</h1><div class='muted'>Industrial metals research · LME close-only + separate SHFE true OHLC</div></div><div><b>{_esc(snapshot.get('run_date'))}</b><br><span class='muted'>Model {_esc(snapshot.get('model_version'))} · RESEARCH ONLY</span></div></div></header>
+<header class='site-header'><div class='top'><div><h1>GLOBAL MACRO RESEARCH DESK</h1><div class='muted'>Daily decision brief · evidence first · execution requires a private live quote</div></div><div><b>{_esc(snapshot.get('run_date'))}</b><br><span class='muted'>Model {_esc(snapshot.get('model_version'))} · RESEARCH ONLY</span></div></div></header>
 <div class='site-shell'><nav class='side-nav' aria-label='Research sections'>
 <a class='active' href='index.html'><span class='nav-icon'>⌂</span>TODAY</a>
 <a href='markets.html'><span class='nav-icon'>◫</span>MARKETS</a>
 <a href='radar.html'><span class='nav-icon'>⌁</span>RADAR</a>
-<a href='journal.html'><span class='nav-icon'>□</span>JOURNAL</a><div class='nav-sep'></div>
-<a href='#market-research'><span class='nav-icon'>⌁</span>LME ZINC</a>
-<a href='#shfe-zinc'><span class='nav-icon'>◈</span>SHFE ZINC</a>
-<a href='#inventory'><span class='nav-icon'>▥</span>INVENTORY</a>
-<a href='#tc-premiums'><span class='nav-icon'>⚙</span>TC &amp; PREMIUMS</a>
-<a href='#methodology'><span class='nav-icon'>◇</span>METHODOLOGY</a></nav>
+<a href='journal.html'><span class='nav-icon'>□</span>JOURNAL</a></nav>
 <main class='wrap'><div class='grid'>
-<section class='panel s3' id='overview'><h2>CORE DATA GATE</h2><div class='hero'>{_esc(gate.get('status'))}</div><span class='pill {gate_class}'>{len(gate.get('usable_core',[]))} core usable</span><p class='muted'>Stale: {_esc(', '.join(gate.get('stale_core',[])) or 'None')}<br>Missing: {_esc(', '.join(gate.get('missing_core',[])) or 'None')}</p></section>
-<section class='panel s3'><h2>FUNDAMENTAL / PROCUREMENT REGIME</h2><div class='hero'>{_esc(snapshot.get('market_regime'))}</div><div>ZTI / Score <b>{fmt(snapshot.get('market_score'),1)}</b></div><div>Confidence <b>{fmt(iq.get('confidence'),0)}/100</b></div><p class='muted'>Cash／3M、庫存、TC 與 premium 的綜合情境；不同於下方 Close-only 技術趨勢。</p></section>
-<section class='panel s6'><h2>LME ZINC · CORE REFERENCES</h2><div class='market-cards'>
-<div class='mcard'><div class='eyebrow'>Cash</div><div class='mvalue'>{fmt(market.get('lme_cash'),1)} <small>USD/t</small></div><div class='muted'>Cash−3M {fmt(market.get('cash_3m'),1)}</div>{_core_meta(snapshot,'lme_cash')}</div>
-<div class='mcard'><div class='eyebrow'>3M</div><div class='mvalue'>{fmt(market.get('lme_3m'),1)} <small>USD/t</small></div><div class='muted'>Technical mode {_esc(technical_mode)}</div>{_core_meta(snapshot,'lme_3m')}</div>
-<div class='mcard'><div class='eyebrow'>Inventory</div><div class='mvalue'>{fmt(market.get('lme_inventory_t'),0)} <small>t</small></div><div class='muted'>Live {fmt(market.get('live_warrants_t'),0)} · Cancelled {fmt(market.get('cancelled_warrants_t'),0)} · Ratio {fmt(market.get('cancelled_ratio_pct'),1)}%</div>{_core_meta(snapshot,'lme_inventory_t')}</div>
-</div></section>
+{_today_posture(snapshot)}
 <section class='panel s12' id='data-health' hidden aria-hidden='true'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
-<section class='panel s12'><div class='section-head'><div><div class='eyebrow'>DAILY DECISION DESK</div><h2>跨市場研究摘要</h2></div><a href='markets.html'>完整證據、條件式價位與八問審核 →</a></div><p class='muted'>Today 只保留結論；Markets 顯示每個市場的專屬證據、候選價位與 No-Trade 理由，Radar 顯示跨市場脈絡，Journal 保留研究過程。Data Health 已自一般閱讀導覽隱藏。</p>{_global_decision_strip(snapshot)}</section>
-<section class='panel s12'><div class='cockpit-banner'><div class='cockpit-copy'><div class='eyebrow'>MIXED VIEW 3 · MARKET MAP</div><h2>同一頁比較，不混合合約與幣別</h2><p>LME 區塊只用同源 3M 參考 Close、均線與 RSI；SHFE 區塊使用交易所公布的完整日線 OHLC。兩者可比對方向，但不互相填補缺值。</p><div class='market-cards'><div class='mcard'><span class='eyebrow'>LME</span><div class='mvalue'>{fmt(snapshot.get('market_research',{}).get('close_series',{}).get('latest_close'),1)}</div><div class='muted'>USD/t · Close-only</div></div><div class='mcard'><span class='eyebrow'>SHFE</span><div class='mvalue'>{fmt(snapshot.get('market_research',{}).get('shfe_zinc',{}).get('latest_close'),0)}</div><div class='muted'>CNY/t · True OHLC</div></div><div class='mcard'><span class='eyebrow'>LME OHLC</span><div class='mvalue'>0</div><div class='muted'>private-only framework</div></div></div></div>{_compass(snapshot.get('market_research',{}).get('close_series',{}))}</div></section>
-{_trend_band(snapshot.get('market_research',{}).get('close_series',{}))}
-{_research_panel(snapshot)}
-{_shfe_panel(snapshot)}
-{_cockpit_cards(snapshot)}
-<section class='panel s12' id='tc-premiums'><h2>CHINA ZINC CONCENTRATE TC</h2><div class='tc-grid'>{tc_html}</div><p class='muted'>不同 basis 不混算：Import TC、Domestic TC、Annual Benchmark 分開保存與判讀。延遲一日/一週/月度可接受，但日期與來源必須可追溯。</p></section>
-<section class='panel s6'><h2>🏭 PROCUREMENT</h2>{"<div class='notice warn'>Public privacy mode：精確庫存、60D需求與建議採購噸數已遮罩。</div>" if not include_private else ''}<div class='market-cards'>
-<div class='mcard'><div class='eyebrow'>Coverage</div><div class='mvalue'>{fmt(proc.get('coverage_days'),1)} <small>days</small></div><div class='muted'>{_esc(proc.get('inventory_band'))}</div></div>
-<div class='mcard'><div class='eyebrow'>Action</div><div class='mvalue'>{_esc(proc.get('action'))}</div><div class='muted'>Input {_esc(proc_q.get('status'))}</div></div>
-<div class='mcard'><div class='eyebrow'>Private inputs</div><div class='mvalue'>{private_value(proc_state.get('current_inventory_t'),0)} / {private_value(proc_state.get('demand_60d_t'),0)}</div><div class='muted'>inventory / 60D demand</div></div>
-</div></section>
-<section class='panel s6' id='notes'><h2>📈 PAPER RESEARCH NOTES</h2><div class='paper-grid'>{_paper_card(inv.get('conservative',{}),'Conservative',snapshot)}{_paper_card(inv.get('aggressive',{}),'Aggressive',snapshot)}</div></section>
-<section class='panel s8' id='methodology'><h2>TECHNICAL DATA · METHODOLOGY</h2>{candle_block}</section>
-<section class='panel s4'><h2>MODEL / PIPELINE STATUS</h2><table><tr><td>Technical mode</td><td>{_esc(technical_mode)}</td></tr><tr><td>Close-history points</td><td>{_esc(snapshot.get('free_close_history_points'))}</td></tr><tr><td>Market confidence</td><td>{fmt(iq.get('confidence'),0)}</td></tr><tr><td>Provider failures</td><td>{sum(1 for v in market.get('provider_status',{}).values() if str(v.get('status')).upper()=='ERROR')}</td></tr></table><p><a href='research.html'>Research Lab →</a></p></section>
-</div><div class='footer'>Zinc Research Cockpit · PAPER RESEARCH ONLY · LME and SHFE identities remain separate · private LME transparency data is never deployed.</div></main></div></body></html>"""
+{_today_market_matrix(snapshot)}
+{_primary_watch(snapshot)}
+{_zinc_context(snapshot)}
+<section class='panel s12'><div class='section-head'><div><div class='eyebrow'>OPERATING CONSTITUTION</div><h2>WHAT PERMITS ACTION</h2></div><span class='pill warn'>RESEARCH ONLY</span></div><div class='today-rules'><div><b>1 · Verified data</b><span>No complete data → no signal</span></div><div><b>2 · Confirmed trigger</b><span>No trigger → no order</span></div><div><b>3 · Private quote check</b><span>Bid/Ask and spread must be acceptable</span></div><div><b>4 · Risk approval</b><span>Actual R:R below 1:2 → reject</span></div></div></section>
+</div><div class='footer'>GLOBAL MACRO RESEARCH DESK · RESEARCH ONLY · Today shows decisions once; Markets holds evidence and levels · private inputs are never deployed.</div></main></div></body></html>"""
 
     out = PUBLIC_DIR / "index.html"
     out.write_text(page, encoding="utf-8")

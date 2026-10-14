@@ -2,11 +2,13 @@
 
 ## Reading flow
 
-1. **Today (`index.html`)** — zinc core data, daily conclusion and links to detail.
-2. **Markets (`markets.html`)** — LME Zinc, SHFE Zinc, Gold, USD/JPY and DXY. Each market shows validated price structure, asset-specific evidence, the six gates, a conditional research plan and the same eight-question audit.
+1. **Today (`index.html`)** — a ten-second decision layer only: current posture, five-market comparison, primary watch, the physical/technical zinc context split and the four execution rules. Long charts, methodology, TC detail and repeated audits do not belong here.
+2. **Markets (`markets.html`)** — comparison first, then one expanded market at a time. LME Zinc, SHFE Zinc, Gold, USD/JPY and DXY retain validated price structure, indicators, asset-specific evidence, compact gates, conditional levels and the same eight-question audit without repeating the public/private execution boundary on every card.
 3. **Radar (`radar.html`)** — cross-market direction, evidence agreement and event discipline.
 4. **Journal (`journal.html`)** — daily facts, interpretation, invalidation and next observation.
 5. **System status (`system-status.html`)** — operations-only data health page. It is not linked from normal navigation. GitHub Pages does not provide authentication, so this is navigation hiding rather than access control.
+
+The primary navigation contains pages only. Market names, inventory, TC and methodology are detail content rather than mixed page/anchor navigation. Radar and Journal retain their existing scope until their separate information-architecture review.
 
 ## Price boundary
 
