@@ -36,6 +36,8 @@ class ResearchPagesTest(unittest.TestCase):
             self.assertIn("data-chart-window='20'", markets)
             self.assertIn("data-chart-window='all'", markets)
             self.assertIn("data-indicator='RSI14'", markets)
+            self.assertIn("text-anchor='start'", markets)
+            self.assertIn("text-anchor='end'", markets)
             self.assertLess(markets.index("Validated price structure") if "Validated price structure" in markets else markets.index("Gold · CLOSE-ONLY"),
                             markets.index("Asset-specific evidence"))
             self.assertIn("class='market-detail'", markets)

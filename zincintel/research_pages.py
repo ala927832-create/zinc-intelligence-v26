@@ -84,7 +84,8 @@ def _sparkline(series: dict, *, group: str | None = None, window: int | None = 1
     y = lambda value: 165 - (float(value)-low)*130/span
     ticks = []
     for index in sorted({0, len(points)//2, len(points)-1}):
-        ticks.append(f"<text x='{x(index):.1f}' y='184' fill='#bed0dc' font-size='11' text-anchor='middle'>{_e(points[index][0])}</text>")
+        anchor = "start" if index == 0 else "end" if index == len(points) - 1 else "middle"
+        ticks.append(f"<text x='{x(index):.1f}' y='184' fill='#bed0dc' font-size='11' text-anchor='{anchor}'>{_e(points[index][0])}</text>")
     if has_ohlc:
         width = max(2.0, min(6.0, 520 / len(raw_points)))
         plot = []
