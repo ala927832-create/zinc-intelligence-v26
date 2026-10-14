@@ -195,16 +195,33 @@ def main() -> int:
     text = _visible_text(raw_html)
     failures: list[str] = []
 
-    markets_html = _fetch(urljoin(page_url, "markets.html"), run_id, marker="Market comparison · first decision layer")
+    markets_html = _fetch(urljoin(page_url, "markets.html"), run_id, marker="CHARTS BEFORE COMMENTARY")
     markets_text = _visible_text(markets_html)
-    for key, plan in snapshot.get("decision_book", {}).get("markets", {}).items():
+    decisions = snapshot.get("decision_book", {}).get("markets", {})
+    for key in ("lme_zinc", "shfe_zinc", "gold", "usdjpy", "dxy"):
+        plan = decisions.get(key, {})
+        if not plan:
+            failures.append(f"missing required primary market plan: {key}")
+            continue
         _expect(markets_html, f"id='{key}'", failures, f"Markets card {key}")
         for number, label in enumerate(("市場方向", "證據一致性", "風險位置", "准許進場條件",
                                         "看錯損失", "出場計畫", "理論風報比", "No-Trade 理由"), 1):
             _expect(markets_html, f"{number}. {label}", failures, f"{key} audit question {number}")
-    for marker in ("Market comparison · first decision layer", "Decision brief · eight required questions",
-                   "Asset-specific evidence", "Conditional plan · RESEARCH ONLY", "Execution approval boundary"):
+    for marker in ("CHARTS BEFORE COMMENTARY", "Markets · price structure and conditional plans",
+                   "Decision brief · eight required questions", "Asset-specific evidence",
+                   "Conditional plan · RESEARCH ONLY", "Execution approval boundary",
+                   "US Treasury · data source not integrated"):
         _expect(markets_html, marker, failures, f"Markets decision chain: {marker}")
+    if markets_html.find("chart-first") > markets_html.find("Asset-specific evidence"):
+        failures.append("Markets must render chart-first content before evidence commentary")
+    for period in ("20D", "60D", "120D", "1Y", "ALL"):
+        _expect(markets_html, period, failures, f"Markets chart period {period}")
+    _expect(markets_html, "data-indicator='RSI14'", failures, "Markets close-based RSI14 chart")
+    _expect(markets_html, "Separate China-market contract for cross-market confirmation", failures,
+            "LME/SHFE market identity boundary")
+    for obsolete_section in ("Market comparison · first decision layer", "CROSS-MARKET DECISION MATRIX"):
+        if obsolete_section in markets_html or obsolete_section in raw_html:
+            failures.append(f"obsolete repeated comparison remains: {obsolete_section}")
     if markets_html.count("Execution approval boundary") != 1:
         failures.append("Markets must render the public/private execution boundary exactly once")
     for private_marker in ("name=\"account_equity\"", "name='account_equity'", "/api/execution/preview", "/api/trades"):
@@ -218,7 +235,8 @@ def main() -> int:
     _expect(text, "GLOBAL MACRO RESEARCH DESK", failures)
     _expect(text, f"Model {snapshot.get('model_version')}", failures, "model version")
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
-    for marker in ("TODAY'S MARKET POSTURE", "CROSS-MARKET DECISION MATRIX", "PRIMARY WATCH",
+    for marker in ("MARKET SNAPSHOT", "FIRST LOOK · PRICES BEFORE OPINIONS", "TODAY'S MARKET POSTURE",
+                   "TODAY'S WATCH / CHANGES", "PRIMARY WATCH", "US TREASURY 10Y", "SOURCE PENDING",
                    "LME ZINC · CONTEXT SPLIT", "WHAT PERMITS ACTION", "RESEARCH ONLY"):
         _expect(text, marker, failures, f"Today information architecture: {marker}")
     _expect(raw_html, "class='side-nav'", failures, "left research navigation")

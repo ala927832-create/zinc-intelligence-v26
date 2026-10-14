@@ -4,7 +4,8 @@ from copy import deepcopy
 from pathlib import Path
 from unittest.mock import patch
 
-from zincintel.dashboard_v27 import _primary_watch, _today_market_matrix, _today_posture, _zinc_context
+from zincintel.dashboard_v27 import (_primary_watch, _today_changes, _today_market_cards,
+                                    _today_posture, _zinc_context)
 from zincintel.research_pages import build_research_pages
 
 
@@ -17,7 +18,10 @@ class ResearchPagesTest(unittest.TestCase):
                 "evidence":[{"factor":"OI", "status":"NOT_INTEGRATED", "value":None}],
                 "decision_audit":{f"{i}_question":"answer" for i in range(1,9)}}
         snapshot = {"run_date":"2026-10-13", "decision_book":{"markets":{"gold":plan}},
-                    "market_research":{"cross_assets":{"gold":{"unit":"USD/oz"}}}, "market":{"data_health":{}}}
+                    "market_research":{"cross_assets":{"gold":{"unit":"USD/oz", "chart_points":[
+                        {"date":"2026-10-12", "close":4170, "rsi14":49},
+                        {"date":"2026-10-13", "close":4180, "rsi14":52},
+                    ]}}}, "market":{"data_health":{}}}
         original = deepcopy(snapshot)
         with tempfile.TemporaryDirectory() as folder, patch("zincintel.research_pages.PUBLIC_DIR", Path(folder)):
             paths = build_research_pages(snapshot)
@@ -26,7 +30,14 @@ class ResearchPagesTest(unittest.TestCase):
             self.assertIn("Actual R:R", markets)
             self.assertIn("Decision brief · eight required questions", markets)
             self.assertIn("Asset-specific evidence", markets)
-            self.assertIn("Market comparison · first decision layer", markets)
+            self.assertIn("CHARTS BEFORE COMMENTARY", markets)
+            self.assertIn("Markets · price structure and conditional plans", markets)
+            self.assertIn("US Treasury · data source not integrated", markets)
+            self.assertIn("data-chart-window='20'", markets)
+            self.assertIn("data-chart-window='all'", markets)
+            self.assertIn("data-indicator='RSI14'", markets)
+            self.assertLess(markets.index("Validated price structure") if "Validated price structure" in markets else markets.index("Gold · CLOSE-ONLY"),
+                            markets.index("Asset-specific evidence"))
             self.assertIn("class='market-detail'", markets)
             self.assertIn("1. 市場方向", markets)
             self.assertIn("8. No-Trade 理由", markets)
@@ -53,11 +64,18 @@ class ResearchPagesTest(unittest.TestCase):
             "core_data_gate": {"status": "HEALTHY"},
             "decision_book": {"markets": {"lme_zinc": plan}},
         }
-        html = (_today_posture(snapshot) + _today_market_matrix(snapshot)
+        html = (_today_market_cards(snapshot) + _today_posture(snapshot) + _today_changes(snapshot)
                 + _primary_watch(snapshot) + _zinc_context(snapshot))
+        self.assertIn("MARKET SNAPSHOT", html)
+        self.assertIn("LME ZINC", html)
+        self.assertIn("COMEX GOLD", html)
+        self.assertIn("USD/JPY", html)
+        self.assertIn("US DOLLAR INDEX", html)
+        self.assertIn("US TREASURY 10Y", html)
+        self.assertIn("SOURCE PENDING", html)
         self.assertIn("TODAY'S MARKET POSTURE", html)
         self.assertIn("WAIT FOR TRIGGER", html)
-        self.assertIn("CROSS-MARKET DECISION MATRIX", html)
+        self.assertIn("TODAY'S WATCH / CHANGES", html)
         self.assertIn("PRIMARY WATCH", html)
         self.assertIn("Physical / procurement condition", html)
         self.assertIn("Close-only technical trend", html)

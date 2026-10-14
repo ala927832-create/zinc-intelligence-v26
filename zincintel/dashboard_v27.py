@@ -391,6 +391,99 @@ def _decision_class(value: str | None) -> str:
     return "ok" if value == "READY" else "warn" if value == "WAIT_FOR_TRIGGER" else "bad"
 
 
+def _market_series(snapshot: dict, key: str) -> dict:
+    research = snapshot.get("market_research", {})
+    if key == "lme_zinc":
+        return research.get("close_series", {})
+    if key == "shfe_zinc":
+        return research.get("shfe_zinc", {})
+    return research.get("cross_assets", {}).get(key, {})
+
+
+def _spark_path(points: list[dict]) -> str:
+    values = []
+    for item in points[-30:]:
+        try:
+            values.append(float(item.get("close")))
+        except (TypeError, ValueError):
+            continue
+    if len(values) < 2:
+        return "<span class='spark-missing'>NO SERIES</span>"
+    lo, hi = min(values), max(values)
+    span = hi - lo or 1.0
+    coords = " ".join(
+        f"{index * 116 / (len(values) - 1):.1f},{34 - (value - lo) * 28 / span:.1f}"
+        for index, value in enumerate(values)
+    )
+    tone = "spark-up" if values[-1] >= values[0] else "spark-down"
+    return (f"<svg class='market-spark {tone}' viewBox='0 0 116 38' aria-hidden='true'>"
+            f"<polyline points='{coords}'/></svg>")
+
+
+def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = False) -> str:
+    if placeholder:
+        return ("<article class='quote-card quote-pending' data-market='us_treasury'>"
+                "<div class='quote-top'><div><span class='quote-kicker'>RATES</span><h2>US TREASURY 10Y</h2></div>"
+                "<span class='pill warn'>SOURCE PENDING</span></div><div class='quote-main'><strong>N/A</strong>"
+                "<span class='spark-missing'>NO VERIFIED SERIES</span></div>"
+                "<p class='quote-sub'>2Y / 10Y / real yield are not integrated.</p>"
+                "<div class='quote-foot'><span>As of —</span><span>NOT_AVAILABLE</span></div></article>")
+
+    plans = snapshot.get("decision_book", {}).get("markets", {})
+    plan = plans.get(key, {})
+    series = _market_series(snapshot, key)
+    value, unit = _decision_reference(snapshot, key, plan)
+    as_of = plan.get("as_of") or series.get("as_of") or "—"
+    direction = plan.get("direction") or "UNDETERMINED"
+    decision = plan.get("decision") or "NO_TRADE"
+    source_grade = series.get("source_grade") or "—"
+    secondary = ""
+    if key == "lme_zinc":
+        reference = plan.get("reference") or {}
+        secondary = (f"<div class='quote-sub-grid'><span>3M <b>{fmt(reference.get('three_month'),2)}</b></span>"
+                     f"<span>Cash−3M <b>{fmt(reference.get('cash_3m'),2)}</b></span></div>")
+    else:
+        latest_contract = series.get("latest_contract")
+        if latest_contract:
+            secondary = f"<p class='quote-sub'>Contract {_esc(latest_contract)}</p>"
+    return f"""<article class='quote-card' data-market='{_esc(key)}'>
+    <div class='quote-top'><div><span class='quote-kicker'>{'SPOT PRIMARY' if key == 'lme_zinc' else 'VALIDATED REFERENCE'}</span><h2>{_esc(title)}</h2></div><span class='pill {_decision_class(decision)}'>{_esc(direction)}</span></div>
+    <div class='quote-main'><strong>{fmt(value,2)}</strong><span class='quote-unit'>{_esc(unit)}</span>{_spark_path(series.get('chart_points', []))}</div>
+    {secondary}<div class='quote-foot'><span>As of {_esc(as_of)}</span><span>{_esc(source_grade)} · {_esc(decision)}</span></div></article>"""
+
+
+def _today_market_cards(snapshot: dict) -> str:
+    cards = [
+        _market_card(snapshot, "lme_zinc", "LME ZINC"),
+        _market_card(snapshot, "shfe_zinc", "SHFE ZINC"),
+        _market_card(snapshot, "gold", "COMEX GOLD"),
+        _market_card(snapshot, "usdjpy", "USD/JPY"),
+        _market_card(snapshot, "dxy", "US DOLLAR INDEX"),
+        _market_card(snapshot, "us_treasury", "US TREASURY 10Y", placeholder=True),
+    ]
+    return ("<section class='panel s12 quote-board' id='market-snapshot'><div class='section-head'>"
+            "<div><div class='eyebrow'>FIRST LOOK · PRICES BEFORE OPINIONS</div><h2>MARKET SNAPSHOT</h2></div>"
+            f"<span class='muted'>As of {_esc(snapshot.get('run_date'))}</span></div>"
+            f"<div class='quote-grid'>{''.join(cards)}</div></section>")
+
+
+def _today_changes(snapshot: dict) -> str:
+    plans = snapshot.get("decision_book", {}).get("markets", {})
+    preferred = ["lme_zinc", "gold", "dxy"]
+    rows = []
+    for key in preferred:
+        plan = plans.get(key, {})
+        if not plan:
+            continue
+        reason = (plan.get("no_trade_reasons") or ["No blocker registered."])[0]
+        rows.append(
+            f"<div><span><b>{_esc(plan.get('market', key))}</b><small>{_esc(plan.get('direction'))} · {_esc(plan.get('decision'))}</small></span>"
+            f"<p>{_esc(reason)}</p></div>"
+        )
+    return ("<section class='panel s6 today-watch'><div class='eyebrow'>CURRENT VALIDATED WATCH</div>"
+            f"<h2>TODAY'S WATCH / CHANGES</h2>{''.join(rows)}</section>")
+
+
 def _today_posture(snapshot: dict) -> str:
     plans = snapshot.get("decision_book", {}).get("markets", {})
     decisions = [plan.get("decision") for plan in plans.values()]
@@ -402,7 +495,7 @@ def _today_posture(snapshot: dict) -> str:
         posture, explanation = "NO TRADE", "No market currently has a compliant conditional setup. Capital preservation is the active decision."
     actionable = sum(item in {"READY", "WAIT_FOR_TRIGGER"} for item in decisions)
     blocked = sum(item == "NO_TRADE" for item in decisions)
-    return f"""<section class='panel s12 today-hero' id='overview'><div><div class='eyebrow'>TODAY'S MARKET POSTURE</div><div class='posture'>{_esc(posture)}</div><p>{_esc(explanation)}</p></div><div class='today-metrics'><div><span>Core data</span><b>{_esc(snapshot.get('core_data_gate', {}).get('status'))}</b></div><div><span>Watch / ready</span><b>{actionable}</b></div><div><span>No Trade</span><b>{blocked}</b></div><div><span>Snapshot</span><b>{_esc(snapshot.get('run_date'))}</b></div></div></section>"""
+    return f"""<section class='panel s6 today-hero' id='overview'><div><div class='eyebrow'>TODAY'S MARKET POSTURE</div><div class='posture'>{_esc(posture)}</div><p>{_esc(explanation)}</p></div><div class='today-metrics'><div><span>Core data</span><b>{_esc(snapshot.get('core_data_gate', {}).get('status'))}</b></div><div><span>Watch / ready</span><b>{actionable}</b></div><div><span>No Trade</span><b>{blocked}</b></div><div><span>Snapshot</span><b>{_esc(snapshot.get('run_date'))}</b></div></div></section>"""
 
 
 def _today_market_matrix(snapshot: dict) -> str:
@@ -509,11 +602,11 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 .period-controls button{{border-color:#c9d5dd;background:#fff;color:#234f70}}.period-controls button.active{{background:#0b2f4f;color:#fff;border-color:#0b2f4f}}.chart-tooltip{{border-color:#315c7d;background:#0b2f4f;color:#fff}}
 .trend-panel{{background:#f8f6f0;border-color:#d8dfe3}}.trend-regime{{color:#0b5f78}}.trend-detail ul{{color:#536e82}}.cockpit-banner{{grid-template-columns:minmax(0,1.5fr) minmax(285px,.5fr);gap:10px}}.cockpit-copy{{background:#fff;border-color:#d5dde3;color:#173750}}.cockpit-side{{background:#0b2f4f;border-color:#0b2f4f;color:#fff}}.cockpit-side .eyebrow,.cockpit-side .source{{color:#bed0dc}}.cockpit-side .compact-reasons{{color:#e1ebf1}}.compass-gauge{{display:block;width:100%;max-width:330px;margin:6px auto -4px}}.gauge-segment{{stroke:#fff;stroke-width:1.4;opacity:.94}}.gauge-segment.gauge-selected{{stroke:#f2a05d;stroke-width:5;opacity:1}}.gauge-label{{fill:#173750;font-size:8px;font-weight:800;text-transform:uppercase}}.gauge-needle{{stroke:#fff;stroke-width:5;stroke-linecap:round}}.gauge-hub{{fill:#0b2f4f;stroke:#fff;stroke-width:3}}.compass-result{{color:#fff;text-align:center;font-family:Georgia,serif}}
 .status-chip{{border-color:#9fcac2;background:#e0f2ee;color:#086d63}}.research-strip>div,.icon-cards>div{{background:#fbfaf7;border-color:#d8e0e5}}.icon-cards i{{color:#164f78}}
-.today-hero{{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(420px,.55fr);gap:18px;align-items:center;border-left:5px solid #c8783d}}.today-hero .posture{{font:800 38px Georgia,serif;color:#0b2f4f;margin:5px 0}}.today-hero p{{max-width:760px;margin:4px 0}}.today-metrics{{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}}.today-metrics>div,.watch-levels>div{{background:#f8f6f0;border:1px solid #d8e0e5;border-radius:6px;padding:10px}}.today-metrics span,.watch-levels span{{display:block;color:#687e90;font-size:10px;text-transform:uppercase;letter-spacing:.05em}}.today-metrics b{{font-size:17px}}.decision-matrix{{min-width:980px}}.decision-matrix td:first-child{{min-width:180px}}.decision-matrix td:last-child{{min-width:290px}}.watch-levels{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}}.watch-levels b{{font-size:16px}}.context-row{{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #dfe5e8}}.context-row span{{color:#687e90}}.today-rules{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}}.today-rules>div{{padding:11px;background:#fbfaf7;border:1px solid #d8e0e5;border-radius:6px}}.today-rules b,.today-rules span{{display:block}}.today-rules span{{color:#687e90;font-size:11px;margin-top:4px}}
+.quote-board{{padding:14px}}.quote-grid{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}}.quote-card{{background:#fff;border:1px solid #d5dde3;border-radius:8px;padding:15px;box-shadow:0 3px 10px rgba(18,50,76,.04);min-height:184px;display:flex;flex-direction:column}}.quote-top{{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}}.quote-top h2{{font-size:17px;margin:2px 0 0}}.quote-kicker{{display:block;color:#687e90;font-size:9px;letter-spacing:.1em}}.quote-main{{display:flex;align-items:flex-end;gap:7px;margin:15px 0 9px;min-width:0}}.quote-main strong{{font:800 31px Georgia,serif;color:#0b2f4f;line-height:1}}.quote-unit{{color:#526f85;font-weight:650;white-space:nowrap}}.market-spark{{width:116px;height:38px;margin-left:auto;overflow:visible}}.market-spark polyline{{fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}}.spark-up polyline{{stroke:#087b70}}.spark-down polyline{{stroke:#d94a4f}}.spark-missing{{margin-left:auto;color:#8a552e;font-size:10px;letter-spacing:.04em}}.quote-sub,.quote-sub-grid{{color:#536e82;font-size:11px;margin:5px 0}}.quote-sub-grid{{display:flex;gap:18px}}.quote-sub-grid b{{color:#173d5e}}.quote-foot{{display:flex;justify-content:space-between;gap:8px;margin-top:auto;padding-top:10px;border-top:1px solid #e2e7ea;color:#687e90;font-size:10px}}.quote-pending{{background:#fbfaf7}}.today-hero{{display:grid;grid-template-columns:1fr;gap:13px;align-items:center;border-left:5px solid #c8783d}}.today-hero .posture{{font:800 32px Georgia,serif;color:#0b2f4f;margin:5px 0}}.today-hero p{{max-width:760px;margin:4px 0}}.today-metrics{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}}.today-metrics>div,.watch-levels>div{{background:#f8f6f0;border:1px solid #d8e0e5;border-radius:6px;padding:10px}}.today-metrics span,.watch-levels span{{display:block;color:#687e90;font-size:10px;text-transform:uppercase;letter-spacing:.05em}}.today-metrics b{{font-size:15px}}.today-watch>div:not(.eyebrow){{display:grid;grid-template-columns:minmax(180px,.7fr) 1.3fr;gap:14px;padding:10px 0;border-bottom:1px solid #e0e5e8}}.today-watch>div:last-child{{border-bottom:0}}.today-watch span,.today-watch small{{display:block}}.today-watch small{{color:#687e90;margin-top:2px}}.today-watch p{{margin:0;color:#536e82}}.watch-levels{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}}.watch-levels b{{font-size:16px}}.context-row{{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #dfe5e8}}.context-row span{{color:#687e90}}.today-rules{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}}.today-rules>div{{padding:11px;background:#fbfaf7;border:1px solid #d8e0e5;border-radius:6px}}.today-rules b,.today-rules span{{display:block}}.today-rules span{{color:#687e90;font-size:11px;margin-top:4px}}
 .trend-ribbon{{padding:12px 14px}}.trend-ribbon h2{{margin:0}}.trend-band{{display:grid;grid-template-columns:repeat(5,1fr);margin-top:9px;border-radius:5px;overflow:hidden}}.band-item{{min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#173750;border-right:1px solid rgba(255,255,255,.8);text-transform:uppercase;font-size:11px}}.band-item span{{min-height:14px;font-size:9px;text-transform:none}}.band-strong_bear{{background:#d94a4f;color:#fff}}.band-bear{{background:#ef8a83}}.band-neutral{{background:#c7ced1}}.band-bull{{background:#8dd8cf}}.band-strong_bull{{background:#087b70;color:#fff}}.band-item.active{{box-shadow:inset 0 0 0 4px #f1a15e;font-weight:900}}
 .notice.warn{{background:#fff3e8;color:#7d4d29}}.footer{{color:#62798a}}
-@media(max-width:1100px){{.site-shell{{grid-template-columns:1fr}}.side-nav{{position:sticky;top:0;min-height:0;display:flex;gap:4px;overflow-x:auto;padding:7px 10px;border-right:0;border-bottom:1px solid #d4dce2}}.side-nav a{{white-space:nowrap;margin:0}}.side-nav .nav-sep{{display:none}}.cockpit-banner,.today-hero{{grid-template-columns:1fr}}}}
-@media(max-width:680px){{.site-header .top{{padding:14px}}.site-header h1{{font-size:22px}}.side-nav .nav-icon{{display:none}}.trend-band{{min-width:560px}}.trend-ribbon{{overflow-x:auto}}.today-metrics,.watch-levels,.today-rules{{grid-template-columns:1fr 1fr}}.today-hero .posture{{font-size:31px}}}}
+@media(max-width:1100px){{.site-shell{{grid-template-columns:1fr}}.side-nav{{position:sticky;top:0;min-height:0;display:flex;gap:4px;overflow-x:auto;padding:7px 10px;border-right:0;border-bottom:1px solid #d4dce2}}.side-nav a{{white-space:nowrap;margin:0}}.side-nav .nav-sep{{display:none}}.cockpit-banner,.today-hero{{grid-template-columns:1fr}}.quote-grid{{grid-template-columns:repeat(2,minmax(0,1fr))}}}}
+@media(max-width:680px){{.site-header .top{{padding:14px}}.site-header h1{{font-size:22px}}.side-nav .nav-icon{{display:none}}.trend-band{{min-width:560px}}.trend-ribbon{{overflow-x:auto}}.today-metrics,.watch-levels,.today-rules{{grid-template-columns:1fr 1fr}}.today-hero .posture{{font-size:31px}}.quote-grid{{grid-template-columns:1fr}}.quote-main strong{{font-size:29px}}.today-watch>div:not(.eyebrow){{grid-template-columns:1fr}}}}
 </style></head><body>
 <header class='site-header'><div class='top'><div><h1>GLOBAL MACRO RESEARCH DESK</h1><div class='muted'>Daily decision brief · evidence first · execution requires a private live quote</div></div><div><b>{_esc(snapshot.get('run_date'))}</b><br><span class='muted'>Model {_esc(snapshot.get('model_version'))} · RESEARCH ONLY</span></div></div></header>
 <div class='site-shell'><nav class='side-nav' aria-label='Research sections'>
@@ -522,9 +615,10 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 <a href='radar.html'><span class='nav-icon'>⌁</span>RADAR</a>
 <a href='journal.html'><span class='nav-icon'>□</span>JOURNAL</a></nav>
 <main class='wrap'><div class='grid'>
+{_today_market_cards(snapshot)}
 {_today_posture(snapshot)}
+{_today_changes(snapshot)}
 <section class='panel s12' id='data-health' hidden aria-hidden='true'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
-{_today_market_matrix(snapshot)}
 {_primary_watch(snapshot)}
 {_zinc_context(snapshot)}
 <section class='panel s12'><div class='section-head'><div><div class='eyebrow'>OPERATING CONSTITUTION</div><h2>WHAT PERMITS ACTION</h2></div><span class='pill warn'>RESEARCH ONLY</span></div><div class='today-rules'><div><b>1 · Verified data</b><span>No complete data → no signal</span></div><div><b>2 · Confirmed trigger</b><span>No trigger → no order</span></div><div><b>3 · Private quote check</b><span>Bid/Ask and spread must be acceptable</span></div><div><b>4 · Risk approval</b><span>Actual R:R below 1:2 → reject</span></div></div></section>

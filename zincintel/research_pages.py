@@ -24,6 +24,13 @@ STYLE = """
 @media(max-width:620px){main{padding:10px}.head{padding:14px}.head h1{font-size:23px}.market-meta,.decision-grid,.execution-boundary{grid-template-columns:1fr}.comparison{min-width:840px}.market-detail>summary{align-items:flex-start}.chart{height:190px}}
 """
 
+STYLE += """
+.market-stage{background:#fff;border:1px solid var(--line);border-radius:7px;padding:14px;margin-bottom:10px}.market-stage h2{font-size:20px;margin:0}.market-tabs{display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));border:1px solid var(--line);border-radius:7px;overflow:hidden;margin-bottom:12px}.market-tabs a{padding:10px 8px;text-align:center;text-decoration:none;color:var(--ink);background:#fff;border-right:1px solid var(--line);font-size:12px}.market-tabs a:last-child{border-right:0}.market-tabs a:hover,.market-tabs a.active{background:var(--navy);color:#fff}.market-detail{scroll-margin-top:12px}.market-kpis{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:8px;margin:10px 0}.market-kpis>div{padding:10px;background:#f7f6f2;border:1px solid var(--line);border-radius:6px}.market-kpis span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase}.market-kpis b{display:block;margin-top:3px;font-size:16px}.chart-first{display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:10px;margin:10px 0}.chart-stack{display:grid;gap:10px}.chart-panel{background:#0b2f4f;border:1px solid #173f5d;border-radius:7px;padding:11px;color:#fff}.chart-panel h2{color:#fff;margin:0}.chart-panel .muted{color:#bed0dc}.chart-panel .chart{height:290px;background:#081f35}.chart-panel.linked .chart{height:185px}.chart-panel .chart-note{margin:7px 0 0;color:#bed0dc;font-size:11px}.period-controls{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0}.period-controls button{border:1px solid #315c7d;border-radius:5px;padding:5px 9px;background:#081f35;color:#bed0dc;cursor:pointer;font:inherit;font-size:11px}.period-controls button:hover,.period-controls button.active{background:#f5a45d;border-color:#f5a45d;color:#102f49}.rsi-chart{margin-top:8px;padding:7px 8px 4px;background:#081f35;border:1px solid #173f5d;border-radius:5px}.rsi-chart svg{display:block;width:100%;height:72px}.rsi-chart span{display:block;color:#bed0dc;font-size:10px}.key-levels{background:#0b2f4f;color:#fff;border-radius:7px;padding:13px;align-self:start}.key-levels h2{color:#fff;border-bottom:1px solid #315c7d;padding-bottom:9px}.key-levels dl{margin:0}.key-levels div{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #315c7d}.key-levels div:last-child{border-bottom:0}.key-levels dt{color:#bed0dc}.key-levels dd{margin:0;font-weight:750;text-align:right}.key-levels .stop{color:#ff8a98}.key-levels .target{color:#61dbc3}.chart-label-row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.market-lower{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.source-strip{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:9px 0;color:var(--muted);font-size:11px}.treasury-placeholder{border-left:5px solid var(--orange)}
+@media(max-width:1050px){.market-tabs{grid-template-columns:repeat(3,1fr)}.chart-first{grid-template-columns:1fr}.key-levels{display:grid;grid-template-columns:repeat(2,1fr);gap:0 18px}.key-levels h2{grid-column:1/-1}}
+@media(max-width:900px){.market-lower{grid-template-columns:1fr 1fr}.market-kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:620px){.market-lower{grid-template-columns:1fr}.chart-panel .chart{height:215px}.market-tabs{grid-template-columns:repeat(2,1fr)}.market-kpis{grid-template-columns:repeat(2,1fr)}.key-levels{grid-template-columns:1fr}}
+"""
+
 
 def _nav(active: str) -> str:
     items = [("index.html", "Today"), ("markets.html", "Markets"),
@@ -35,13 +42,27 @@ def _nav(active: str) -> str:
 
 def _page(title: str, active: str, body: str, run_date: str) -> str:
     disclosure = "RESEARCH ONLY · No data, no signal · No trigger, no order · Actual R:R must be ≥ 1:2"
-    script = """<script>(()=>{const all=[...document.querySelectorAll('.market-detail')];all.forEach(item=>item.addEventListener('toggle',()=>{if(item.open)all.forEach(other=>{if(other!==item)other.open=false})}));document.querySelectorAll('[data-market-target]').forEach(link=>link.addEventListener('click',()=>{const item=document.getElementById(link.dataset.marketTarget);if(item)item.open=true}))})()</script>"""
+    script = """<script>(()=>{const all=[...document.querySelectorAll('.market-detail')],tabs=[...document.querySelectorAll('[data-market-target]')];function select(id){tabs.forEach(tab=>tab.classList.toggle('active',tab.dataset.marketTarget===id))}all.forEach(item=>item.addEventListener('toggle',()=>{if(item.open){all.forEach(other=>{if(other!==item)other.open=false});select(item.id)}}));tabs.forEach(link=>link.addEventListener('click',()=>{const item=document.getElementById(link.dataset.marketTarget);if(item){item.open=true;select(item.id)}}));document.querySelectorAll('[data-chart-group]').forEach(button=>button.addEventListener('click',()=>{const group=button.dataset.chartGroup,window=button.dataset.chartWindow;document.querySelectorAll(`[data-chart-group="${group}"]`).forEach(item=>item.classList.toggle('active',item===button));document.querySelectorAll(`[data-chart-panel="${group}"]`).forEach(panel=>panel.hidden=panel.dataset.chartWindow!==window)}))})()</script>"""
     return f"<!doctype html><html lang='zh-Hant'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{_e(title)}</title><style>{STYLE}</style></head><body><header class='head'><h1>GLOBAL MACRO RESEARCH DESK</h1><small>{_e(run_date)} · delayed research data · execution requires live quote</small></header><div class='shell'>{_nav(active)}<main>{body}<div class='footer'>{disclosure}</div></main></div>{script}</body></html>"
 
 
-def _sparkline(series: dict) -> str:
+def _sparkline(series: dict, *, group: str | None = None, window: int | None = 120) -> str:
+    if group:
+        specs = [(20, "20D"), (60, "60D"), (120, "120D"), (252, "1Y"), (None, "ALL")]
+        buttons = "".join(
+            f"<button type='button' class='{'active' if days == 120 else ''}' data-chart-group='{_e(group)}' data-chart-window='{days or 'all'}'>{label}</button>"
+            for days, label in specs
+        )
+        panels = "".join(
+            f"<div class='chart-window' data-chart-panel='{_e(group)}' data-chart-window='{days or 'all'}' {'hidden' if days != 120 else ''}>{_sparkline(series, window=days)}</div>"
+            for days, _ in specs
+        )
+        return f"<div class='period-controls'>{buttons}</div>{panels}"
     raw_points = []
-    for item in series.get("chart_points", [])[-120:]:
+    source_points = series.get("chart_points", [])
+    if window is not None:
+        source_points = source_points[-window:]
+    for item in source_points:
         try:
             raw_points.append({**item, "date": str(item.get("date", "")), "close": float(item.get("close"))})
         except (TypeError, ValueError):
@@ -50,8 +71,13 @@ def _sparkline(series: dict) -> str:
         return "<div class='chart'>Validated chart data unavailable.</div>"
     points = [(item["date"], item["close"]) for item in raw_points]
     has_ohlc = all(all(item.get(field) is not None for field in ("open", "high", "low", "close")) for item in raw_points)
+    line_specs = [("ema20", "#61dbc3", "EMA20"), ("sma30", "#f5a45d", "SMA30"),
+                  ("sma20", "#f5a45d", "SMA20"), ("sma60", "#b6a5ff", "SMA60"),
+                  ("sma50", "#b6a5ff", "SMA50")]
+    line_specs = [spec for spec in line_specs if any(item.get(spec[0]) is not None for item in raw_points)]
     values = ([float(item[field]) for item in raw_points for field in ("high", "low")] if has_ohlc
               else [item[1] for item in points])
+    values.extend(float(item[field]) for item in raw_points for field, _, _ in line_specs if item.get(field) is not None)
     low, high = min(values), max(values)
     span = high - low or 1
     x = lambda index: 20 + index * 760 / (len(points)-1)
@@ -67,15 +93,34 @@ def _sparkline(series: dict) -> str:
             top, bottom = min(y(item["open"]), y(item["close"])), max(y(item["open"]), y(item["close"]))
             plot.append(f"<line x1='{x(index):.1f}' y1='{y(item['high']):.1f}' x2='{x(index):.1f}' y2='{y(item['low']):.1f}' stroke='{color}'/>")
             plot.append(f"<rect x='{x(index)-width/2:.1f}' y='{top:.1f}' width='{width:.1f}' height='{max(1.0,bottom-top):.1f}' fill='{color}'/>")
-        body, label, mode = "".join(plot), "Validated SHFE daily OHLC candlestick history", "OHLC"
+        body, label, mode = "".join(plot), "Validated daily OHLC candlestick history", "OHLC"
     else:
         coords = " ".join(f"{x(i):.1f},{y(value):.1f}" for i, (_, value) in enumerate(points))
         body = f"<polyline points='{coords}' fill='none' stroke='#61dbc3' stroke-width='2.5'/>"
         label, mode = "Validated close-only history", "CLOSE_ONLY"
+    overlays = []
+    for field, color, _ in line_specs:
+        segments, segment = [], []
+        for index, item in enumerate(raw_points):
+            value = item.get(field)
+            if value is None:
+                if segment:
+                    segments.append(segment)
+                    segment = []
+                continue
+            segment.append(f"{x(index):.1f},{y(value):.1f}")
+        if segment:
+            segments.append(segment)
+        overlays.extend(
+            f"<polyline points='{' '.join(coords)}' fill='none' stroke='{color}' stroke-width='1.7' opacity='.9'/>"
+            for coords in segments if len(coords) > 1
+        )
+    legend = " · ".join(["Close" if not has_ohlc else "OHLC"] + [label for _, _, label in line_specs])
     return (f"<div class='chart' data-chart-mode='{mode}'><svg viewBox='0 0 800 190' role='img' aria-label='{label}'>"
             "<line x1='20' y1='35' x2='780' y2='35' stroke='#315775'/><line x1='20' y1='165' x2='780' y2='165' stroke='#315775'/>"
-            f"{body}<text x='25' y='25' fill='#bed0dc' font-size='11'>{high:.2f}</text>"
-            f"<text x='25' y='160' fill='#bed0dc' font-size='11'>{low:.2f}</text>{''.join(ticks)}</svg></div>")
+            f"{body}{''.join(overlays)}<text x='25' y='25' fill='#bed0dc' font-size='11'>{high:.2f}</text>"
+            f"<text x='25' y='160' fill='#bed0dc' font-size='11'>{low:.2f}</text>{''.join(ticks)}</svg>"
+            f"<span class='muted'>{_e(legend)}</span></div>")
 
 
 def _format_audit(value) -> str:
@@ -84,6 +129,32 @@ def _format_audit(value) -> str:
     if isinstance(value, list):
         return "；".join(_e(item) for item in value)
     return _e(value)
+
+
+def _rsi_chart(series: dict, window: int = 120) -> str:
+    points = []
+    for item in series.get("chart_points", [])[-window:]:
+        try:
+            value = item.get("rsi14")
+            if value is not None:
+                points.append((str(item.get("date", "")), float(value)))
+        except (TypeError, ValueError):
+            continue
+    if len(points) < 2:
+        return ""
+    x = lambda index: 20 + index * 760 / (len(points) - 1)
+    y = lambda value: 64 - max(0.0, min(100.0, value)) * .56
+    coords = " ".join(f"{x(index):.1f},{y(value):.1f}" for index, (_, value) in enumerate(points))
+    latest = points[-1][1]
+    return ("<div class='rsi-chart' data-indicator='RSI14'><svg viewBox='0 0 800 72' role='img' "
+            "aria-label='Close based RSI14 latest 120 validated sessions'>"
+            f"<line x1='20' y1='{y(70):.1f}' x2='780' y2='{y(70):.1f}' stroke='#8f5d67' stroke-dasharray='4 4'/>"
+            f"<line x1='20' y1='{y(30):.1f}' x2='780' y2='{y(30):.1f}' stroke='#4c806f' stroke-dasharray='4 4'/>"
+            f"<polyline points='{coords}' fill='none' stroke='#d9b44a' stroke-width='2.2'/>"
+            f"<text x='25' y='{y(70)-3:.1f}' fill='#bed0dc' font-size='10'>70</text>"
+            f"<text x='25' y='{y(30)-3:.1f}' fill='#bed0dc' font-size='10'>30</text>"
+            f"<text x='775' y='14' text-anchor='end' fill='#d9b44a' font-size='11'>RSI14 {latest:.2f}</text>"
+            "</svg><span>Close-based RSI14 · latest 120 validated sessions · 30/70 guides</span></div>")
 
 
 def _headline(key: str, plan: dict, series: dict):
@@ -169,6 +240,43 @@ def _lme_fundamentals(snapshot: dict) -> str:
     <p class='muted'>Physical-market evidence is separate from the Close-only technical direction. Different TC bases are not blended. Public privacy mode keeps exact internal inventory, demand and position sizing out of this page.</p></details>"""
 
 
+def _key_levels(daily: dict) -> str:
+    if not daily:
+        return ("<aside class='key-levels'><h2>Key levels</h2><dl>"
+                "<div><dt>Setup</dt><dd>NOT AVAILABLE</dd></div>"
+                "<div><dt>Permission</dt><dd>NO TRADE</dd></div>"
+                "<div><dt>Reason</dt><dd>Structure not aligned</dd></div></dl></aside>")
+    setup = daily.get("setup_zone")
+    setup_text = " – ".join(str(item) for item in setup) if isinstance(setup, list) else str(setup or "—")
+    return f"""<aside class='key-levels'><h2>Key levels · research only</h2><dl>
+    <div><dt>Setup</dt><dd>{_e(setup_text)}</dd></div>
+    <div><dt>Trigger</dt><dd>{_e(daily.get('trigger_price'))}</dd></div>
+    <div><dt>Maximum entry</dt><dd>{_e(daily.get('maximum_entry'))}</dd></div>
+    <div><dt>Hard stop</dt><dd class='stop'>{_e(daily.get('hard_stop'))}</dd></div>
+    <div><dt>Close invalidation</dt><dd class='stop'>{_e(daily.get('close_invalidation'))}</dd></div>
+    <div><dt>T1</dt><dd class='target'>{_e(daily.get('t1'))}</dd></div>
+    <div><dt>T2</dt><dd class='target'>{_e(daily.get('t2'))}</dd></div>
+    <div><dt>Planned R:R</dt><dd>{_e(daily.get('planned_rr_t1'))} / {_e(daily.get('planned_rr_t2'))}</dd></div>
+    </dl></aside>"""
+
+
+def _market_tabs() -> str:
+    items = [("lme_zinc", "LME Zinc"), ("shfe_zinc", "SHFE Zinc"), ("gold", "Gold"),
+             ("usdjpy", "USD/JPY"), ("dxy", "DXY"), ("us_treasury", "US Treasury")]
+    return "<nav class='market-tabs' aria-label='Market detail'>" + "".join(
+        f"<a class='{'active' if key == 'lme_zinc' else ''}' href='#{key}' data-market-target='{key}'>{label}</a>"
+        for key, label in items
+    ) + "</nav>"
+
+
+def _treasury_placeholder() -> str:
+    return """<details class='market-detail treasury-placeholder' id='us_treasury'>
+    <summary><span class='market-summary'><b>US Treasury 10Y</b><span class='pill wait'>SOURCE PENDING</span><span class='pill'>UNDETERMINED</span></span><span><b>N/A</b></span></summary>
+    <div class='market-body'><div class='market-stage'><h2>US Treasury · data source not integrated</h2>
+    <p>No verified 2Y, 10Y or real-yield series is present in the current snapshot. No chart, trend or cross-market conclusion is generated.</p>
+    <p class='rules'><b>Required before activation:</b> permitted source, series identity, date, frequency, history, gap validation and source grade.</p></div></div></details>"""
+
+
 def _market_card(key: str, plan: dict, series: dict, snapshot: dict, open_by_default: bool = False) -> str:
     reference = plan.get("reference") or {}
     daily = plan.get("daily_plan", {})
@@ -221,13 +329,22 @@ def _market_card(key: str, plan: dict, series: dict, snapshot: dict, open_by_def
     chart_note = ("Verified exchange OHLC is rendered as candlesticks; contract identity and roll boundaries remain in the source series."
                   if all(sample.get(field) is not None for field in ("open", "high", "low", "close"))
                   else "Only validated closes are plotted. Candle patterns and ATR require verified OHLC.")
+    chart_title = ("LME 3M · CLOSE-ONLY" if key == "lme_zinc" else
+                   f"{plan.get('market', key)} · {'VERIFIED OHLC' if all(sample.get(field) is not None for field in ('open', 'high', 'low', 'close')) else 'CLOSE-ONLY'}")
+    linked_chart = ""
+    if key == "lme_zinc":
+        shfe = snapshot.get("market_research", {}).get("shfe_zinc", {})
+        if shfe.get("status") == "AVAILABLE":
+            linked_chart = ("<section class='chart-panel linked'><div class='chart-label-row'><h2>SHFE Zinc · VERIFIED OHLC · CNY/t</h2>"
+                            f"<span class='muted'>{_e(shfe.get('latest_contract'))} · {_e(shfe.get('as_of'))}</span></div>"
+                            f"{_sparkline(shfe, group='lme_linked_shfe')}{_rsi_chart(shfe)}<p class='chart-note'>Separate China-market contract for cross-market confirmation; never labelled as LME OHLC.</p></section>")
     return f"""<details class='market-detail' id='{_e(key)}' {'open' if open_by_default else ''}>
     <summary><span class='market-summary'><b>{_e(plan.get('market', key))}</b><span class='pill {klass}'>{_e(decision)}</span><span class='pill'>{_e(plan.get('direction'))}</span></span><span><b>{_e(headline)}</b> <span class='muted'>{_e(series.get('unit') or ('USD/t' if key == 'lme_zinc' else ''))}</span></span></summary>
-    <div class='market-body'><div class='market-head'><div><h2>Identity & data quality</h2><p class='muted source-line'>{source_line}</p></div><div class='evidence-count'>Required evidence available: <b>{available}/{total}</b><br>Not a win probability or confidence score.</div></div>
-    <div class='market-meta'><div><span>{'LME Cash headline' if key == 'lme_zinc' else 'Latest validated reference'}</span><b>{_e(headline)}</b></div><div><span>Secondary identity</span><b>{secondary}</b></div><div><span>As-of / observations</span><b>{_e(plan.get('as_of') or series.get('as_of'))} · {_e(series.get('observations'))}</b><small class='muted'>{_e(series.get('coverage_start'))} → {_e(series.get('coverage_end'))}</small></div><div><span>Data gate</span><b>{_e(plan.get('data_gate'))}</b></div></div>
-    <div class='market-meta' aria-label='Validated indicators'>{indicator_cells}</div>
-    <div class='gate-line' aria-label='Decision gates'>{gate_html}</div>{blocked}
-    <div class='grid'><section class='card half'><h2>Validated price structure · latest 120 sessions</h2>{_sparkline(series)}<p class='muted'>{_e(chart_note)}</p></section><section class='card half'><h2>Asset-specific evidence</h2><div class='table-wrap'><table><tr><th>Factor</th><th>Status</th><th>Value</th></tr>{evidence_rows}</table></div></section></div>
+    <div class='market-body'><div class='market-kpis'><div><span>{'LME Cash headline' if key == 'lme_zinc' else 'Validated reference'}</span><b>{_e(headline)}</b></div><div><span>Secondary identity</span><b>{secondary}</b></div><div><span>Technical direction</span><b>{_e(plan.get('direction'))}</b></div><div><span>Trade state</span><b>{_e(decision)}</b></div><div><span>As-of / observations</span><b>{_e(plan.get('as_of') or series.get('as_of'))} · {_e(series.get('observations'))}</b></div></div>
+    <div class='chart-first'><div class='chart-stack'><section class='chart-panel'><div class='chart-label-row'><h2>{_e(chart_title)}</h2><span class='muted'>20D / 60D / 120D / 1Y / all validated sessions</span></div>{_sparkline(series, group=key)}{_rsi_chart(series)}<p class='chart-note'>{_e(chart_note)}</p></section>{linked_chart}</div>{_key_levels(daily)}</div>
+    <div class='source-strip'><span>{source_line}</span><span>{_e(series.get('coverage_start'))} → {_e(series.get('coverage_end'))} · required evidence {available}/{total}</span></div>
+    <div class='market-meta' aria-label='Validated indicators'>{indicator_cells}</div><div class='gate-line' aria-label='Decision gates'>{gate_html}</div>{blocked}
+    <div class='market-lower'><section class='card'><h2>Asset-specific evidence</h2><div class='table-wrap'><table><tr><th>Factor</th><th>Status</th><th>Value</th></tr>{evidence_rows}</table></div></section><section class='card'><h2>Identity & data quality</h2><p>{_e(identity)}</p><p class='muted'>Data gate: {_e(plan.get('data_gate'))}. Evidence availability is not a win probability or confidence score.</p></section></div>
     {physical}<section aria-label='Eight-question decision audit'><div class='section-title'><h2>Decision brief · eight required questions</h2><span class='pill'>single source of truth</span></div><div class='decision-grid'>{audit_blocks}</div></section>
     <details class='appendix'><summary>Conditional plan · RESEARCH ONLY</summary><div class='table-wrap'><table>{plan_rows}</table></div></details>
     <p class='rules'><b>Private execution status:</b> {_e(plan.get('execution_check', {}).get('status'))}. Bid / Ask, spread, actual fill, slippage, Actual R:R and contract quantity remain private inputs.</p>
@@ -244,15 +361,21 @@ def build_research_pages(snapshot: dict) -> list[Path]:
     constitution = ("<section class='rules'><b>Decision chain</b><br>Asset-specific evidence → conditional plan → "
                     "private execution approval → post-trade review. No complete data → no signal; no trigger → no order; "
                     "no acceptable Bid/Ask → not executable; Actual R:R below 1:2 → reject; unclear structure → No Trade.</section>")
-    comparison = _comparison_table(decisions, series)
+    primary_keys = ["lme_zinc", "shfe_zinc", "gold", "usdjpy", "dxy"]
+    visible_decisions = [(key, decisions[key]) for key in primary_keys if key in decisions]
     details = "".join(
         _market_card(key, plan, series.get(key, {}), snapshot, open_by_default=index == 0)
-        for index, (key, plan) in enumerate(decisions.items())
-    )
+        for index, (key, plan) in enumerate(visible_decisions)
+    ) + _treasury_placeholder()
     execution_boundary = ("<section class='card dark'><div class='execution-boundary'><div><h2>Execution approval boundary</h2>"
                           "<p>Bid / Ask · Spread · Actual fill · Slippage · Actual R:R · Contract quantity</p></div>"
                           "<p class='muted'>This public page publishes research levels only. Executability is evaluated once, in the private loopback tool, after a trigger exists.</p></div></section>")
-    market_body = constitution + comparison + execution_boundary + "<section aria-label='Market details'>" + details + "</section>"
+    market_intro = ("<section class='market-stage'><div class='section-title'><div><div class='muted'>CHARTS BEFORE COMMENTARY</div>"
+                    "<h2>Markets · price structure and conditional plans</h2></div><span class='pill'>delayed research data</span></div>"
+                    "<p class='muted'>Choose a market. Verified price structure, key levels and source identity appear before evidence and interpretation.</p>"
+                    f"{_market_tabs()}</section>")
+    market_body = (market_intro + "<section aria-label='Market details'>" + details + "</section>" +
+                   execution_boundary + constitution)
     radar_rows = "".join(
         f"<tr><td>{_e(plan.get('market', key))}</td><td>{_e(plan.get('direction'))}</td><td>{_e(plan.get('evidence_alignment'))}</td><td>{_e(plan.get('evidence_completeness', 'NOT_SCORED'))}</td><td>{_e(plan.get('decision'))}</td><td>{_e('; '.join(plan.get('no_trade_reasons', [])[:1]))}</td></tr>"
         for key, plan in decisions.items())
