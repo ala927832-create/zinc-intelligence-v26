@@ -3,6 +3,11 @@
 *{box-sizing:border-box}body{margin:0;background:var(--ivory);color:var(--ink);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}.head{background:linear-gradient(112deg,#0a2a48,#123e61);color:#fff;border-bottom:3px solid var(--orange);padding:18px 24px}.head h1{font:700 29px Georgia,serif;margin:0}.head small{color:#d4e0e8}.shell{display:grid;grid-template-columns:190px minmax(0,1fr);max-width:1760px;margin:auto}.nav{min-height:100vh;background:#fbfaf6;border-right:1px solid var(--line);padding:16px 10px}.nav a{display:block;padding:11px;color:#244966;text-decoration:none;border-left:3px solid transparent}.nav a.on,.nav a:hover{background:var(--navy);color:#fff;border-left-color:var(--orange)}main{padding:16px;min-width:0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}.card{grid-column:span 12;background:#fff;border:1px solid var(--line);border-radius:7px;padding:15px;box-shadow:0 3px 12px rgba(18,50,76,.05)}.half{grid-column:span 6}h2{font:700 16px Georgia,serif;margin:0 0 10px}h3{font-size:13px;margin:0 0 7px}.pill{display:inline-block;border-radius:99px;padding:4px 9px;font-size:11px;background:#e8edf0}.good{background:#dcf1ec;color:#086d63}.wait{background:#fae9d9;color:#8a552e}.bad{background:#fae0e2;color:#a7333a}.price{font-size:25px;font-weight:800}.muted{color:var(--muted)}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #e1e6e9;padding:8px;text-align:left;vertical-align:top}th{background:#f3f5f4}.table-wrap{overflow-x:auto}.rules{border-left:4px solid var(--orange);padding:12px;background:#fff8f1}.dark{background:#0b2f4f;color:#fff}.dark .muted{color:#bed0dc}.chart{height:225px;background:linear-gradient(#103c60,#092d4b);border-radius:6px;padding:8px;color:#bed0dc}.chart svg{width:100%;height:100%}.journal{border-left:3px solid var(--teal);padding-left:12px}.footer{padding:25px;color:var(--muted);text-align:center}.status-ok{color:var(--teal);font-weight:700}.status-missing{color:var(--red);font-weight:700}.market-head{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start}.market-meta{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin:10px 0}.market-meta div{padding:8px;background:#f7f6f2;border:1px solid var(--line);border-radius:5px}.market-meta span{display:block;color:var(--muted);font-size:11px}.market-index{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.market-index a{padding:8px 11px;border:1px solid var(--line);border-radius:99px;background:#fff;color:var(--ink);text-decoration:none}.market-index a:hover{background:var(--navy);color:#fff}.comparison td:first-child{font-weight:750}.state{white-space:nowrap}.market-detail{margin:10px 0;background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:7px;box-shadow:0 3px 12px rgba(18,50,76,.05)}.market-detail>summary{cursor:pointer;list-style:none;padding:14px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center}.market-detail>summary::-webkit-details-marker{display:none}.market-detail>summary:after{content:'＋';font-size:18px}.market-detail[open]>summary:after{content:'−'}.market-detail[open]>summary{border-bottom:1px solid var(--line)}.market-summary{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.market-body{padding:15px}.gate-line{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.gate-line span{border:1px solid var(--line);border-radius:99px;padding:5px 8px;background:#f7f6f2;font-size:11px}.decision-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px}.decision-block{border:1px solid var(--line);border-radius:6px;padding:12px;background:#fbfaf7}.decision-block dl{margin:0}.decision-block dt{font-weight:750;margin-top:7px}.decision-block dt:first-child{margin-top:0}.decision-block dd{margin:2px 0;color:#526d82}.evidence-count{font-size:11px;color:var(--muted)}.appendix{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}.appendix summary{cursor:pointer;font-weight:750}.blocked{border-left:4px solid var(--red);background:#fff5f5;padding:11px;margin-top:10px}.execution-boundary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}.section-title{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:8px}.section-title h2{margin:0}.source-line{overflow-wrap:anywhere}.primary{border-left:5px solid var(--teal)}
 @media(max-width:900px){.shell{grid-template-columns:1fr}.nav{min-height:0;display:flex;overflow:auto}.nav a{white-space:nowrap}.half{grid-column:span 12}.market-meta,.decision-grid,.execution-boundary{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){main{padding:10px}.head{padding:14px}.head h1{font-size:23px}.market-meta,.decision-grid,.execution-boundary{grid-template-columns:1fr}.comparison{min-width:840px}.market-detail>summary{align-items:flex-start}.chart{height:190px}}
+
+.market-stage{background:#fff;border:1px solid var(--line);border-radius:7px;padding:14px;margin-bottom:10px}.market-stage h2{font-size:20px;margin:0}.market-tabs{display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));border:1px solid var(--line);border-radius:7px;overflow:hidden;margin-bottom:12px}.market-tabs a{padding:10px 8px;text-align:center;text-decoration:none;color:var(--ink);background:#fff;border-right:1px solid var(--line);font-size:12px}.market-tabs a:last-child{border-right:0}.market-tabs a:hover,.market-tabs a.active{background:var(--navy);color:#fff}.market-detail{scroll-margin-top:12px}.market-kpis{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:8px;margin:10px 0}.market-kpis>div{padding:10px;background:#f7f6f2;border:1px solid var(--line);border-radius:6px}.market-kpis span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase}.market-kpis b{display:block;margin-top:3px;font-size:16px}.chart-first{display:grid;grid-template-columns:minmax(0,1fr) 245px;gap:10px;margin:10px 0}.chart-stack{display:grid;gap:10px}.chart-panel{background:#0b2f4f;border:1px solid #173f5d;border-radius:7px;padding:11px;color:#fff}.chart-panel h2{color:#fff;margin:0}.chart-panel .muted{color:#bed0dc}.chart-panel .chart{height:290px;background:#081f35}.chart-panel.linked .chart{height:185px}.chart-panel .chart-note{margin:7px 0 0;color:#bed0dc;font-size:11px}.period-controls{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0}.period-controls button{border:1px solid #315c7d;border-radius:5px;padding:5px 9px;background:#081f35;color:#bed0dc;cursor:pointer;font:inherit;font-size:11px}.period-controls button:hover,.period-controls button.active{background:#f5a45d;border-color:#f5a45d;color:#102f49}.rsi-chart{margin-top:8px;padding:7px 8px 4px;background:#081f35;border:1px solid #173f5d;border-radius:5px}.rsi-chart svg{display:block;width:100%;height:72px}.rsi-chart span{display:block;color:#bed0dc;font-size:10px}.key-levels{background:#0b2f4f;color:#fff;border-radius:7px;padding:13px;align-self:start}.key-levels h2{color:#fff;border-bottom:1px solid #315c7d;padding-bottom:9px}.key-levels dl{margin:0}.key-levels div{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #315c7d}.key-levels div:last-child{border-bottom:0}.key-levels dt{color:#bed0dc}.key-levels dd{margin:0;font-weight:750;text-align:right}.key-levels .stop{color:#ff8a98}.key-levels .target{color:#61dbc3}.chart-label-row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.market-lower{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.source-strip{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:9px 0;color:var(--muted);font-size:11px}.treasury-placeholder{border-left:5px solid var(--orange)}
+@media(max-width:1050px){.market-tabs{grid-template-columns:repeat(3,1fr)}.chart-first{grid-template-columns:1fr}.key-levels{display:grid;grid-template-columns:repeat(2,1fr);gap:0 18px}.key-levels h2{grid-column:1/-1}}
+@media(max-width:900px){.market-lower{grid-template-columns:1fr 1fr}.market-kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:620px){.market-lower{grid-template-columns:1fr}.chart-panel .chart{height:215px}.market-tabs{grid-template-columns:repeat(2,1fr)}.market-kpis{grid-template-columns:repeat(2,1fr)}.key-levels{grid-template-columns:1fr}}
 </style></head><body><header class='head'><h1>GLOBAL MACRO RESEARCH DESK</h1><small>2026-10-14 · delayed research data · execution requires live quote</small></header><div class='shell'><nav class='nav'><a class='' href='index.html'>Today</a><a class='' href='markets.html'>Markets</a><a class='' href='radar.html'>Radar</a><a class='' href='journal.html'>Journal</a></nav><main><div class='grid'><section class='card'><h2>Data Health · internal operations view</h2><p>This page is intentionally absent from normal navigation.</p><pre>{
   &quot;lme_cash&quot;: {
     &quot;value_present&quot;: true,
@@ -10,7 +15,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_REFERENCE_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-13&quot;,
-    &quot;age_days&quot;: 1.09,
+    &quot;age_days&quot;: 1.29,
     &quot;expected_update&quot;: &quot;T+1 business day&quot;,
     &quot;max_age_days&quot;: 4,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -22,7 +27,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_REFERENCE_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-13&quot;,
-    &quot;age_days&quot;: 1.09,
+    &quot;age_days&quot;: 1.29,
     &quot;expected_update&quot;: &quot;T+1 business day&quot;,
     &quot;max_age_days&quot;: 4,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -34,7 +39,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-12&quot;,
-    &quot;age_days&quot;: 2.09,
+    &quot;age_days&quot;: 2.29,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -46,7 +51,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-12&quot;,
-    &quot;age_days&quot;: 2.09,
+    &quot;age_days&quot;: 2.29,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -58,7 +63,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-12&quot;,
-    &quot;age_days&quot;: 2.09,
+    &quot;age_days&quot;: 2.29,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -70,7 +75,7 @@
     &quot;source_grade&quot;: &quot;B_MARKET_SOURCE_RESTRICTED&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_WEB_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-09-30&quot;,
-    &quot;age_days&quot;: 14.09,
+    &quot;age_days&quot;: 14.29,
     &quot;expected_update&quot;: &quot;Weekly or better&quot;,
     &quot;max_age_days&quot;: 14,
     &quot;importance&quot;: &quot;SECONDARY&quot;,
@@ -81,11 +86,11 @@
     &quot;source&quot;: &quot;smm_premium_direct&quot;,
     &quot;source_grade&quot;: &quot;B_MARKET_SOURCE_RESTRICTED&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_WEB_DELAYED&quot;,
-    &quot;as_of&quot;: &quot;2026-10-13&quot;,
-    &quot;age_days&quot;: 1.09,
+    &quot;as_of&quot;: &quot;2026-10-14&quot;,
+    &quot;age_days&quot;: 0.29,
     &quot;expected_update&quot;: &quot;Weekly or better&quot;,
     &quot;max_age_days&quot;: 14,
     &quot;importance&quot;: &quot;SECONDARY&quot;,
     &quot;freshness&quot;: &quot;CURRENT_ENOUGH&quot;
   }
-}</pre></section></div><div class='footer'>RESEARCH ONLY · No data, no signal · No trigger, no order · Actual R:R must be ≥ 1:2</div></main></div><script>(()=>{const all=[...document.querySelectorAll('.market-detail')];all.forEach(item=>item.addEventListener('toggle',()=>{if(item.open)all.forEach(other=>{if(other!==item)other.open=false})}));document.querySelectorAll('[data-market-target]').forEach(link=>link.addEventListener('click',()=>{const item=document.getElementById(link.dataset.marketTarget);if(item)item.open=true}))})()</script></body></html>
+}</pre></section></div><div class='footer'>RESEARCH ONLY · No data, no signal · No trigger, no order · Actual R:R must be ≥ 1:2</div></main></div><script>(()=>{const all=[...document.querySelectorAll('.market-detail')],tabs=[...document.querySelectorAll('[data-market-target]')];function select(id){tabs.forEach(tab=>tab.classList.toggle('active',tab.dataset.marketTarget===id))}all.forEach(item=>item.addEventListener('toggle',()=>{if(item.open){all.forEach(other=>{if(other!==item)other.open=false});select(item.id)}}));tabs.forEach(link=>link.addEventListener('click',()=>{const item=document.getElementById(link.dataset.marketTarget);if(item){item.open=true;select(item.id)}}));document.querySelectorAll('[data-chart-group]').forEach(button=>button.addEventListener('click',()=>{const group=button.dataset.chartGroup,window=button.dataset.chartWindow;document.querySelectorAll(`[data-chart-group="${group}"]`).forEach(item=>item.classList.toggle('active',item===button));document.querySelectorAll(`[data-chart-panel="${group}"]`).forEach(panel=>panel.hidden=panel.dataset.chartWindow!==window)}))})()</script></body></html>

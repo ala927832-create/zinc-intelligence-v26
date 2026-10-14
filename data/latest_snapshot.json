@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-14T02:12:29.169690+00:00",
+  "run_time": "2026-10-14T06:57:51.877229+00:00",
   "run_date": "2026-10-14",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-14T02:12:29.173968+00:00",
+    "as_of": "2026-10-14T06:57:51.881745+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -81,7 +81,7 @@
       "physical_premium_usd_t": {
         "provider": "smm_premium_direct",
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-10-13"
+        "as_of": "2026-10-14"
       }
     },
     "provider_status": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-14T02:12:29.173968+00:00",
+        "as_of": "2026-10-14T06:57:51.881745+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -144,7 +144,7 @@
       },
       "smm_premium_direct": {
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-10-13",
+        "as_of": "2026-10-14",
         "error": null,
         "redistribution_caution": true
       }
@@ -165,7 +165,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-13",
-        "age_days": 1.09,
+        "age_days": 1.29,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -177,7 +177,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-13",
-        "age_days": 1.09,
+        "age_days": 1.29,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -189,7 +189,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 2.09,
+        "age_days": 2.29,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -201,7 +201,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 2.09,
+        "age_days": 2.29,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -213,7 +213,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 2.09,
+        "age_days": 2.29,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -225,7 +225,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-09-30",
-        "age_days": 14.09,
+        "age_days": 14.29,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -236,8 +236,8 @@
         "source": "smm_premium_direct",
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-10-13",
-        "age_days": 1.09,
+        "as_of": "2026-10-14",
+        "age_days": 0.29,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -268,7 +268,7 @@
       "source": "SMM_PUBLIC",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 14.09,
+      "age_days": 14.29,
       "url": "https://www-old.metal.com/Zinc/202506030011",
       "error": null
     },
@@ -282,7 +282,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 5.09,
+      "age_days": 5.29,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -296,7 +296,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Monthly",
-      "age_days": 13.09,
+      "age_days": 13.29,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -309,7 +309,7 @@
       "source": "Fastmarkets reported Teck / Korea Zinc annual benchmark",
       "source_grade": "B_VERIFIED_BENCHMARK",
       "expected_update": "Annual",
-      "age_days": 222.09,
+      "age_days": 222.29,
       "url": "https://www.fastmarkets.com/insights/teck-korea-zinc-benchmark-zinc-concentrate-tcs-85-per-tonne/",
       "notes": "Annual benchmark reference only. Do not substitute for China import spot TC or China domestic TC."
     },
@@ -326,44 +326,44 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 106.94000244140625,
-      "change_pct": 0.2719183416579396,
+      "value": 105.93000030517578,
+      "change_pct": 0.22707716740055783,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.328000068664551,
-      "change_pct": 5.083675735380533,
+      "value": 3.311000108718872,
+      "change_pct": 0.8528820107626123,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.13899993896484,
-      "change_pct": -0.42991020103134714,
+      "value": 102.10600280761719,
+      "change_pct": -0.07241876819102933,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.733500003814697,
-      "change_pct": 0.5225027483003908,
+      "value": 6.755499839782715,
+      "change_pct": 1.160525109246624,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Aluminium Proxy": {
-      "value": 3132.25,
-      "change_pct": -0.06381111908749793,
+      "value": 3127.75,
+      "change_pct": -0.20738613703438213,
       "ticker": "ALI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 32.14500045776367,
-      "change_pct": 0.6802887708623473,
+      "value": 32.159000396728516,
+      "change_pct": 0.7241375149184215,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 59.275001525878906,
-      "change_pct": -1.4399450144688464,
+      "value": 58.880001068115234,
+      "change_pct": -0.47497208180105055,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -16908,7 +16908,7 @@
             "ema20": 4371.2167,
             "atr14": 103.5216,
             "rsi14": 32.9581,
-            "volume": 229031.0
+            "volume": 140092.0
           },
           {
             "date": "2026-09-29",
@@ -17042,16 +17042,16 @@
           },
           {
             "date": "2026-10-13",
-            "open": 4184.2002,
-            "high": 4189.2002,
-            "low": 4167.0,
-            "close": 4179.7002,
-            "sma20": 4251.88,
-            "sma60": 4330.3383,
-            "ema20": 4242.7402,
-            "atr14": 82.6197,
-            "rsi14": 40.4563,
-            "volume": 16723.0
+            "open": 4195.5,
+            "high": 4224.7998,
+            "low": 4169.7002,
+            "close": 4177.2998,
+            "sma20": 4251.76,
+            "sma60": 4330.2983,
+            "ema20": 4242.5116,
+            "atr14": 84.8696,
+            "rsi14": 40.2606,
+            "volume": 102772.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -17061,15 +17061,15 @@
           "No bid/ask, spread, actual fill or slippage."
         ],
         "latest_session": {
-          "open": 4184.2002,
-          "high": 4189.2002,
-          "low": 4167.0,
-          "close": 4179.7002,
-          "sma20": 4251.88,
-          "sma60": 4330.3383,
-          "ema20": 4242.7402,
-          "atr14": 82.6197,
-          "rsi14": 40.4563
+          "open": 4195.5,
+          "high": 4224.7998,
+          "low": 4169.7002,
+          "close": 4177.2998,
+          "sma20": 4251.76,
+          "sma60": 4330.2983,
+          "ema20": 4242.5116,
+          "atr14": 84.8696,
+          "rsi14": 40.2606
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -22317,10 +22317,10 @@
         "unit": "index",
         "source": "Yahoo Finance public reference via yfinance",
         "source_grade": "B_PUBLIC_REFERENCE",
-        "as_of": "2026-10-12",
-        "observations": 377,
+        "as_of": "2026-10-13",
+        "observations": 378,
         "coverage_start": "2025-04-14",
-        "coverage_end": "2026-10-12",
+        "coverage_end": "2026-10-13",
         "chart_points": [
           {
             "date": "2025-04-14",
@@ -27222,6 +27222,19 @@
             "atr14": 0.4889,
             "rsi14": 72.2864,
             "volume": 0.0
+          },
+          {
+            "date": "2026-10-13",
+            "open": 102.57,
+            "high": 102.57,
+            "low": 102.16,
+            "close": 102.18,
+            "sma20": 101.427,
+            "sma60": 100.3193,
+            "ema20": 101.4704,
+            "atr14": 0.484,
+            "rsi14": 64.3948,
+            "volume": 0.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -27231,15 +27244,15 @@
           "No bid/ask, spread, actual fill or slippage."
         ],
         "latest_session": {
-          "open": 102.3,
-          "high": 102.61,
-          "low": 102.1,
-          "close": 102.58,
-          "sma20": 101.3005,
-          "sma60": 100.2995,
-          "ema20": 101.3957,
-          "atr14": 0.4889,
-          "rsi14": 72.2864
+          "open": 102.57,
+          "high": 102.57,
+          "low": 102.16,
+          "close": 102.18,
+          "sma20": 101.427,
+          "sma60": 100.3193,
+          "ema20": 101.4704,
+          "atr14": 0.484,
+          "rsi14": 64.3948
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -27487,18 +27500,18 @@
         "execution_gate": "PENDING_LIVE_QUOTE",
         "daily_plan": {
           "setup_zone": [
-            4179.7002,
-            4242.7402
+            4177.2998,
+            4242.5116
           ],
-          "trigger_price": 4087.069,
-          "maximum_entry": 4070.5451,
-          "hard_stop": 4255.1332,
-          "close_invalidation": 4242.7402,
-          "t1": 3750.9407,
-          "t2": 3582.8766,
+          "trigger_price": 4086.9565,
+          "maximum_entry": 4069.9826,
+          "hard_stop": 4255.242,
+          "close_invalidation": 4242.5116,
+          "t1": 3750.3855,
+          "t2": 3582.1,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
-          "risk_distance_atr": 2.03,
+          "risk_distance_atr": 1.98,
           "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
         },
         "execution_check": {
@@ -27514,11 +27527,11 @@
           ]
         },
         "reference": {
-          "close": 4179.7002,
-          "ema20": 4242.7402,
-          "sma60": 4330.3383,
-          "rsi14": 40.4563,
-          "atr14": 82.6197,
+          "close": 4177.2998,
+          "ema20": 4242.5116,
+          "sma60": 4330.2983,
+          "rsi14": 40.2606,
+          "atr14": 84.8696,
           "support20": 4091.2,
           "resistance20": 4439.7998
         },
@@ -27531,17 +27544,17 @@
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 4179.7002; EMA20 4242.7402; SMA60 4330.3383"
+            "value": "Close 4177.2998; EMA20 4242.5116; SMA60 4330.2983"
           },
           {
             "factor": "Momentum",
             "status": "SUPPORTS",
-            "value": "RSI14 40.4563"
+            "value": "RSI14 40.2606"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 82.6197"
+            "value": "ATR14 84.8696"
           },
           {
             "factor": "20-session range",
@@ -27573,23 +27586,23 @@
           "1_market_direction": "BEAR",
           "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
           "3_risk_location": [
-            4179.7002,
-            4242.7402
+            4177.2998,
+            4242.5116
           ],
           "4_entry_permission": {
-            "trigger": 4087.069,
-            "maximum_entry": 4070.5451,
+            "trigger": 4086.9565,
+            "maximum_entry": 4069.9826,
             "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 184.5881,
+            "price_units_per_contract_unit": 185.2594,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 3750.9407,
-            "t2": 3582.8766,
-            "close_invalidation": 4242.7402
+            "t1": 3750.3855,
+            "t2": 3582.1,
+            "close_invalidation": 4242.5116
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -27676,7 +27689,7 @@
       "dxy": {
         "market": "US Dollar Index",
         "symbol": "DX-Y.NYB",
-        "as_of": "2026-10-12",
+        "as_of": "2026-10-13",
         "decision": "WAIT_FOR_TRIGGER",
         "direction": "BULL",
         "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
@@ -27687,18 +27700,18 @@
         "execution_gate": "PENDING_LIVE_QUOTE",
         "daily_plan": {
           "setup_zone": [
-            101.3957,
-            102.58
+            101.4704,
+            102.18
           ],
-          "trigger_price": 102.6344,
-          "maximum_entry": 102.7322,
-          "hard_stop": 101.3224,
-          "close_invalidation": 101.3957,
-          "t1": 105.2586,
-          "t2": 106.5707,
+          "trigger_price": 102.6342,
+          "maximum_entry": 102.731,
+          "hard_stop": 101.3978,
+          "close_invalidation": 101.4704,
+          "t1": 105.107,
+          "t2": 106.3434,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
-          "risk_distance_atr": 2.68,
+          "risk_distance_atr": 2.55,
           "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
         },
         "execution_check": {
@@ -27714,12 +27727,12 @@
           ]
         },
         "reference": {
-          "close": 102.58,
-          "ema20": 101.3957,
-          "sma60": 100.2995,
-          "rsi14": 72.2864,
-          "atr14": 0.4889,
-          "support20": 99.48,
+          "close": 102.18,
+          "ema20": 101.4704,
+          "sma60": 100.3193,
+          "rsi14": 64.3948,
+          "atr14": 0.484,
+          "support20": 99.54,
           "resistance20": 102.61
         },
         "no_trade_reasons": [
@@ -27731,22 +27744,22 @@
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 102.58; EMA20 101.3957; SMA60 100.2995"
+            "value": "Close 102.18; EMA20 101.4704; SMA60 100.3193"
           },
           {
             "factor": "Momentum",
-            "status": "CAUTION",
-            "value": "RSI14 72.2864"
+            "status": "SUPPORTS",
+            "value": "RSI14 64.3948"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 0.4889"
+            "value": "ATR14 0.484"
           },
           {
             "factor": "20-session range",
             "status": "AVAILABLE",
-            "value": "Support 99.48; resistance 102.61"
+            "value": "Support 99.54; resistance 102.61"
           },
           {
             "factor": "Fed rate path",
@@ -27768,23 +27781,23 @@
           "1_market_direction": "BULL",
           "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
           "3_risk_location": [
-            101.3957,
-            102.58
+            101.4704,
+            102.18
           ],
           "4_entry_permission": {
-            "trigger": 102.6344,
-            "maximum_entry": 102.7322,
+            "trigger": 102.6342,
+            "maximum_entry": 102.731,
             "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 1.4098,
+            "price_units_per_contract_unit": 1.3332,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 105.2586,
-            "t2": 106.5707,
-            "close_invalidation": 101.3957
+            "t1": 105.107,
+            "t2": 106.3434,
+            "close_invalidation": 101.4704
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -27880,16 +27893,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99955688950206,
     "physical_market": 99.63157601005639,
-    "macro": 53.09829300723013,
+    "macro": 53.563206686028316,
     "technical": 57.28069892923107
   },
   "component_coverage": 0.8,
-  "market_score": 73.5476623491198,
+  "market_score": 73.60577655896958,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 62.16078795519769,
-    "20D": 66.22752881016987,
-    "60D": 69.48092149414762
+    "5D": 62.17822221815263,
+    "20D": 66.25949162558726,
+    "60D": 69.52450715153495
   },
   "market_quality": {
     "confidence": 93.0,
@@ -27917,7 +27930,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 0.8433596130324075
+    "max_age_days": 1.0415208212847222
   },
   "procurement": {
     "status": "OK",
