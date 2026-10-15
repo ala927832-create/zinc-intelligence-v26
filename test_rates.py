@@ -32,4 +32,12 @@ class RatesTest(unittest.TestCase):
         self.assertIn('日期／資料不足',s)
         self.assertIn('缺日本2Y',s)
 
+    def test_market_context_does_not_mutate_trade_evidence(self):
+        from zincintel.research_pages import _market_card
+        plan={'evidence':[{'factor':'real yield','status':'NOT_INTEGRATED','value':None}], 'decision_audit':{}}
+        snapshot={'market_research':{'rates':{'real10y':{'status':'AVAILABLE','value':2.5,'as_of':'2026-10-14'}}}}
+        card=_market_card('gold',plan,{},snapshot)
+        self.assertIn('CONTEXT_AVAILABLE_NOT_IN_SIGNAL',card)
+        self.assertEqual(plan['evidence'][0]['status'],'NOT_INTEGRATED')
+
 if __name__=='__main__':unittest.main()

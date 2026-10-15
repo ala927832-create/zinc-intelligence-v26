@@ -34,8 +34,15 @@ def radar_body(snapshot):
     dxy=research.get('cross_assets',{}).get('dxy',{})
     dm=_today_market_metrics(snapshot,'dxy')
     dollar=(f"DXY {n(dm.get('technical_close'))}，1D {n(dm.get('change_1d'),'%')}、5D {n(dm.get('change_5d'),'%')}；截至 {e(dxy.get('as_of'))}，{e(dxy.get('retrieval_status'))}。")
+    short,long=rates.get('us2y',{}),rates.get('us10y',{})
+    rate_summary='利率方向：資料不足，請逐列核對狀態與日期。'
+    if short.get('status')==long.get('status')=='AVAILABLE' and short.get('as_of')==long.get('as_of'):
+        a,b=short.get('change_1d_bp'),long.get('change_1d_bp')
+        if a is not None and b is not None:
+            alignment='短端與長端方向相反，不能描述為利率全面上升或下降。' if a*b<0 else '短端與長端須連同實質利率分別判讀；沒有單一利率結論。'
+            rate_summary=f"截至 {short.get('as_of')}，2Y一日 {a:+.1f} bp，10Y一日 {b:+.1f} bp；{alignment}"
     intro=("<section class='card'><h2>今日宏觀研究導覽</h2><p>先看利率與美元實際變動，再核對商品有無同步確認；以下屬描述性背景，不改變既有Trigger或交易權限。</p>"
-           f"<p>{dollar}</p><p>重大新聞與事件時鐘尚未接入：此頁沒有完成當日事件查核，不能把空白解讀為沒有重大事件。</p></section>")
+           f"<p>{e(rate_summary)}</p><p>{dollar}</p><p>重大新聞與事件時鐘尚未接入：此頁沒有完成當日事件查核，不能把空白解讀為沒有重大事件。</p></section>")
     cards=[]
     for key,label in [('gold','黃金'),('usdjpy','美元／日圓'),('dxy','美元指數'),('lme_zinc','LME鋅'),('shfe_zinc','SHFE鋅')]:
         plan=snapshot.get('decision_book',{}).get('markets',{}).get(key,{})

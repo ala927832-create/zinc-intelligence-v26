@@ -347,9 +347,16 @@ def _market_card(key: str, plan: dict, series: dict, snapshot: dict, open_by_def
     identity = series.get("market_identity") or ("LME Cash headline; 3M public technical reference" if key == "lme_zinc" else series.get("market") or series.get("symbol"))
     retrieval_status = series.get("retrieval_status", "CURRENT_OR_MISSING")
     source_line = f"{source_badge(series.get('source_grade'), retrieval_status)} {_e(series.get('source'))} · {_e(identity)} · {_e(retrieval_status)}{tv_link}"
+    display_evidence = [dict(item) for item in plan.get('evidence', [])]
+    for item in display_evidence:
+        rate_key = {'real yield':'real10y', 'US 2Y yield':'us2y'}.get(item.get('factor'))
+        rate = snapshot.get('market_research', {}).get('rates', {}).get(rate_key, {})
+        if rate.get('status') == 'AVAILABLE':
+            item['status'] = 'CONTEXT_AVAILABLE_NOT_IN_SIGNAL'
+            item['value'] = f"{rate.get('value')}% · {rate.get('as_of')} · US Treasury; macro context only, not part of trade gate"
     evidence_rows = "".join(
         f"<tr><td>{_e(item.get('factor'))}</td><td class='{'status-missing' if item.get('status') in {'MISSING', 'NOT_INTEGRATED'} else 'status-ok'}'>{_e(item.get('status'))}</td><td>{_e(item.get('value'))}</td></tr>"
-        for item in plan.get("evidence", [])) or "<tr><td colspan='3'>No asset-specific evidence registered.</td></tr>"
+        for item in display_evidence) or "<tr><td colspan='3'>No asset-specific evidence registered.</td></tr>"
     labels = ["市場方向", "證據一致性", "風險位置", "准許進場條件", "看錯損失", "出場計畫", "理論風報比", "No-Trade 理由"]
     values = list(plan.get("decision_audit", {}).values())
     audit_items = [
