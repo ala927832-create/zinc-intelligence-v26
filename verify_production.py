@@ -196,6 +196,8 @@ def main() -> int:
     failures: list[str] = []
 
     market_index = _fetch(urljoin(page_url, "markets.html"), run_id, marker="CHARTS BEFORE COMMENTARY")
+    for label in ("事實｜", "解讀｜", "觀察｜", "entry-price", "market-us_treasury.html"):
+        _expect(market_index, label, failures, f"Markets research entry {label}")
     market_pages = {}
     for key in ("lme_zinc", "shfe_zinc", "gold", "usdjpy", "dxy", "us_treasury"):
         _expect(market_index, f"market-{key}.html", failures, f"Markets route {key}")

@@ -42,12 +42,19 @@ def asset_icon(key: str, *, compact: bool = False) -> str:
     label = html.escape(asset["label"])
     short = html.escape(asset["short"])
     accent = html.escape(asset["accent"])
+    if asset["accent"] in {"gold", "zinc", "shfe"}:
+        shape = "<path d='M8 28 L12 17 H30 L36 28 L31 34 H13 Z M8 28 H36 M12 17 L16 28 M30 17 L28 28' fill='currentColor' fill-opacity='.22' stroke='currentColor' stroke-width='1.5'/>"
+    elif asset["accent"] == "fx":
+        shape = "<circle cx='16' cy='21' r='10' fill='none' stroke='currentColor' stroke-width='1.5'/><circle cx='29' cy='26' r='10' fill='currentColor' fill-opacity='.12' stroke='currentColor' stroke-width='1.5'/><text x='16' y='25' text-anchor='middle' font-size='13' fill='currentColor'>$</text><text x='29' y='30' text-anchor='middle' font-size='13' fill='currentColor'>¥</text>"
+    elif asset["accent"] == "rates":
+        shape = "<path d='M11 7 H28 L34 13 V36 H11 Z M28 7 V14 H34 M16 19 H27 M16 23 H25 M16 31 L21 27 L26 30 L31 24' fill='none' stroke='currentColor' stroke-width='1.7'/>"
+    else:
+        shape = "<circle cx='22' cy='22' r='14' fill='none' stroke='currentColor' stroke-width='1.5'/><path d='M8 22 H36 M22 8 Q10 22 22 36 M22 8 Q34 22 22 36' fill='none' stroke='currentColor'/><text x='22' y='27' text-anchor='middle' font-size='16' fill='currentColor'>$</text>"
     return (
         f"<svg class='asset-icon asset-icon--{accent}{size_class}' viewBox='0 0 44 44' "
         f"role='img' aria-label='{label} icon' data-asset-icon='{html.escape(key)}'>"
         "<rect x='1' y='1' width='42' height='42' rx='10' class='asset-icon-bg'/>"
-        "<path d='M8 32 L15 25 L21 28 L28 17 L36 12' class='asset-icon-path'/>"
-        f"<text x='22' y='24' text-anchor='middle' class='asset-icon-text'>{short}</text></svg>"
+        f"{shape}</svg>"
     )
 
 

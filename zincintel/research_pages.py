@@ -7,12 +7,54 @@ import json
 from pathlib import Path
 
 from .utils import PUBLIC_DIR
+from .dashboard_v27 import _today_market_metrics, _change_text, _decision_reference
 from .visual_language import (SERIES_STYLES, VISUAL_CSS, asset_icon,
                               series_legend, source_badge, source_legend)
 
 
 def _e(value):
     return html.escape(str(value if value is not None else "—"))
+
+
+def _market_guide(snapshot: dict, key: str, plan: dict) -> str:
+    """Explain facts, limits and the next observation without adding signals."""
+    m = _today_market_metrics(snapshot, key, plan)
+    change, _ = _change_text(m.get("change_1d"))
+    direction = {"STRONG_BULL":"強多", "BULL":"偏多", "NEUTRAL":"中性／過渡", "BEAR":"偏空", "STRONG_BEAR":"強空"}.get(plan.get("direction"), "方向未明")
+    facts = f"最近一個有效交易日變動 {change}，技術方向為{direction}。"
+    if key == "lme_zinc":
+        curve = (plan.get("reference") or {}).get("cash_3m")
+        facts = f"3M Close最近一個有效交易日變動 {change}，技術方向為{direction}；Cash−3M為 {curve if curve is not None else 'N/A'} USD/t。"
+        meaning = "現貨曲線與3M價格趨勢必須分別判讀；庫存與TC也須核對各自資料日期，不能以單一升水判定買賣方向。"
+    elif key == "shfe_zinc":
+        meaning = "這是人民幣計價的中國期貨序列，須核對合約月份與轉倉；目前與LME的匯率及套利成本比較尚不完整。"
+    elif key == "gold":
+        meaning = "這是COMEX連續期貨參考；實質殖利率、合約OI與ETF資金流尚未整合，因此方向解讀以技術證據為限。"
+    elif key == "usdjpy":
+        meaning = "USD/JPY上升代表美元走強、日圓走弱；美日利差與政策證據尚未整合，不能單憑此圖推斷避險資金流向。"
+    else:
+        meaning = "DXY反映美元對貨幣籃子的方向；美債殖利率與成分貢獻尚未整合，不能單憑指數替其他商品決定方向。"
+    trigger = m.get("trigger")
+    observe = (f"下一觀察：核對研究Trigger {trigger:,.2f}及其日線確認條件；目前狀態 {plan.get('decision', 'NO_TRADE')}，仍須通過私人執行檢查。"
+               if trigger is not None else "下一觀察：先確認均線與價格結構重新一致；目前沒有合格Trigger，維持No Trade。")
+    return "".join(f"<p><b>{label}</b>{_e(value)}</p>" for label,value in (("事實｜",facts),("解讀｜",meaning),("觀察｜",observe)))
+
+
+def _market_entry(snapshot: dict, key: str, plan: dict) -> str:
+    m = _today_market_metrics(snapshot, key, plan)
+    price,unit = _decision_reference(snapshot,key,plan)
+    names = {"lme_zinc":"LME 鋅", "shfe_zinc":"SHFE 鋅", "gold":"黃金", "usdjpy":"美元／日圓", "dxy":"美元指數"}
+    changes = " · ".join(f"{label} {_change_text(m.get(field))[0]}" for label,field in (("1D","change_1d"),("5D","change_5d")))
+    series = ({"lme_zinc":snapshot.get("market_research",{}).get("close_series",{}),"shfe_zinc":snapshot.get("market_research",{}).get("shfe_zinc",{})}.get(key)
+              or snapshot.get("market_research",{}).get("cross_assets",{}).get(key,{}))
+    amount = f"{price:,.2f}" if isinstance(price,(float,int)) else "N/A"
+    return (f"<article class='card half market-entry' id='{_e(key)}'><header class='asset-identity'>{asset_icon(key)}<div><h2>{names.get(key,key)}</h2>"
+            f"<small>{_e(plan.get('market',key))}</small></div></header><div class='entry-price'>{amount} <small>{_e(unit)}</small></div>"
+            f"<p class='entry-change'>{_e(changes)} · {_e(m.get('change_basis'))}</p>"
+            f"<p><span class='pill'>{_e(plan.get('direction'))}</span> <span class='pill'>{_e(plan.get('decision'))}</span></p>"
+            f"<div class='entry-guide'>{_market_guide(snapshot,key,plan)}</div>"
+            f"<p class='muted'>資料截至 {_e(series.get('as_of'))} · {source_badge(series.get('source_grade'),series.get('retrieval_status') or series.get('status'))}</p>"
+            f"<a href='market-{key}.html'>查看圖表、證據與條件式計畫 →</a></article>")
 
 
 def _first_present(*values):
@@ -34,6 +76,9 @@ STYLE += """
 """
 
 STYLE += VISUAL_CSS
+STYLE += """
+.market-entry{padding:22px}.market-entry header h2{font-size:23px;margin:0}.market-entry header small{display:block;color:#687e90;margin-top:4px}.market-entry .asset-icon{width:56px;height:56px;flex-basis:56px;color:#396581}.market-entry .asset-icon--gold{color:#ac7a12}.entry-price{font-size:32px;font-weight:800;margin-top:15px;color:#0b2f4f}.entry-price small{font-size:13px;color:#687e90}.entry-change{font-weight:700}.entry-guide{padding:4px 14px;background:#f5f7f5;border-left:3px solid #147fa3;margin:14px 0}.entry-guide p{margin:10px 0;line-height:1.8}.entry-guide b{color:#0b2f4f}.market-entry>a{display:inline-block;background:#0b2f4f;color:#fff;padding:10px 15px;border-radius:5px;text-decoration:none}.market-detail>header{padding:16px;border-bottom:1px solid #d5dde3}@media(max-width:850px){.market-entry.half{grid-column:span 12}}
+"""
 
 
 def _nav(active: str) -> str:
@@ -415,14 +460,11 @@ def build_research_pages(snapshot: dict) -> list[Path]:
             market_intro + cash_note + detail + execution_boundary + constitution, run_date)
     pages["market-us_treasury.html"] = _page("US Rates", "Markets",
         market_intro + _treasury_placeholder().replace("<details ", "<details open ", 1) + constitution, run_date)
-    cards = "".join(
-        f"<section class='card half' id='{_e(key)}'><h2>{asset_icon(key, compact=True)} {_e(plan.get('market', key))}</h2>"
-        f"<p>{_e(plan.get('direction'))} · {_e(plan.get('decision'))}</p>"
-        f"<p>{_e((plan.get('no_trade_reasons') or ['Review evidence'])[0])}</p>"
-        f"<a href='market-{_e(key)}.html'>Open chart, evidence and eight-question decision brief →</a></section>"
-        for key, plan in visible_decisions)
+    cards = "".join(_market_entry(snapshot,key,plan) for key,plan in visible_decisions)
+    cards += (f"<article class='card market-entry'><header class='asset-identity'>{asset_icon('us_treasury')}<h2>美債與實質殖利率</h2></header>"
+              "<p>來源尚未接入，殖利率與方向均為N/A。</p><a href='market-us_treasury.html'>查看資料缺口 →</a></article>")
     pages["markets.html"] = _page("Markets · Global Macro Research", "Markets",
-        market_intro + "<div class='grid'>" + cards + "</div>" + constitution, run_date)
+        market_intro + "<p class='rules'>閱讀順序：先看價格與變動，再看事實／解讀／觀察。各市場截至各自最後交易日；1D與5D以有效交易筆數計算。</p><div class='grid'>" + cards + "</div>" + constitution, run_date)
     output = []
     for name, content in pages.items():
         path = PUBLIC_DIR / name
