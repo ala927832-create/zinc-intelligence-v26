@@ -77,7 +77,7 @@ class ResearchPagesTest(unittest.TestCase):
         self.assertIn("SOURCE PENDING", html)
         self.assertIn("TODAY'S MARKET POSTURE", html)
         self.assertIn("WAIT FOR TRIGGER", html)
-        self.assertIn("TODAY'S WATCH / CHANGES", html)
+        self.assertIn("TODAY'S LARGEST MOVES / CONDITIONS", html)
         self.assertIn("PRIMARY WATCH", html)
         self.assertIn("Physical / procurement condition", html)
         self.assertIn("Close-only technical trend", html)

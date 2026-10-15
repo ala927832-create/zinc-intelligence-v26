@@ -413,6 +413,142 @@ def _market_series(snapshot: dict, key: str) -> dict:
     return research.get("cross_assets", {}).get(key, {})
 
 
+def _number(value):
+    try:
+        result = float(value)
+        return result if math.isfinite(result) else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _change_pct(current, prior):
+    current, prior = _number(current), _number(prior)
+    if current is None or prior in (None, 0):
+        return None
+    return (current / prior - 1) * 100
+
+
+def _change_text(value) -> tuple[str, str]:
+    value = _number(value)
+    if value is None:
+        return "N/A", "flat"
+    if abs(value) < 0.005:
+        return "0.00%", "flat"
+    return f"{'▲' if value > 0 else '▼'} {value:+.2f}%", "up" if value > 0 else "down"
+
+
+def _direction_at(point: dict, long_key: str) -> str:
+    close = _number(point.get("close"))
+    ema = _number(point.get("ema20"))
+    long_average = _number(point.get(long_key))
+    if None in (close, ema, long_average):
+        return "UNDETERMINED"
+    if close > ema > long_average:
+        return "BULL"
+    if close < ema < long_average:
+        return "BEAR"
+    return "NEUTRAL"
+
+
+def _today_market_metrics(snapshot: dict, key: str, plan: dict | None = None) -> dict:
+    """Derive display-only market context from already validated history.
+
+    These values never change the decision book. LME returns and levels use the
+    3M close series, while the headline card continues to show Cash as primary.
+    """
+    plan = plan or snapshot.get("decision_book", {}).get("markets", {}).get(key, {})
+    series = _market_series(snapshot, key)
+    points = [item for item in series.get("chart_points", []) if _number(item.get("close")) is not None]
+    closes = [_number(item.get("close")) for item in points]
+    latest = closes[-1] if closes else None
+
+    def period_change(sessions: int):
+        return _change_pct(latest, closes[-sessions - 1]) if len(closes) > sessions else None
+
+    latest_session = series.get("latest_session") or (points[-1] if points else {})
+    reference = plan.get("reference") or {}
+    ema20 = _number(reference.get("ema20"))
+    if ema20 is None:
+        ema20 = _number(latest_session.get("ema20"))
+    if ema20 is None and key == "lme_zinc":
+        ema20 = _number(series.get("ema_20"))
+
+    long_key, long_label = ("sma30", "SMA30") if key == "lme_zinc" else ("sma60", "SMA60")
+    long_average = _number(reference.get(long_key))
+    if long_average is None:
+        long_average = _number(latest_session.get(long_key))
+    if long_average is None and key == "lme_zinc":
+        long_average = _number(series.get("sma_30"))
+
+    recent = points[-20:]
+    series_type = series.get("series_type") or ("CLOSE_ONLY" if key == "lme_zinc" else None)
+    if series_type == "FULL_OHLC" and recent:
+        lows = [_number(item.get("low")) for item in recent]
+        highs = [_number(item.get("high")) for item in recent]
+        lows, highs = [x for x in lows if x is not None], [x for x in highs if x is not None]
+        support, resistance, range_basis = (min(lows), max(highs), "20D H/L") if lows and highs else (None, None, "20D H/L")
+    else:
+        recent_closes = [_number(item.get("close")) for item in recent]
+        recent_closes = [x for x in recent_closes if x is not None]
+        support, resistance, range_basis = ((min(recent_closes), max(recent_closes), "20D Close")
+                                              if recent_closes else (None, None, "20D Close"))
+    if _number(reference.get("support20")) is not None:
+        support = _number(reference.get("support20"))
+    if _number(reference.get("resistance20")) is not None:
+        resistance = _number(reference.get("resistance20"))
+
+    range_position = None
+    if None not in (latest, support, resistance) and resistance > support:
+        range_position = max(0.0, min(100.0, (latest - support) / (resistance - support) * 100))
+
+    trigger = _number((plan.get("daily_plan") or {}).get("trigger_price"))
+    trigger_gap = _change_pct(trigger, latest)
+    direction = plan.get("direction") or "UNDETERMINED"
+    if key == "lme_zinc":
+        persistence = _number(series.get("trend", {}).get("persistence_days"))
+    else:
+        target = "BULL" if "BULL" in direction else "BEAR" if "BEAR" in direction else direction
+        persistence = 0
+        for point in reversed(points):
+            if _direction_at(point, long_key) != target:
+                break
+            persistence += 1
+        persistence = persistence or None
+    trend_since = None
+    if persistence is not None and points and int(persistence) <= len(points):
+        trend_since = points[-int(persistence)].get("date")
+
+    return {
+        "change_1d": period_change(1), "change_5d": period_change(5), "change_20d": period_change(20),
+        "technical_close": latest, "ema20": ema20, "long_average": long_average, "long_label": long_label,
+        "ema_distance_pct": _change_pct(latest, ema20), "long_distance_pct": _change_pct(latest, long_average),
+        "support": support, "resistance": resistance, "range_basis": range_basis,
+        "range_position_pct": range_position, "trigger": trigger, "trigger_gap_pct": trigger_gap,
+        "trend_sessions": int(persistence) if persistence is not None else None,
+        "trend_since": trend_since,
+        "change_basis": "LME 3M Close" if key == "lme_zinc" else "Daily Close",
+    }
+
+
+def _market_summary(snapshot: dict, key: str, plan: dict, metrics: dict) -> str:
+    direction = plan.get("direction") or "UNDETERMINED"
+    decision = plan.get("decision") or "NO_TRADE"
+    one_day, _ = _change_text(metrics.get("change_1d"))
+    ema_distance = metrics.get("ema_distance_pct")
+    ema_text = (f"高於 EMA20 {abs(ema_distance):.1f}%" if ema_distance is not None and ema_distance >= 0
+                else f"低於 EMA20 {abs(ema_distance):.1f}%" if ema_distance is not None else "EMA20位置不足")
+    trigger_gap = metrics.get("trigger_gap_pct")
+    next_condition = (f"距Trigger {trigger_gap:+.1f}%" if trigger_gap is not None
+                      else "目前沒有合格Trigger")
+    if key == "lme_zinc":
+        curve = _number((plan.get("reference") or {}).get("cash_3m"))
+        curve_text = (f"現貨升水 {curve:.1f} USD/t" if curve is not None and curve > 0
+                      else f"現貨貼水 {abs(curve):.1f} USD/t" if curve is not None and curve < 0
+                      else "Cash−3M曲線近乎持平" if curve == 0 else "Cash−3M曲線資料不足")
+        return f"{curve_text}，但3M技術方向為 {direction}；{next_condition}，{decision}。"
+    return f"1D {one_day}，Close {ema_text}，方向 {direction}；{next_condition}，{decision}。"
+
+
 def _spark_path(points: list[dict]) -> str:
     values = []
     for item in points[-30:]:
@@ -439,7 +575,10 @@ def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = Fa
                 f"<div class='quote-top'><div class='asset-identity'>{asset_icon('us_treasury')}<div><span class='quote-kicker'>RATES</span><h2>US TREASURY 10Y</h2></div></div>"
                 f"<span class='pill warn'>SOURCE PENDING</span>{source_badge(None, 'MISSING')}</div><div class='quote-main'><strong>N/A</strong>"
                 "<span class='spark-missing'>NO VERIFIED SERIES</span></div>"
-                "<p class='quote-sub'>2Y / 10Y / real yield are not integrated.</p>"
+                "<div class='quote-changes'><div><span>1D</span><b>N/A</b></div><div><span>5D</span><b>N/A</b></div><div><span>20D</span><b>N/A</b></div></div>"
+                "<div class='quote-position'><span>vs EMA20 <b>N/A</b></span><span>vs SMA60 <b>N/A</b></span></div>"
+                "<div class='quote-location'><div><span>20D H/L</span><b>N/A</b><small>Position N/A</small></div><div><span>Next trigger</span><b>BLOCKED</b><small>No verified series</small></div></div>"
+                "<p class='quote-summary'><b>今日重點</b>2Y／10Y／實質殖利率尚未接入；不判斷利率方向，也不產生交易條件。</p>"
                 "<div class='quote-foot'><span>As of —</span><span>NOT_AVAILABLE</span></div></article>")
 
     plans = snapshot.get("decision_book", {}).get("markets", {})
@@ -451,6 +590,30 @@ def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = Fa
     decision = plan.get("decision") or "NO_TRADE"
     source_grade = series.get("source_grade")
     retrieval_status = series.get("retrieval_status") or series.get("status")
+    metrics = _today_market_metrics(snapshot, key, plan)
+    changes = []
+    for label, field in (("1D", "change_1d"), ("5D", "change_5d"), ("20D", "change_20d")):
+        text, tone = _change_text(metrics.get(field))
+        changes.append(f"<div><span>{label}</span><b class='{tone}'>{_esc(text)}</b></div>")
+
+    def signed_position(value):
+        value = _number(value)
+        if value is None:
+            return "N/A", "flat"
+        return f"{value:+.2f}%", "up" if value >= 0 else "down"
+
+    ema_text, ema_tone = signed_position(metrics.get("ema_distance_pct"))
+    long_text, long_tone = signed_position(metrics.get("long_distance_pct"))
+    range_position = metrics.get("range_position_pct")
+    range_text = (f"{fmt(metrics.get('support'),2)} – {fmt(metrics.get('resistance'),2)}"
+                  if None not in (metrics.get("support"), metrics.get("resistance")) else "N/A")
+    position_text = f"{range_position:.0f}%" if range_position is not None else "N/A"
+    trigger_gap = metrics.get("trigger_gap_pct")
+    trigger_text = (f"{fmt(metrics.get('trigger'),2)} ({trigger_gap:+.2f}%)"
+                    if trigger_gap is not None else "NO VALIDATED TRIGGER")
+    trend_sessions = metrics.get("trend_sessions")
+    trend_age = (f"{trend_sessions} sessions · since {metrics.get('trend_since')}"
+                 if trend_sessions is not None and metrics.get("trend_since") else "N/A")
     secondary = ""
     if key == "lme_zinc":
         reference = plan.get("reference") or {}
@@ -463,7 +626,11 @@ def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = Fa
     return f"""<article class='quote-card' data-market='{_esc(key)}'>
     <div class='quote-top'><div class='asset-identity'>{asset_icon(key)}<div><span class='quote-kicker'>{'SPOT PRIMARY' if key == 'lme_zinc' else 'VALIDATED REFERENCE'}</span><h2>{_esc(title)}</h2></div></div><span class='pill {_decision_class(decision)}'>{_esc(direction)}</span></div>
     <div class='quote-main'><strong>{fmt(value,2)}</strong><span class='quote-unit'>{_esc(unit)}</span>{_spark_path(series.get('chart_points', []))}</div>
-    {secondary}<div class='quote-foot'><span>As of {_esc(as_of)} · {_esc(decision)}</span>{source_badge(source_grade, retrieval_status)}</div></article>"""
+    {secondary}<div class='quote-changes'>{''.join(changes)}</div>
+    <div class='quote-position'><span>vs EMA20 <b class='{ema_tone}'>{_esc(ema_text)}</b></span><span>vs {_esc(metrics.get('long_label'))} <b class='{long_tone}'>{_esc(long_text)}</b></span></div>
+    <div class='quote-location'><div><span>{_esc(metrics.get('range_basis'))}</span><b>{_esc(range_text)}</b><small>Position {_esc(position_text)}</small></div><div><span>Next trigger</span><b>{_esc(trigger_text)}</b><small>Trend age {_esc(trend_age)}</small></div></div>
+    <p class='quote-summary'><b>今日重點</b>{_esc(_market_summary(snapshot, key, plan, metrics))}</p>
+    <div class='quote-foot'><span>As of {_esc(as_of)} · {_esc(metrics.get('change_basis'))} · {_esc(decision)}</span>{source_badge(source_grade, retrieval_status)}</div></article>"""
 
 
 def _today_market_cards(snapshot: dict) -> str:
@@ -483,19 +650,26 @@ def _today_market_cards(snapshot: dict) -> str:
 
 def _today_changes(snapshot: dict) -> str:
     plans = snapshot.get("decision_book", {}).get("markets", {})
-    preferred = ["lme_zinc", "gold", "dxy"]
-    rows = []
+    preferred = ["lme_zinc", "shfe_zinc", "gold", "usdjpy", "dxy"]
+    ranked = []
     for key in preferred:
         plan = plans.get(key, {})
         if not plan:
             continue
-        reason = (plan.get("no_trade_reasons") or ["No blocker registered."])[0]
+        metrics = _today_market_metrics(snapshot, key, plan)
+        ranked.append((abs(metrics.get("change_1d")) if metrics.get("change_1d") is not None else -1,
+                       key, plan, metrics))
+    ranked.sort(reverse=True, key=lambda item: item[0])
+    rows = []
+    for _, key, plan, metrics in ranked[:3]:
+        change_text, tone = _change_text(metrics.get("change_1d"))
         rows.append(
-            f"<div><span><b>{_esc(plan.get('market', key))}</b><small>{_esc(plan.get('direction'))} · {_esc(plan.get('decision'))}</small></span>"
-            f"<p>{_esc(reason)}</p></div>"
+            f"<div><span class='watch-asset'>{asset_icon(key, compact=True)}<span><b>{_esc(plan.get('market', key))}</b>"
+            f"<small><i class='{tone}'>{_esc(change_text)} 1D</i> · {_esc(plan.get('direction'))} · {_esc(plan.get('decision'))}</small></span></span>"
+            f"<p>{_esc(_market_summary(snapshot, key, plan, metrics))}</p></div>"
         )
-    return ("<section class='panel s6 today-watch'><div class='eyebrow'>CURRENT VALIDATED WATCH</div>"
-            f"<h2>TODAY'S WATCH / CHANGES</h2>{''.join(rows)}</section>")
+    return ("<section class='panel s6 today-watch'><div class='eyebrow'>RULE-BASED · VALIDATED CLOSES ONLY</div>"
+            f"<h2>TODAY'S LARGEST MOVES / CONDITIONS</h2>{''.join(rows)}</section>")
 
 
 def _today_posture(snapshot: dict) -> str:
@@ -616,7 +790,7 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 .period-controls button{{border-color:#c9d5dd;background:#fff;color:#234f70}}.period-controls button.active{{background:#0b2f4f;color:#fff;border-color:#0b2f4f}}.chart-tooltip{{border-color:#315c7d;background:#0b2f4f;color:#fff}}
 .trend-panel{{background:#f8f6f0;border-color:#d8dfe3}}.trend-regime{{color:#0b5f78}}.trend-detail ul{{color:#536e82}}.cockpit-banner{{grid-template-columns:minmax(0,1.5fr) minmax(285px,.5fr);gap:10px}}.cockpit-copy{{background:#fff;border-color:#d5dde3;color:#173750}}.cockpit-side{{background:#0b2f4f;border-color:#0b2f4f;color:#fff}}.cockpit-side .eyebrow,.cockpit-side .source{{color:#bed0dc}}.cockpit-side .compact-reasons{{color:#e1ebf1}}.compass-gauge{{display:block;width:100%;max-width:330px;margin:6px auto -4px}}.gauge-segment{{stroke:#fff;stroke-width:1.4;opacity:.94}}.gauge-segment.gauge-selected{{stroke:#f2a05d;stroke-width:5;opacity:1}}.gauge-label{{fill:#173750;font-size:8px;font-weight:800;text-transform:uppercase}}.gauge-needle{{stroke:#fff;stroke-width:5;stroke-linecap:round}}.gauge-hub{{fill:#0b2f4f;stroke:#fff;stroke-width:3}}.compass-result{{color:#fff;text-align:center;font-family:Georgia,serif}}
 .status-chip{{border-color:#9fcac2;background:#e0f2ee;color:#086d63}}.research-strip>div,.icon-cards>div{{background:#fbfaf7;border-color:#d8e0e5}}.icon-cards i{{color:#164f78}}
-.quote-board{{padding:14px}}.quote-grid{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}}.quote-card{{background:#fff;border:1px solid #d5dde3;border-radius:8px;padding:15px;box-shadow:0 3px 10px rgba(18,50,76,.04);min-height:184px;display:flex;flex-direction:column}}.quote-top{{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}}.quote-top h2{{font-size:17px;margin:2px 0 0}}.quote-kicker{{display:block;color:#687e90;font-size:9px;letter-spacing:.1em}}.quote-main{{display:flex;align-items:flex-end;gap:7px;margin:15px 0 9px;min-width:0}}.quote-main strong{{font:800 31px Georgia,serif;color:#0b2f4f;line-height:1}}.quote-unit{{color:#526f85;font-weight:650;white-space:nowrap}}.market-spark{{width:116px;height:38px;margin-left:auto;overflow:visible}}.market-spark polyline{{fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}}.spark-up polyline{{stroke:#087b70}}.spark-down polyline{{stroke:#d94a4f}}.spark-missing{{margin-left:auto;color:#8a552e;font-size:10px;letter-spacing:.04em}}.quote-sub,.quote-sub-grid{{color:#536e82;font-size:11px;margin:5px 0}}.quote-sub-grid{{display:flex;gap:18px}}.quote-sub-grid b{{color:#173d5e}}.quote-foot{{display:flex;justify-content:space-between;gap:8px;margin-top:auto;padding-top:10px;border-top:1px solid #e2e7ea;color:#687e90;font-size:10px}}.quote-pending{{background:#fbfaf7}}.today-hero{{display:grid;grid-template-columns:1fr;gap:13px;align-items:center;border-left:5px solid #c8783d}}.today-hero .posture{{font:800 32px Georgia,serif;color:#0b2f4f;margin:5px 0}}.today-hero p{{max-width:760px;margin:4px 0}}.today-metrics{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}}.today-metrics>div,.watch-levels>div{{background:#f8f6f0;border:1px solid #d8e0e5;border-radius:6px;padding:10px}}.today-metrics span,.watch-levels span{{display:block;color:#687e90;font-size:10px;text-transform:uppercase;letter-spacing:.05em}}.today-metrics b{{font-size:15px}}.today-watch>div:not(.eyebrow){{display:grid;grid-template-columns:minmax(180px,.7fr) 1.3fr;gap:14px;padding:10px 0;border-bottom:1px solid #e0e5e8}}.today-watch>div:last-child{{border-bottom:0}}.today-watch span,.today-watch small{{display:block}}.today-watch small{{color:#687e90;margin-top:2px}}.today-watch p{{margin:0;color:#536e82}}.watch-levels{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}}.watch-levels b{{font-size:16px}}.context-row{{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #dfe5e8}}.context-row span{{color:#687e90}}.today-rules{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}}.today-rules>div{{padding:11px;background:#fbfaf7;border:1px solid #d8e0e5;border-radius:6px}}.today-rules b,.today-rules span{{display:block}}.today-rules span{{color:#687e90;font-size:11px;margin-top:4px}}
+.quote-board{{padding:14px}}.quote-grid{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}}.quote-card{{background:#fff;border:1px solid #d5dde3;border-radius:8px;padding:15px;box-shadow:0 3px 10px rgba(18,50,76,.04);min-height:350px;display:flex;flex-direction:column}}.quote-top{{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}}.quote-top h2{{font-size:17px;margin:2px 0 0}}.quote-kicker{{display:block;color:#687e90;font-size:9px;letter-spacing:.1em}}.quote-main{{display:flex;align-items:flex-end;gap:7px;margin:15px 0 9px;min-width:0}}.quote-main strong{{font:800 31px Georgia,serif;color:#0b2f4f;line-height:1}}.quote-unit{{color:#526f85;font-weight:650;white-space:nowrap}}.market-spark{{width:116px;height:38px;margin-left:auto;overflow:visible}}.market-spark polyline{{fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}}.spark-up polyline{{stroke:#087b70}}.spark-down polyline{{stroke:#d94a4f}}.spark-missing{{margin-left:auto;color:#8a552e;font-size:10px;letter-spacing:.04em}}.quote-sub,.quote-sub-grid{{color:#536e82;font-size:11px;margin:5px 0}}.quote-sub-grid{{display:flex;gap:18px}}.quote-sub-grid b{{color:#173d5e}}.quote-changes{{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:9px 0}}.quote-changes>div{{background:#f5f7f6;border:1px solid #e0e6e9;border-radius:5px;padding:6px 7px}}.quote-changes span,.quote-location span{{display:block;color:#687e90;font-size:9px;letter-spacing:.04em;text-transform:uppercase}}.quote-changes b{{display:block;margin-top:2px;font-size:12px}}.quote-position{{display:flex;gap:13px;flex-wrap:wrap;color:#536e82;font-size:10px;margin:1px 0 8px}}.quote-position b{{margin-left:3px}}.quote-location{{display:grid;grid-template-columns:1fr 1fr;gap:6px}}.quote-location>div{{padding:7px 8px;border-left:3px solid #9bb4c5;background:#f8f6f0}}.quote-location b,.quote-location small{{display:block}}.quote-location b{{font-size:11px;margin-top:2px}}.quote-location small{{color:#687e90;font-size:9px;margin-top:2px}}.quote-summary{{margin:9px 0;padding:8px 9px;background:#eef5f6;border-left:3px solid #147fa3;color:#294e69;font-size:11px;line-height:1.45}}.quote-summary b{{display:block;color:#0b2f4f;font-size:9px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}}.quote-foot{{display:flex;justify-content:space-between;gap:8px;margin-top:auto;padding-top:10px;border-top:1px solid #e2e7ea;color:#687e90;font-size:9px}}.quote-pending{{background:#fbfaf7}}.today-hero{{display:grid;grid-template-columns:1fr;gap:13px;align-items:center;border-left:5px solid #c8783d}}.today-hero .posture{{font:800 32px Georgia,serif;color:#0b2f4f;margin:5px 0}}.today-hero p{{max-width:760px;margin:4px 0}}.today-metrics{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}}.today-metrics>div,.watch-levels>div{{background:#f8f6f0;border:1px solid #d8e0e5;border-radius:6px;padding:10px}}.today-metrics span,.watch-levels span{{display:block;color:#687e90;font-size:10px;text-transform:uppercase;letter-spacing:.05em}}.today-metrics b{{font-size:15px}}.today-watch>div:not(.eyebrow){{display:grid;grid-template-columns:minmax(220px,.75fr) 1.25fr;gap:14px;padding:10px 0;border-bottom:1px solid #e0e5e8}}.today-watch>div:last-child{{border-bottom:0}}.today-watch span,.today-watch small{{display:block}}.today-watch small{{color:#687e90;margin-top:2px}}.today-watch small i{{display:inline;font-style:normal;font-weight:800}}.today-watch p{{margin:0;color:#536e82}}.watch-asset{{display:flex!important;align-items:center;gap:8px}}.watch-levels{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}}.watch-levels b{{font-size:16px}}.context-row{{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #dfe5e8}}.context-row span{{color:#687e90}}.today-rules{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}}.today-rules>div{{padding:11px;background:#fbfaf7;border:1px solid #d8e0e5;border-radius:6px}}.today-rules b,.today-rules span{{display:block}}.today-rules span{{color:#687e90;font-size:11px;margin-top:4px}}
 .trend-ribbon{{padding:12px 14px}}.trend-ribbon h2{{margin:0}}.trend-band{{display:grid;grid-template-columns:repeat(5,1fr);margin-top:9px;border-radius:5px;overflow:hidden}}.band-item{{min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#173750;border-right:1px solid rgba(255,255,255,.8);text-transform:uppercase;font-size:11px}}.band-item span{{min-height:14px;font-size:9px;text-transform:none}}.band-strong_bear{{background:#d94a4f;color:#fff}}.band-bear{{background:#ef8a83}}.band-neutral{{background:#c7ced1}}.band-bull{{background:#8dd8cf}}.band-strong_bull{{background:#087b70;color:#fff}}.band-item.active{{box-shadow:inset 0 0 0 4px #f1a15e;font-weight:900}}
 .notice.warn{{background:#fff3e8;color:#7d4d29}}.footer{{color:#62798a}}
 @media(max-width:1100px){{.site-shell{{grid-template-columns:1fr}}.side-nav{{position:sticky;top:0;min-height:0;display:flex;gap:4px;overflow-x:auto;padding:7px 10px;border-right:0;border-bottom:1px solid #d4dce2}}.side-nav a{{white-space:nowrap;margin:0}}.side-nav .nav-sep{{display:none}}.cockpit-banner,.today-hero{{grid-template-columns:1fr}}.quote-grid{{grid-template-columns:repeat(2,minmax(0,1fr))}}}}
