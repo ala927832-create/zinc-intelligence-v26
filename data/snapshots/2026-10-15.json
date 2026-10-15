@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-15T00:27:38.827406+00:00",
+  "run_time": "2026-10-15T00:31:21.321246+00:00",
   "run_date": "2026-10-15",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-15T00:27:38.838813+00:00",
+    "as_of": "2026-10-15T00:31:21.324169+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-15T00:27:38.838813+00:00",
+        "as_of": "2026-10-15T00:31:21.324169+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -326,26 +326,26 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 105.44000244140625,
-      "change_pct": -0.23654082148271138,
+      "value": 105.43000030517578,
+      "change_pct": -0.24600447556486493,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.2820000648498535,
-      "change_pct": -0.030457737528954976,
+      "value": 3.2839999198913574,
+      "change_pct": 0.030457737528966078,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.20999908447266,
-      "change_pct": 0.02935875827685397,
+      "value": 102.20800018310547,
+      "change_pct": 0.02740250327466498,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.620500087738037,
-      "change_pct": -0.8610345281372167,
+      "value": 6.620999813079834,
+      "change_pct": -0.853551369350225,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -16933,7 +16933,7 @@
             "ema20": 4371.2167,
             "atr14": 103.5216,
             "rsi14": 32.9581,
-            "volume": 229031.0
+            "volume": 140092.0
           },
           {
             "date": "2026-09-29",
@@ -17081,15 +17081,15 @@
           {
             "date": "2026-10-14",
             "open": 4128.2998,
-            "high": 4159.7002,
+            "high": 4160.5,
             "low": 4120.8999,
-            "close": 4159.1001,
-            "sma20": 4240.34,
-            "sma60": 4331.6767,
-            "ema20": 4234.5677,
+            "close": 4159.3999,
+            "sma20": 4240.355,
+            "sma60": 4331.6817,
+            "ema20": 4234.5962,
             "atr14": 82.8361,
-            "rsi14": 38.7303,
-            "volume": 11161.0
+            "rsi14": 38.7546,
+            "volume": 12124.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -17100,14 +17100,14 @@
         ],
         "latest_session": {
           "open": 4128.2998,
-          "high": 4159.7002,
+          "high": 4160.5,
           "low": 4120.8999,
-          "close": 4159.1001,
-          "sma20": 4240.34,
-          "sma60": 4331.6767,
-          "ema20": 4234.5677,
+          "close": 4159.3999,
+          "sma20": 4240.355,
+          "sma60": 4331.6817,
+          "ema20": 4234.5962,
           "atr14": 82.8361,
-          "rsi14": 38.7303
+          "rsi14": 38.7546
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -30751,15 +30751,15 @@
         "execution_gate": "PENDING_LIVE_QUOTE",
         "daily_plan": {
           "setup_zone": [
-            4159.1001,
-            4234.5677
+            4159.3999,
+            4234.5962
           ],
           "trigger_price": 4087.0582,
           "maximum_entry": 4070.491,
-          "hard_stop": 4246.9931,
-          "close_invalidation": 4234.5677,
-          "t1": 3767.1884,
-          "t2": 3607.2534,
+          "hard_stop": 4247.0216,
+          "close_invalidation": 4234.5962,
+          "t1": 3767.1314,
+          "t2": 3607.1679,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
           "risk_distance_atr": 1.93,
@@ -30778,10 +30778,10 @@
           ]
         },
         "reference": {
-          "close": 4159.1001,
-          "ema20": 4234.5677,
-          "sma60": 4331.6767,
-          "rsi14": 38.7303,
+          "close": 4159.3999,
+          "ema20": 4234.5962,
+          "sma60": 4331.6817,
+          "rsi14": 38.7546,
           "atr14": 82.8361,
           "support20": 4091.2,
           "resistance20": 4439.7998
@@ -30795,12 +30795,12 @@
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 4159.1001; EMA20 4234.5677; SMA60 4331.6767"
+            "value": "Close 4159.3999; EMA20 4234.5962; SMA60 4331.6817"
           },
           {
             "factor": "Momentum",
             "status": "CAUTION",
-            "value": "RSI14 38.7303"
+            "value": "RSI14 38.7546"
           },
           {
             "factor": "Observed volatility",
@@ -30837,8 +30837,8 @@
           "1_market_direction": "BEAR",
           "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
           "3_risk_location": [
-            4159.1001,
-            4234.5677
+            4159.3999,
+            4234.5962
           ],
           "4_entry_permission": {
             "trigger": 4087.0582,
@@ -30847,13 +30847,13 @@
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 176.5021,
+            "price_units_per_contract_unit": 176.5306,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 3767.1884,
-            "t2": 3607.2534,
-            "close_invalidation": 4234.5677
+            "t1": 3767.1314,
+            "t2": 3607.1679,
+            "close_invalidation": 4234.5962
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -31166,16 +31166,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99955688950206,
     "physical_market": 99.63157601005639,
-    "macro": 47.3695045758952,
+    "macro": 47.386516861918984,
     "technical": 54.550752904375
   },
   "component_coverage": 0.8,
-  "market_score": 72.10652288357102,
+  "market_score": 72.108649419324,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 59.8174838981338,
-    "20D": 64.20642639293281,
-    "60D": 67.717580388772
+    "5D": 59.8181218588597,
+    "20D": 64.20759598759695,
+    "60D": 67.71917529058675
   },
   "market_quality": {
     "confidence": 93.0,
@@ -31203,7 +31203,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 1.770578115162037
+    "max_age_days": 1.7731193703819446
   },
   "procurement": {
     "status": "OK",
