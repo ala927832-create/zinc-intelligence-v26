@@ -8,14 +8,32 @@
 @media(max-width:1050px){.market-tabs{grid-template-columns:repeat(3,1fr)}.chart-first{grid-template-columns:1fr}.key-levels{display:grid;grid-template-columns:repeat(2,1fr);gap:0 18px}.key-levels h2{grid-column:1/-1}}
 @media(max-width:900px){.market-lower{grid-template-columns:1fr 1fr}.market-kpis{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:620px){.market-lower{grid-template-columns:1fr}.chart-panel .chart{height:215px}.market-tabs{grid-template-columns:repeat(2,1fr)}.market-kpis{grid-template-columns:repeat(2,1fr)}.key-levels{grid-template-columns:1fr}}
-</style></head><body><header class='head'><h1>GLOBAL MACRO RESEARCH DESK</h1><small>2026-10-14 · delayed research data · execution requires live quote</small></header><div class='shell'><nav class='nav'><a class='' href='index.html'>Today</a><a class='' href='markets.html'>Markets</a><a class='' href='radar.html'>Radar</a><a class='' href='journal.html'>Journal</a></nav><main><div class='grid'><section class='card'><h2>Data Health · internal operations view</h2><p>This page is intentionally absent from normal navigation.</p><pre>{
+
+:root{
+  --canvas:#f4f1e9;--surface:#ffffff;--surface-soft:#f8f6f0;--ink:#153552;--muted:#687e90;
+  --border:#d5dde3;--navy:#0b2f4f;--navy-deep:#071f35;--accent:#c8783d;
+  --series-close:#59d7ff;--series-sma14:#4ed6a5;--series-sma30:#ffb454;
+  --series-ema20:#c69cff;--series-sma60:#f48fb1;--series-rsi:#f4d35e;
+  --bull:#087b70;--bear:#d94a4f;--neutral:#71808b;
+  --official:#087b70;--api:#147fa3;--reference:#b56a2e;--derived:#6d4cc9;
+  --carry:#8a552e;--missing:#a7333a;
+}
+.asset-identity{display:flex;align-items:center;gap:9px;min-width:0}.asset-icon{width:42px;height:42px;flex:0 0 42px;overflow:visible}.asset-icon--compact{width:28px;height:28px;flex-basis:28px}.asset-icon-bg{fill:#e9f0f4;stroke:#adc0cc;stroke-width:1.4}.asset-icon-path{fill:none;stroke:#5e7d91;stroke-width:1.7;opacity:.45}.asset-icon-text{fill:#164f78;font-size:11px;font-weight:850;font-family:Inter,Segoe UI,Arial,sans-serif}.asset-icon--gold .asset-icon-bg{fill:#fff0c7;stroke:#d4aa45}.asset-icon--gold .asset-icon-text{fill:#8a5b00}.asset-icon--fx .asset-icon-bg{fill:#e8efff;stroke:#7998cf}.asset-icon--fx .asset-icon-text{fill:#345c9b}.asset-icon--dxy .asset-icon-bg{fill:#e8edf1;stroke:#71808b}.asset-icon--dxy .asset-icon-text{fill:#344b5e;font-size:8px}.asset-icon--rates .asset-icon-bg{fill:#f3e9fa;stroke:#9b77b7}.asset-icon--rates .asset-icon-text{fill:#694786;font-size:9px}.asset-icon--shfe .asset-icon-bg{fill:#e5f4ee;stroke:#5b9c83}.asset-icon--shfe .asset-icon-text{fill:#17664e}
+.source-badge{display:inline-flex;align-items:center;gap:4px;border:1px solid currentColor;border-radius:99px;padding:3px 7px;font-size:9px;font-weight:800;line-height:1.2;letter-spacing:.045em;white-space:nowrap;background:#fff}.source-badge--official{color:var(--official);background:#e0f2ee}.source-badge--api{color:var(--api);background:#e5f3f7}.source-badge--reference{color:var(--reference);background:#fff0e0}.source-badge--market{color:#8a552e;background:#fae9d9}.source-badge--derived{color:var(--derived);background:#f0eafd}.source-badge--carry{color:var(--carry);background:#fff3e8}.source-badge--missing{color:var(--missing);background:#fae0e2}.source-badge--unclassified{color:#5d6971;background:#edf0f2}
+.source-identity-key{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 12px;margin:0 0 12px;background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--muted);font-size:10px}.source-identity-key>b{color:var(--ink);margin-right:4px;letter-spacing:.06em}
+.series-legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0;color:#bed0dc;font-size:11px}.series-legend-item{display:inline-flex;align-items:center;gap:5px}.series-legend-item svg{width:34px;height:8px;overflow:visible}.series-legend-note{color:#9bb3c4;border-left:1px solid #315c7d;padding-left:10px}
+.chart-line.close{stroke:var(--series-close)!important}.chart-line.sma14,.chart-line.sma20{stroke:var(--series-sma14)!important;stroke-dasharray:8 5}.chart-line.sma30{stroke:var(--series-sma30)!important;stroke-dasharray:12 6}.chart-line.ema20{stroke:var(--series-ema20)!important}.chart-line.sma50{stroke:var(--series-ema20)!important;stroke-dasharray:3 4}.chart-line.sma60{stroke:var(--series-sma60)!important;stroke-dasharray:2 5}.chart-line.rsi{stroke:var(--series-rsi)!important}
+.close-chart .chart-frame{fill:var(--navy-deep);stroke:#315c7d}.close-chart .chart-grid{stroke:#244967}.close-chart .chart-time-grid,.close-chart .chart-day-grid{stroke:#163a57}.close-chart .chart-week-grid{stroke:#456982}.close-chart .chart-label,.close-chart .chart-day-label,.close-chart .chart-axis-title{fill:#bed0dc}.close-chart .chart-axis-title{fill:#dceaf2}
+.market-tabs a,.market-index a{display:flex;align-items:center;justify-content:center;gap:6px}.market-summary>.asset-identity{display:inline-flex}.quote-foot .source-badge{margin-left:auto}.radar-market,.journal h2{display:flex;align-items:center;gap:8px}
+@media(max-width:620px){.source-identity-key{align-items:flex-start}.series-legend{gap:8px}.asset-icon{width:38px;height:38px;flex-basis:38px}}
+</style></head><body><header class='head'><h1>GLOBAL MACRO RESEARCH DESK</h1><small>2026-10-15 · delayed research data · execution requires live quote</small></header><div class='shell'><nav class='nav'><a class='' href='index.html'>Today</a><a class='' href='markets.html'>Markets</a><a class='' href='radar.html'>Radar</a><a class='' href='journal.html'>Journal</a></nav><main><aside class='source-identity-key' aria-label='Data identity key'><b>DATA IDENTITY</b><span class='source-badge source-badge--official'>OFFICIAL</span><span class='source-badge source-badge--api'>PUBLIC API</span><span class='source-badge source-badge--reference'>PUBLIC REFERENCE</span><span class='source-badge source-badge--derived'>DERIVED</span><span class='source-badge source-badge--carry'>CARRY FORWARD</span><span class='source-badge source-badge--missing'>MISSING</span></aside><div class='grid'><section class='card'><h2>Data Health · internal operations view</h2><p>This page is intentionally absent from normal navigation.</p><pre>{
   &quot;lme_cash&quot;: {
     &quot;value_present&quot;: true,
     &quot;source&quot;: &quot;westmetall_lme_zinc&quot;,
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_REFERENCE_DAY_DELAYED&quot;,
-    &quot;as_of&quot;: &quot;2026-10-13&quot;,
-    &quot;age_days&quot;: 1.61,
+    &quot;as_of&quot;: &quot;2026-10-14&quot;,
+    &quot;age_days&quot;: 1.02,
     &quot;expected_update&quot;: &quot;T+1 business day&quot;,
     &quot;max_age_days&quot;: 4,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -26,8 +44,8 @@
     &quot;source&quot;: &quot;westmetall_lme_zinc&quot;,
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_REFERENCE_DAY_DELAYED&quot;,
-    &quot;as_of&quot;: &quot;2026-10-13&quot;,
-    &quot;age_days&quot;: 1.61,
+    &quot;as_of&quot;: &quot;2026-10-14&quot;,
+    &quot;age_days&quot;: 1.02,
     &quot;expected_update&quot;: &quot;T+1 business day&quot;,
     &quot;max_age_days&quot;: 4,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -39,7 +57,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-12&quot;,
-    &quot;age_days&quot;: 2.61,
+    &quot;age_days&quot;: 3.02,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -51,7 +69,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-12&quot;,
-    &quot;age_days&quot;: 2.61,
+    &quot;age_days&quot;: 3.02,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -63,7 +81,7 @@
     &quot;source_grade&quot;: &quot;B_PUBLIC_REFERENCE&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_MIRROR_DAY_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-12&quot;,
-    &quot;age_days&quot;: 2.61,
+    &quot;age_days&quot;: 3.02,
     &quot;expected_update&quot;: &quot;T+1/T+2 business day&quot;,
     &quot;max_age_days&quot;: 5,
     &quot;importance&quot;: &quot;CORE&quot;,
@@ -75,7 +93,7 @@
     &quot;source_grade&quot;: &quot;B_MARKET_SOURCE_RESTRICTED&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_WEB_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-09-30&quot;,
-    &quot;age_days&quot;: 14.61,
+    &quot;age_days&quot;: 15.02,
     &quot;expected_update&quot;: &quot;Weekly or better&quot;,
     &quot;max_age_days&quot;: 14,
     &quot;importance&quot;: &quot;SECONDARY&quot;,
@@ -87,7 +105,7 @@
     &quot;source_grade&quot;: &quot;B_MARKET_SOURCE_RESTRICTED&quot;,
     &quot;source_status&quot;: &quot;PUBLIC_WEB_DELAYED&quot;,
     &quot;as_of&quot;: &quot;2026-10-14&quot;,
-    &quot;age_days&quot;: 0.61,
+    &quot;age_days&quot;: 1.02,
     &quot;expected_update&quot;: &quot;Weekly or better&quot;,
     &quot;max_age_days&quot;: 14,
     &quot;importance&quot;: &quot;SECONDARY&quot;,
