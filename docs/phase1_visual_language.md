@@ -41,9 +41,10 @@ upgrading it:
 | `CARRY FORWARD` | Last verified observation is being reused |
 | `MISSING` | Required source or value is unavailable |
 
-The exact raw source grade remains in the HTML `data-source-grade` attribute
-and tooltip for auditability. A carry-forward status overrides the normal
-source badge so stale reuse cannot look current.
+The exact raw source grade remains visible inside the badge and is also kept in
+the HTML `data-source-grade` attribute and tooltip for auditability. A
+carry-forward status overrides the normal source badge so stale reuse cannot
+look current.
 
 ## Guardrails
 

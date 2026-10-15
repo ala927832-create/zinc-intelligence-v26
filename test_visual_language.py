@@ -46,6 +46,8 @@ class VisualLanguageTest(unittest.TestCase):
         badge = source_badge("B_PUBLIC_REFERENCE", "AVAILABLE")
         self.assertIn("data-source-grade='B_PUBLIC_REFERENCE'", badge)
         self.assertIn("PUBLIC REFERENCE", badge)
+        self.assertIn("source-grade-code", badge)
+        self.assertIn(">B_PUBLIC_REFERENCE</span>", badge)
         self.assertNotIn(">OFFICIAL<", badge)
 
     def test_generated_pages_share_icons_legends_and_identity_badges(self):
