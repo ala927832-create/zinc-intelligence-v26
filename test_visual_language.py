@@ -60,7 +60,7 @@ class VisualLanguageTest(unittest.TestCase):
             build_dashboard_v27(snapshot, {}, [], {})
             build_research_pages(snapshot)
             index = (Path(folder) / "index.html").read_text(encoding="utf-8")
-            markets = (Path(folder) / "markets.html").read_text(encoding="utf-8")
+            markets = (Path(folder) / "market-lme_zinc.html").read_text(encoding="utf-8")
             radar = (Path(folder) / "radar.html").read_text(encoding="utf-8")
             journal = (Path(folder) / "journal.html").read_text(encoding="utf-8")
             status = (Path(folder) / "system-status.html").read_text(encoding="utf-8")

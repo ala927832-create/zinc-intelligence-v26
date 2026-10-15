@@ -626,7 +626,7 @@ def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = Fa
     return f"""<article class='quote-card' data-market='{_esc(key)}'>
     <div class='quote-top'><div class='asset-identity'>{asset_icon(key)}<div><span class='quote-kicker'>{'SPOT PRIMARY' if key == 'lme_zinc' else 'VALIDATED REFERENCE'}</span><h2>{_esc(title)}</h2></div></div><span class='pill {_decision_class(decision)}'>{_esc(direction)}</span></div>
     <div class='quote-main'><strong>{fmt(value,2)}</strong><span class='quote-unit'>{_esc(unit)}</span>{_spark_path(series.get('chart_points', []))}</div>
-    {secondary}<div class='quote-changes'>{''.join(changes)}</div>
+    {secondary}<a href='market-{_esc(key)}.html'>查看圖表與市場證據 →</a><div class='quote-changes'>{''.join(changes)}</div>
     <div class='quote-position'><span>vs EMA20 <b class='{ema_tone}'>{_esc(ema_text)}</b></span><span>vs {_esc(metrics.get('long_label'))} <b class='{long_tone}'>{_esc(long_text)}</b></span></div>
     <div class='quote-location'><div><span>{_esc(metrics.get('range_basis'))}</span><b>{_esc(range_text)}</b><small>Position {_esc(position_text)}</small></div><div><span>Next trigger</span><b>{_esc(trigger_text)}</b><small>Trend age {_esc(trend_age)}</small></div></div>
     <p class='quote-summary'><b>今日重點</b>{_esc(_market_summary(snapshot, key, plan, metrics))}</p>

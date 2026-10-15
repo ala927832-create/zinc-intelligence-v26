@@ -195,7 +195,12 @@ def main() -> int:
     text = _visible_text(raw_html)
     failures: list[str] = []
 
-    markets_html = _fetch(urljoin(page_url, "markets.html"), run_id, marker="CHARTS BEFORE COMMENTARY")
+    market_index = _fetch(urljoin(page_url, "markets.html"), run_id, marker="CHARTS BEFORE COMMENTARY")
+    market_pages = {}
+    for key in ("lme_zinc", "shfe_zinc", "gold", "usdjpy", "dxy", "us_treasury"):
+        _expect(market_index, f"market-{key}.html", failures, f"Markets route {key}")
+        market_pages[key] = _fetch(urljoin(page_url, f"market-{key}.html"), run_id, marker="CHARTS BEFORE COMMENTARY")
+    markets_html = "".join(market_pages.values())
     markets_text = _visible_text(markets_html)
     decisions = snapshot.get("decision_book", {}).get("markets", {})
     for key in ("lme_zinc", "shfe_zinc", "gold", "usdjpy", "dxy"):
@@ -222,8 +227,9 @@ def main() -> int:
     for obsolete_section in ("Market comparison · first decision layer", "CROSS-MARKET DECISION MATRIX"):
         if obsolete_section in markets_html or obsolete_section in raw_html:
             failures.append(f"obsolete repeated comparison remains: {obsolete_section}")
-    if markets_html.count("Execution approval boundary") != 1:
-        failures.append("Markets must render the public/private execution boundary exactly once")
+    for key, page in market_pages.items():
+        if key != "us_treasury" and page.count("Execution approval boundary") != 1:
+            failures.append(f"{key} must render the execution boundary exactly once")
     for private_marker in ("name=\"account_equity\"", "name='account_equity'", "/api/execution/preview", "/api/trades"):
         if private_marker in markets_html:
             failures.append(f"private execution control rendered publicly: {private_marker}")

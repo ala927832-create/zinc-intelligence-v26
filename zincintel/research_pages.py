@@ -270,7 +270,7 @@ def _market_tabs() -> str:
     items = [("lme_zinc", "LME Zinc"), ("shfe_zinc", "SHFE Zinc"), ("gold", "Gold"),
              ("usdjpy", "USD/JPY"), ("dxy", "DXY"), ("us_treasury", "US Treasury")]
     return "<nav class='market-tabs' aria-label='Market detail'>" + "".join(
-        f"<a class='{'active' if key == 'lme_zinc' else ''}' href='#{key}' data-market-target='{key}'>{asset_icon(key, compact=True)}{label}</a>"
+        f"<a href='market-{key}.html'>{asset_icon(key, compact=True)}{label}</a>"
         for key, label in items
     ) + "</nav>"
 
@@ -399,6 +399,30 @@ def build_research_pages(snapshot: dict) -> list[Path]:
         "journal.html": _page("Journal · Global Macro Research", "Journal", journal_body, run_date),
         "system-status.html": _page("System Status", "", status_body, run_date),
     }
+    # Each asset has its own fully expanded research page. The main Markets
+    # route is an index, so unrelated evidence never interrupts an asset review.
+    for key, plan in visible_decisions:
+        detail = _market_card(key, plan, series.get(key, {}), snapshot, open_by_default=True)
+        detail = detail.replace("<details class='market-detail'", "<section class='market-detail'")
+        detail = detail.replace("<summary>", "<header class='market-summary'>", 1).replace("</summary>", "</header>", 1)
+        end = detail.rfind("</details>")
+        detail = detail[:end] + "</section>" + detail[end + len("</details>"):]
+        cash_note = ("<section class='rules'><b>LME Cash candlestick · SOURCE NOT VERIFIED</b>"
+                     "<p>Cash Official Bid/Offer and Settlement are reference observations, not daily Open/High/Low/Close. "
+                     "No verified Cash OHLC feed is connected. The 3M Close chart and SHFE candles below retain their own identities.</p>"
+                     "<a href='https://www.lme.com/Market-data/Accessing-market-data/Historical-data' target='_blank' rel='noopener'>LME dataset catalogue</a></section>") if key == "lme_zinc" else ""
+        pages[f"market-{key}.html"] = _page(plan.get("market", key), "Markets",
+            market_intro + cash_note + detail + execution_boundary + constitution, run_date)
+    pages["market-us_treasury.html"] = _page("US Rates", "Markets",
+        market_intro + _treasury_placeholder().replace("<details ", "<details open ", 1) + constitution, run_date)
+    cards = "".join(
+        f"<section class='card half' id='{_e(key)}'><h2>{asset_icon(key, compact=True)} {_e(plan.get('market', key))}</h2>"
+        f"<p>{_e(plan.get('direction'))} · {_e(plan.get('decision'))}</p>"
+        f"<p>{_e((plan.get('no_trade_reasons') or ['Review evidence'])[0])}</p>"
+        f"<a href='market-{_e(key)}.html'>Open chart, evidence and eight-question decision brief →</a></section>"
+        for key, plan in visible_decisions)
+    pages["markets.html"] = _page("Markets · Global Macro Research", "Markets",
+        market_intro + "<div class='grid'>" + cards + "</div>" + constitution, run_date)
     output = []
     for name, content in pages.items():
         path = PUBLIC_DIR / name
