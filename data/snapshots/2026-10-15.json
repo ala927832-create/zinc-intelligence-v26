@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-15T08:10:55.647709+00:00",
+  "run_time": "2026-10-15T08:27:01.924020+00:00",
   "run_date": "2026-10-15",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-15T08:10:55.650184+00:00",
+    "as_of": "2026-10-15T08:27:01.926330+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-15T08:10:55.650184+00:00",
+        "as_of": "2026-10-15T08:27:01.926330+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -165,7 +165,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-14",
-        "age_days": 1.34,
+        "age_days": 1.35,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -177,7 +177,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-14",
-        "age_days": 1.34,
+        "age_days": 1.35,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -189,7 +189,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 3.34,
+        "age_days": 3.35,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -201,7 +201,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 3.34,
+        "age_days": 3.35,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -213,7 +213,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 3.34,
+        "age_days": 3.35,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -225,7 +225,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-09-30",
-        "age_days": 15.34,
+        "age_days": 15.35,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -237,7 +237,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-10-15",
-        "age_days": 0.34,
+        "age_days": 0.35,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -268,7 +268,7 @@
       "source": "SMM_PUBLIC",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 15.34,
+      "age_days": 15.35,
       "url": "https://www-old.metal.com/Zinc/202506030011",
       "error": null
     },
@@ -282,7 +282,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 6.34,
+      "age_days": 6.35,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -296,7 +296,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Monthly",
-      "age_days": 14.34,
+      "age_days": 14.35,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -309,7 +309,7 @@
       "source": "Fastmarkets reported Teck / Korea Zinc annual benchmark",
       "source_grade": "B_VERIFIED_BENCHMARK",
       "expected_update": "Annual",
-      "age_days": 223.34,
+      "age_days": 223.35,
       "url": "https://www.fastmarkets.com/insights/teck-korea-zinc-benchmark-zinc-concentrate-tcs-85-per-tonne/",
       "notes": "Annual benchmark reference only. Do not substitute for China import spot TC or China domestic TC."
     },
@@ -326,26 +326,26 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 104.13999938964844,
-      "change_pct": -1.810294374073118,
+      "value": 103.81999969482422,
+      "change_pct": -2.1120101030853045,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.259000062942505,
-      "change_pct": 1.9074455782373878,
+      "value": 3.253000020980835,
+      "change_pct": 1.7198270026415496,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.09700012207031,
-      "change_pct": -0.44173858235661,
+      "value": 101.98600006103516,
+      "change_pct": -0.5499785216369069,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.546000003814697,
-      "change_pct": -0.9906947693958723,
+      "value": 6.546500205993652,
+      "change_pct": -0.9831291308098233,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -356,14 +356,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 32.382999420166016,
-      "change_pct": 0.8659083690811364,
+      "value": 32.38999938964844,
+      "change_pct": 0.8877117317418914,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 56.66999816894531,
-      "change_pct": 2.0161997250533803,
+      "value": 56.72999954223633,
+      "change_pct": 2.124212999788022,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -31153,16 +31153,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99955688950206,
     "physical_market": 99.63157601005639,
-    "macro": 47.02031484872659,
+    "macro": 47.099573953544855,
     "technical": 54.550752904375
   },
   "component_coverage": 0.8,
-  "market_score": 72.06287416767495,
+  "market_score": 72.07278155577723,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 59.80438928336498,
-    "20D": 64.18241959918997,
-    "60D": 67.68484385184996
+    "5D": 59.80736149979566,
+    "20D": 64.18786866264622,
+    "60D": 67.69227439292666
   },
   "market_quality": {
     "confidence": 93.0,
@@ -31190,7 +31190,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 2.0922602131944443
+    "max_age_days": 2.103436331921296
   },
   "procurement": {
     "status": "OK",
