@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from .utils import PUBLIC_DIR
+from .radar import radar_body as build_radar_body, rates_panel
 from .dashboard_v27 import _today_market_metrics, _change_text, _decision_reference
 from .visual_language import (SERIES_STYLES, VISUAL_CSS, asset_icon,
                               series_legend, source_badge, source_legend)
@@ -29,11 +30,11 @@ def _market_guide(snapshot: dict, key: str, plan: dict) -> str:
     elif key == "shfe_zinc":
         meaning = "這是人民幣計價的中國期貨序列，須核對合約月份與轉倉；目前與LME的匯率及套利成本比較尚不完整。"
     elif key == "gold":
-        meaning = "這是COMEX連續期貨參考；實質殖利率、合約OI與ETF資金流尚未整合，因此方向解讀以技術證據為限。"
+        meaning = "這是COMEX連續期貨參考；實質殖利率背景請見Radar。合約OI與ETF資金流尚未整合，技術方向仍需其他證據核對。"
     elif key == "usdjpy":
         meaning = "USD/JPY上升代表美元走強、日圓走弱；美日利差與政策證據尚未整合，不能單憑此圖推斷避險資金流向。"
     else:
-        meaning = "DXY反映美元對貨幣籃子的方向；美債殖利率與成分貢獻尚未整合，不能單憑指數替其他商品決定方向。"
+        meaning = "DXY反映美元對貨幣籃子的方向；美債背景請見Radar，成分貢獻尚未整合，不能單憑指數替其他商品決定方向。"
     trigger = m.get("trigger")
     observe = (f"下一觀察：核對研究Trigger {trigger:,.2f}及其日線確認條件；目前狀態 {plan.get('decision', 'NO_TRADE')}，仍須通過私人執行檢查。"
                if trigger is not None else "下一觀察：先確認均線與價格結構重新一致；目前沒有合格Trigger，維持No Trade。")
@@ -440,7 +441,7 @@ def build_research_pages(snapshot: dict) -> list[Path]:
     status_body = f"<div class='grid'><section class='card'><h2>Data Health · internal operations view</h2><p>This page is intentionally absent from normal navigation.</p><pre>{_e(json.dumps(health, ensure_ascii=False, indent=2))}</pre></section></div>"
     pages = {
         "markets.html": _page("Markets · Global Macro Research", "Markets", market_body, run_date),
-        "radar.html": _page("Radar · Global Macro Research", "Radar", radar_body, run_date),
+        "radar.html": _page("Radar · Global Macro Research", "Radar", build_radar_body(snapshot), run_date),
         "journal.html": _page("Journal · Global Macro Research", "Journal", journal_body, run_date),
         "system-status.html": _page("System Status", "", status_body, run_date),
     }
@@ -459,10 +460,10 @@ def build_research_pages(snapshot: dict) -> list[Path]:
         pages[f"market-{key}.html"] = _page(plan.get("market", key), "Markets",
             market_intro + cash_note + detail + execution_boundary + constitution, run_date)
     pages["market-us_treasury.html"] = _page("US Rates", "Markets",
-        market_intro + _treasury_placeholder().replace("<details ", "<details open ", 1) + constitution, run_date)
+        market_intro + rates_panel(snapshot) + constitution, run_date)
     cards = "".join(_market_entry(snapshot,key,plan) for key,plan in visible_decisions)
     cards += (f"<article class='card market-entry'><header class='asset-identity'>{asset_icon('us_treasury')}<h2>美債與實質殖利率</h2></header>"
-              "<p>來源尚未接入，殖利率與方向均為N/A。</p><a href='market-us_treasury.html'>查看資料缺口 →</a></article>")
+              "<p>查看官方名目／實質殖利率、基點變動、日期與狀態。</p><a href='market-us_treasury.html'>查看利率證據 →</a></article>")
     pages["markets.html"] = _page("Markets · Global Macro Research", "Markets",
         market_intro + "<p class='rules'>閱讀順序：先看價格與變動，再看事實／解讀／觀察。各市場截至各自最後交易日；1D與5D以有效交易筆數計算。</p><div class='grid'>" + cards + "</div>" + constitution, run_date)
     output = []

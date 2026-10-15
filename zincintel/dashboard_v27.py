@@ -570,6 +570,17 @@ def _spark_path(points: list[dict]) -> str:
 
 
 def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = False) -> str:
+    rate = snapshot.get('market_research', {}).get('rates', {}).get('us10y', {})
+    if placeholder and rate.get('status') in {'AVAILABLE', 'STALE'}:
+        def bp(field):
+            v=rate.get(field)
+            return f'{v:+.1f} bp' if isinstance(v,(int,float)) else 'N/A'
+        return (f"<article class='quote-card' data-market='us_treasury'><div class='asset-identity'>{asset_icon('us_treasury')}<h2>US TREASURY 10Y</h2></div>"
+                f"<div class='quote-main'><strong>{fmt(rate.get('value'),2)}%</strong></div>"
+                f"<p>1D {bp('change_1d_bp')} · 5D {bp('change_5d_bp')}</p>"
+                f"<p class='quote-summary'>官方日殖利率；不是債券價格。詳見Radar名目／實質利率與商品影響。</p>"
+                f"<p>{_esc(rate.get('status'))} · {_esc(rate.get('as_of'))} {source_badge(rate.get('source_grade'), rate.get('retrieval_status'))}</p>"
+                "<a href='market-us_treasury.html'>查看利率證據 →</a></article>")
     if placeholder:
         return ("<article class='quote-card quote-pending' data-market='us_treasury'>"
                 f"<div class='quote-top'><div class='asset-identity'>{asset_icon('us_treasury')}<div><span class='quote-kicker'>RATES</span><h2>US TREASURY 10Y</h2></div></div>"

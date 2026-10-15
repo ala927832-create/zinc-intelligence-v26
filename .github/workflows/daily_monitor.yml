@@ -76,6 +76,9 @@ jobs:
       - name: Phase 2A enriched Today decision layer test
         run: python -m unittest -q test_today_phase2a.py
 
+      - name: Treasury rates and macro alignment test
+        run: python -m unittest -q test_rates.py
+
       - name: SHFE official daily OHLC test
         run: python -m unittest -q test_shfe_research.py
 

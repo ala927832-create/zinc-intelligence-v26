@@ -195,6 +195,20 @@ def main() -> int:
     text = _visible_text(raw_html)
     failures: list[str] = []
 
+    radar_html = _fetch(urljoin(page_url, 'radar.html'), run_id, marker='Treasury evidence')
+    for marker in ('今日宏觀研究導覽', '當次驗證｜', '下一觀察｜', '缺日本2Y', '重大新聞與事件時鐘尚未接入'):
+        _expect(radar_html, marker, failures, f'Radar context {marker}')
+    for key, rate in snapshot.get('market_research', {}).get('rates', {}).items():
+        label = {'us2y':'美國2Y', 'us10y':'美國10Y', 'us30y':'美國30Y', 'real10y':'美國10Y實質'}.get(key)
+        if not label:continue
+        row = _table_row_text(radar_html, label)
+        for field, suffix in (('value','%'),('change_1d_bp',' bp'),('change_5d_bp',' bp')):
+            value=rate.get(field)
+            if value is not None:
+                _expect(row, f'{value:,.2f}{suffix}', failures, f'Radar {key} {field}')
+        if rate.get('as_of'):
+            _expect(row, rate['as_of'], failures, f'Radar {key} as-of')
+
     market_index = _fetch(urljoin(page_url, "markets.html"), run_id, marker="CHARTS BEFORE COMMENTARY")
     for label in ("事實｜", "解讀｜", "觀察｜", "entry-price", "market-us_treasury.html"):
         _expect(market_index, label, failures, f"Markets research entry {label}")
@@ -217,7 +231,7 @@ def main() -> int:
     for marker in ("CHARTS BEFORE COMMENTARY", "Markets · price structure and conditional plans",
                    "Decision brief · eight required questions", "Asset-specific evidence",
                    "Conditional plan · RESEARCH ONLY", "Execution approval boundary",
-                   "US Treasury · data source not integrated"):
+                   "Treasury evidence"):
         _expect(markets_html, marker, failures, f"Markets decision chain: {marker}")
     if markets_html.find("chart-first") > markets_html.find("Asset-specific evidence"):
         failures.append("Markets must render chart-first content before evidence commentary")
@@ -245,7 +259,7 @@ def main() -> int:
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
     for marker in ("MARKET SNAPSHOT", "FIRST LOOK · PRICES BEFORE OPINIONS", "TODAY'S MARKET POSTURE",
                    "TODAY'S LARGEST MOVES / CONDITIONS", "1D", "5D", "20D", "vs EMA20",
-                   "Next trigger", "今日重點", "PRIMARY WATCH", "US TREASURY 10Y", "SOURCE PENDING",
+                   "Next trigger", "今日重點", "PRIMARY WATCH", "US TREASURY 10Y",
                    "LME ZINC · CONTEXT SPLIT", "WHAT PERMITS ACTION", "RESEARCH ONLY"):
         _expect(text, marker, failures, f"Today information architecture: {marker}")
     _expect(raw_html, "class='side-nav'", failures, "left research navigation")

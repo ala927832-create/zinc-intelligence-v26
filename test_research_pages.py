@@ -41,7 +41,7 @@ class ResearchPagesTest(unittest.TestCase):
             self.assertIn("Asset-specific evidence", markets)
             self.assertIn("CHARTS BEFORE COMMENTARY", markets)
             self.assertIn("Markets · price structure and conditional plans", markets)
-            self.assertIn("US Treasury · data source not integrated", (Path(folder)/"market-us_treasury.html").read_text())
+            self.assertIn("Treasury evidence", (Path(folder)/"market-us_treasury.html").read_text())
             self.assertIn("data-chart-window='20'", markets)
             self.assertIn("data-chart-window='all'", markets)
             self.assertIn("data-indicator='RSI14'", markets)

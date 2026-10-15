@@ -55,7 +55,10 @@ class TodayPhase2ATest(unittest.TestCase):
         self.assertIn(plan["direction"], summary)
 
     def test_missing_treasury_does_not_invent_metrics(self) -> None:
-        card = _market_card(self.snapshot, "us_treasury", "US TREASURY 10Y", placeholder=True)
+        from copy import deepcopy
+        snapshot = deepcopy(self.snapshot)
+        snapshot.get('market_research', {}).pop('rates', None)
+        card = _market_card(snapshot, "us_treasury", "US TREASURY 10Y", placeholder=True)
         self.assertIn("NO VERIFIED SERIES", card)
         self.assertIn("1D</span><b>N/A", card)
         self.assertIn("不判斷利率方向", card)
