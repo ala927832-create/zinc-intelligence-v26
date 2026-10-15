@@ -236,7 +236,8 @@ def main() -> int:
     _expect(text, f"Model {snapshot.get('model_version')}", failures, "model version")
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
     for marker in ("MARKET SNAPSHOT", "FIRST LOOK · PRICES BEFORE OPINIONS", "TODAY'S MARKET POSTURE",
-                   "TODAY'S WATCH / CHANGES", "PRIMARY WATCH", "US TREASURY 10Y", "SOURCE PENDING",
+                   "TODAY'S LARGEST MOVES / CONDITIONS", "1D", "5D", "20D", "vs EMA20",
+                   "Next trigger", "今日重點", "PRIMARY WATCH", "US TREASURY 10Y", "SOURCE PENDING",
                    "LME ZINC · CONTEXT SPLIT", "WHAT PERMITS ACTION", "RESEARCH ONLY"):
         _expect(text, marker, failures, f"Today information architecture: {marker}")
     _expect(raw_html, "class='side-nav'", failures, "left research navigation")
