@@ -9,6 +9,8 @@ import pandas as pd
 
 from .dashboard import build_dashboard as build_legacy_dashboard, fmt, pct
 from .utils import PUBLIC_DIR
+from .visual_language import (SERIES_STYLES, VISUAL_CSS, asset_icon,
+                              series_legend, source_badge, source_legend)
 
 
 def _esc(value) -> str:
@@ -34,7 +36,7 @@ def _age(value) -> str:
 def _source_label(h: dict) -> str:
     grade = h.get("source_grade") or "—"
     src = h.get("source") or "—"
-    return f"{_esc(grade)} · {_esc(src)}"
+    return f"{source_badge(grade, h.get('freshness'))} <span>{_esc(src)}</span>"
 
 
 def _health_rows(snapshot: dict) -> str:
@@ -70,7 +72,7 @@ def _core_meta(snapshot: dict, field: str) -> str:
     return (
         "<div class='card-meta'>"
         f"<span>{_esc(h.get('as_of'))} · {_age(h.get('age_days'))}</span>"
-        f"<span class='pill {_freshness_class(freshness)}'>{_esc(h.get('source_grade'))}</span>"
+        f"{source_badge(h.get('source_grade'), freshness)}"
         "</div>"
     )
 
@@ -123,7 +125,7 @@ def _line_path(points: list[dict], field: str, x, y) -> str:
 
 
 def _interactive_close_script() -> str:
-    return """<script>
+    script = """<script>
 (() => {
   const source = document.getElementById('close-chart-data');
   const svg = document.getElementById('close-price-chart');
@@ -145,8 +147,8 @@ def _interactive_close_script() -> str:
     for(let v=ymin;v<=ymax+.001;v+=step) out+=`<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" class="chart-grid"/><text x="4" y="${y(v)+4}" class="chart-label">${v.toLocaleString()}</text>`;
     let lastWeek='';
     data.forEach((d,i)=>{ const wk=mondayKey(dates[i]), first=wk!==lastWeek; lastWeek=wk; const show=data.length<=20 || (data.length<=60 && [1,3,5].includes(dates[i].getUTCDay())) || first; out+=`<line x1="${x(dates[i])}" y1="${T}" x2="${x(dates[i])}" y2="${H-B}" class="${first?'chart-week-grid':'chart-day-grid'}"/>`; if(show) out+=`<text x="${x(dates[i])}" y="${H-57}" text-anchor="middle" class="chart-label">${d.date.slice(5)}</text><text x="${x(dates[i])}" y="${H-42}" text-anchor="middle" class="chart-day-label">${['日','一','二','三','四','五','六'][dates[i].getUTCDay()]}</text>`; });
-    const series=[['close','#5cd4ff'],['sma14','#2ce6a6'],['sma30','#ffb253'],['ema20','#c991ff']];
-    series.forEach(([key,color])=>{ let path='', open=false; data.forEach((d,i)=>{ if(!Number.isFinite(d[key])) {open=false;return;} path+=(open?' L':'M')+x(dates[i]).toFixed(1)+','+y(d[key]).toFixed(1);open=true; }); out+=`<path d="${path}" class="chart-line ${key}" stroke="${color}"/>`; });
+    const series=[['close','__CLOSE__',''],['sma14','__SMA14__','__SMA14_DASH__'],['sma30','__SMA30__','__SMA30_DASH__'],['ema20','__EMA20__','']];
+    series.forEach(([key,color,dash])=>{ let path='', open=false; data.forEach((d,i)=>{ if(!Number.isFinite(d[key])) {open=false;return;} path+=(open?' L':'M')+x(dates[i]).toFixed(1)+','+y(d[key]).toFixed(1);open=true; }); out+=`<path d="${path}" class="chart-line ${key}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`; });
     const last=data[data.length-1], lx=x(dates[dates.length-1]); out+=`<circle cx="${lx}" cy="${y(last.close)}" r="4" class="last-close"/><text x="${W-R+7}" y="${y(last.close)+4}" class="last-price">${Number(last.close).toLocaleString()} Close</text><text x="${W/2}" y="${H-8}" text-anchor="middle" class="chart-axis-title">實際交易日期（日／週分隔）</text><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" data-hover/>`;
     svg.innerHTML=out; svg.setAttribute('aria-label',`LME zinc 3M Close chart from ${data[0].date} to ${last.date}, ${data.length} trading days`);
     const hover=svg.querySelector('[data-hover]');
@@ -158,6 +160,17 @@ def _interactive_close_script() -> str:
   render('60');
 })();
 </script>"""
+    replacements = {
+        "__CLOSE__": SERIES_STYLES["close"]["color"],
+        "__SMA14__": SERIES_STYLES["sma14"]["color"],
+        "__SMA14_DASH__": SERIES_STYLES["sma14"]["dash"],
+        "__SMA30__": SERIES_STYLES["sma30"]["color"],
+        "__SMA30_DASH__": SERIES_STYLES["sma30"]["dash"],
+        "__EMA20__": SERIES_STYLES["ema20"]["color"],
+    }
+    for token, value in replacements.items():
+        script = script.replace(token, str(value))
+    return script
 
 
 def _close_charts(close: dict) -> str:
@@ -172,7 +185,7 @@ def _close_charts(close: dict) -> str:
     pad = max((high-low)*.08, 1.0); low -= pad; high += pad
     x = lambda i: left + plot_w*i/max(len(points)-1, 1)
     y = lambda v: 18 + (high-v)*plot_h/max(high-low, 1)
-    colors = {"close":"#5cd4ff", "sma14":"#2ce6a6", "sma30":"#ffb253", "ema20":"#c991ff"}
+    colors = {key: SERIES_STYLES[key]["color"] for key in ("close", "sma14", "sma30", "ema20")}
     paths = "".join(f"<path class='chart-line {k}' d='{_line_path(points,k,x,y)}' stroke='{c}'/>" for k,c in colors.items())
     ticks = "".join(f"<line x1='{left}' y1='{18+i*61}' x2='{width-right}' y2='{18+i*61}' class='chart-grid'/><text x='4' y='{22+i*61}' class='chart-label'>{high-(high-low)*i/4:.0f}</text>" for i in range(5))
     time_indexes = sorted({round(i*(len(points)-1)/4) for i in range(5)})
@@ -194,7 +207,7 @@ def _close_charts(close: dict) -> str:
         weekly_svg=f"<svg viewBox='0 0 {width} 190' role='img' aria-label='Weekly close-range bars, not OHLC candlesticks'><rect x='{left}' y='15' width='{plot_w}' height='145' class='chart-frame'/>{bars}<text x='{left}' y='182' class='chart-label'>{_esc(weekly[0]['week'])}</text><text x='{width-right}' y='182' text-anchor='end' class='chart-label'>{_esc(weekly[-1]['week'])}</text></svg>"
     return f"""<div class='chart-title'><b>長期 Close＋SMA14／SMA30／EMA20</b><span id='close-period-label'>交易日時間軸：{_esc(points[0]['date'])} → {_esc(points[-1]['date'])} · {len(points)} 個有效交易日</span></div>
     <div class='period-controls' aria-label='收盤價圖期間'><button type='button' data-close-days='20'>20交易日</button><button type='button' data-close-days='60' class='active'>60交易日</button><button type='button' data-close-days='120'>120交易日</button><button type='button' data-close-days='all'>全部</button></div>
-    <div class='chart-legend'><span style='color:#5cd4ff'>━ Close</span><span style='color:#2ce6a6'>━ SMA14</span><span style='color:#ffb253'>━ SMA30</span><span style='color:#c991ff'>━ EMA20</span><span>Open：{_esc(close.get('open_status'))}</span></div>
+    {series_legend(["close", "sma14", "sma30", "ema20"], extra=f"Open: {close.get('open_status') or 'MISSING'}")}
     <div class='interactive-chart'><svg id='close-price-chart' viewBox='0 0 {width} 390' role='img' aria-label='Long-term LME zinc 3M reference Close with moving averages by trading day'><rect x='{left}' y='18' width='{plot_w}' height='{plot_h}' class='chart-frame'/>{ticks}{time_ticks}{paths}<text x='{width/2:.1f}' y='318' text-anchor='middle' class='chart-axis-title'>交易日（只含已完成的同源 Close）</text></svg><div id='close-chart-tooltip' class='chart-tooltip' hidden></div></div>
     <div class='chart-title'><b>RSI14 · Close-only</b><span>30 / 50 / 70 reference levels</span></div>
     <svg viewBox='0 0 {width} 175' role='img' aria-label='Close-only RSI14'><rect x='{left}' y='18' width='{plot_w}' height='124' class='chart-frame'/><line x1='{left}' y1='55.2' x2='{width-right}' y2='55.2' class='rsi-band'/><line x1='{left}' y1='80' x2='{width-right}' y2='80' class='chart-grid'/><line x1='{left}' y1='104.8' x2='{width-right}' y2='104.8' class='rsi-band'/><path class='chart-line rsi' d='{rsi_path}'/><text x='25' y='59' class='chart-label'>70</text><text x='25' y='84' class='chart-label'>50</text><text x='25' y='109' class='chart-label'>30</text></svg>
@@ -316,7 +329,7 @@ def _shfe_panel(snapshot: dict) -> str:
       <div class='muted'>獨立跨市場參考，絕非 LME K 線 · {_esc(shfe.get('source_grade'))} · 截至 {_esc(shfe.get('as_of'))}</div></div>
       <div class='status-chip'>VALIDATED · {_esc(shfe.get('observations'))} sessions</div></div>
       <div class='period-controls shfe-controls'><button data-shfe-days='20'>20</button><button data-shfe-days='60'>60</button><button class='active' data-shfe-days='120'>120</button><button data-shfe-days='all'>全部</button></div>
-      <div class='chart-legend'><span class='up'>■ 上漲</span><span class='down'>■ 下跌</span><span style='color:#ffb253'>━ SMA20</span><span style='color:#c991ff'>━ SMA50</span><span style='color:#5cd4ff'>━ EMA20</span><span>◆ 換月</span></div>
+      {series_legend(["up", "down", "sma20", "sma50", "ema20"], extra="◆ Contract roll")}
       <div class='interactive-chart'><svg id='shfe-candle-chart' viewBox='0 0 1120 480' role='img' aria-label='SHFE Zinc validated daily OHLC candlestick chart'></svg><div id='shfe-tooltip' class='chart-tooltip' hidden></div></div>
       <div class='research-strip'><div><span>Latest</span><b>{fmt(shfe.get('latest_close'),0)} CNY/t</b></div><div><span>Contract</span><b>{_esc(shfe.get('latest_contract'))}</b></div><div><span>Rolls</span><b>{_esc(shfe.get('roll_count'))}</b></div><div><span>Rule</span><b>Max open interest</b></div></div>
       <p class='source'>來源：SHFE official daily trading data · 每日以持倉量最高、成交量作同分判定選代表合約；合約代碼與換月日完整保留。換月跳空不作普通單日報酬解讀。</p>
@@ -423,8 +436,8 @@ def _spark_path(points: list[dict]) -> str:
 def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = False) -> str:
     if placeholder:
         return ("<article class='quote-card quote-pending' data-market='us_treasury'>"
-                "<div class='quote-top'><div><span class='quote-kicker'>RATES</span><h2>US TREASURY 10Y</h2></div>"
-                "<span class='pill warn'>SOURCE PENDING</span></div><div class='quote-main'><strong>N/A</strong>"
+                f"<div class='quote-top'><div class='asset-identity'>{asset_icon('us_treasury')}<div><span class='quote-kicker'>RATES</span><h2>US TREASURY 10Y</h2></div></div>"
+                f"<span class='pill warn'>SOURCE PENDING</span>{source_badge(None, 'MISSING')}</div><div class='quote-main'><strong>N/A</strong>"
                 "<span class='spark-missing'>NO VERIFIED SERIES</span></div>"
                 "<p class='quote-sub'>2Y / 10Y / real yield are not integrated.</p>"
                 "<div class='quote-foot'><span>As of —</span><span>NOT_AVAILABLE</span></div></article>")
@@ -436,7 +449,8 @@ def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = Fa
     as_of = plan.get("as_of") or series.get("as_of") or "—"
     direction = plan.get("direction") or "UNDETERMINED"
     decision = plan.get("decision") or "NO_TRADE"
-    source_grade = series.get("source_grade") or "—"
+    source_grade = series.get("source_grade")
+    retrieval_status = series.get("retrieval_status") or series.get("status")
     secondary = ""
     if key == "lme_zinc":
         reference = plan.get("reference") or {}
@@ -447,9 +461,9 @@ def _market_card(snapshot: dict, key: str, title: str, *, placeholder: bool = Fa
         if latest_contract:
             secondary = f"<p class='quote-sub'>Contract {_esc(latest_contract)}</p>"
     return f"""<article class='quote-card' data-market='{_esc(key)}'>
-    <div class='quote-top'><div><span class='quote-kicker'>{'SPOT PRIMARY' if key == 'lme_zinc' else 'VALIDATED REFERENCE'}</span><h2>{_esc(title)}</h2></div><span class='pill {_decision_class(decision)}'>{_esc(direction)}</span></div>
+    <div class='quote-top'><div class='asset-identity'>{asset_icon(key)}<div><span class='quote-kicker'>{'SPOT PRIMARY' if key == 'lme_zinc' else 'VALIDATED REFERENCE'}</span><h2>{_esc(title)}</h2></div></div><span class='pill {_decision_class(decision)}'>{_esc(direction)}</span></div>
     <div class='quote-main'><strong>{fmt(value,2)}</strong><span class='quote-unit'>{_esc(unit)}</span>{_spark_path(series.get('chart_points', []))}</div>
-    {secondary}<div class='quote-foot'><span>As of {_esc(as_of)}</span><span>{_esc(source_grade)} · {_esc(decision)}</span></div></article>"""
+    {secondary}<div class='quote-foot'><span>As of {_esc(as_of)} · {_esc(decision)}</span>{source_badge(source_grade, retrieval_status)}</div></article>"""
 
 
 def _today_market_cards(snapshot: dict) -> str:
@@ -607,6 +621,7 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 .notice.warn{{background:#fff3e8;color:#7d4d29}}.footer{{color:#62798a}}
 @media(max-width:1100px){{.site-shell{{grid-template-columns:1fr}}.side-nav{{position:sticky;top:0;min-height:0;display:flex;gap:4px;overflow-x:auto;padding:7px 10px;border-right:0;border-bottom:1px solid #d4dce2}}.side-nav a{{white-space:nowrap;margin:0}}.side-nav .nav-sep{{display:none}}.cockpit-banner,.today-hero{{grid-template-columns:1fr}}.quote-grid{{grid-template-columns:repeat(2,minmax(0,1fr))}}}}
 @media(max-width:680px){{.site-header .top{{padding:14px}}.site-header h1{{font-size:22px}}.side-nav .nav-icon{{display:none}}.trend-band{{min-width:560px}}.trend-ribbon{{overflow-x:auto}}.today-metrics,.watch-levels,.today-rules{{grid-template-columns:1fr 1fr}}.today-hero .posture{{font-size:31px}}.quote-grid{{grid-template-columns:1fr}}.quote-main strong{{font-size:29px}}.today-watch>div:not(.eyebrow){{grid-template-columns:1fr}}}}
+{VISUAL_CSS}
 </style></head><body>
 <header class='site-header'><div class='top'><div><h1>GLOBAL MACRO RESEARCH DESK</h1><div class='muted'>Daily decision brief · evidence first · execution requires a private live quote</div></div><div><b>{_esc(snapshot.get('run_date'))}</b><br><span class='muted'>Model {_esc(snapshot.get('model_version'))} · RESEARCH ONLY</span></div></div></header>
 <div class='site-shell'><nav class='side-nav' aria-label='Research sections'>
@@ -615,6 +630,7 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 <a href='radar.html'><span class='nav-icon'>⌁</span>RADAR</a>
 <a href='journal.html'><span class='nav-icon'>□</span>JOURNAL</a></nav>
 <main class='wrap'><div class='grid'>
+<section class='s12'>{source_legend()}</section>
 {_today_market_cards(snapshot)}
 {_today_posture(snapshot)}
 {_today_changes(snapshot)}

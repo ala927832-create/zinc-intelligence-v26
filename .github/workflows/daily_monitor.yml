@@ -70,6 +70,9 @@ jobs:
       - name: Phase 0 durable baseline guardrails
         run: python -m unittest -q test_phase0_guardrails.py
 
+      - name: Phase 1 visual language and data identity test
+        run: python -m unittest -q test_visual_language.py
+
       - name: SHFE official daily OHLC test
         run: python -m unittest -q test_shfe_research.py
 
