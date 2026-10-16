@@ -1,0 +1,65 @@
+name: One approved LINE B1 preview — 2026-10-16
+on:
+  push:
+    branches: [line-b1-preview-20261016]
+    paths: [.github/workflows/line_one_approved.yml]
+permissions:
+  contents: read
+concurrency:
+  group: line-b1-preview-20261016-once
+  cancel-in-progress: false
+jobs:
+  send-once:
+    if: "github.event.head_commit.message == 'test: send one approved LINE B1 preview 2026-10-16'"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 42e5404c040ff89264f3bd8121f98feaa058d85c
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Validate and push one approved formal-data Flex message
+        env:
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        run: |
+          python - <<'PY'
+          import os,json,time,uuid
+          from pathlib import Path
+          from datetime import datetime,timezone
+          import requests
+          from zincintel.line_flex import build_daily_flex,validate_structure
+          from zincintel.line_notify import validate_line_message
+          if datetime.now(timezone.utc)>=datetime(2026,10,16,10,tzinfo=timezone.utc):
+              raise RuntimeError('One-off authorization window expired; do not resend')
+          token=os.environ['LINE_CHANNEL_ACCESS_TOKEN'].strip()
+          user=os.environ['LINE_USER_ID'].strip()
+          if not token or not user:raise RuntimeError('Configured LINE Secrets unavailable')
+          snapshot=json.loads(Path('data/latest_snapshot.json').read_text())
+          message=build_daily_flex(snapshot)
+          message['altText']='版本B1正式資料試傳｜'+message['altText']
+          validate_structure(message)
+          validate_line_message(message,token)
+          print('LINE official format validation: PASS')
+          headers={'Authorization':f'Bearer {token}','Content-Type':'application/json',
+                   'X-Line-Retry-Key':str(uuid.uuid5(uuid.NAMESPACE_URL,'https://ala927832-create.github.io/zinc-intelligence-v26/approved-line-b1-preview-20261016-1551'))}
+          payload={'to':user,'messages':[message]}
+          for attempt in range(3):
+              try:
+                  response=requests.post('https://api.line.me/v2/bot/message/push',headers=headers,json=payload,timeout=20)
+                  if response.status_code==409 and response.headers.get('x-line-accepted-request-id'):
+                      print('LINE_PUSH_ALREADY_ACCEPTED; no duplicate message');break
+                  if response.status_code>=500 and attempt<2:
+                      time.sleep(2**(attempt+1));continue
+                  response.raise_for_status()
+                  print('LINE_PUSH_ACCEPTED: one version B message; device receipt not independently verified')
+                  print('Snapshot run_time:',snapshot.get('run_time'))
+                  break
+              except (requests.Timeout,requests.ConnectionError):
+                  if attempt==2:raise
+                  time.sleep(2**(attempt+1))
+          PY
