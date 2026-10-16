@@ -55,4 +55,45 @@ class RadarUpgradeTest(unittest.TestCase):
         self.assertIn('60筆日期',markup)
         self.assertNotIn('atr14',markup)
 
+class RadarEvidenceTest(unittest.TestCase):
+    def test_bls_html_fallback_dst_and_requires_explicit_timezone(self):
+        from zincintel.official_events import parse_bls_list
+        raw='<p>All times Eastern Time</p><table class="release-list"><tr><td class="date-cell">Friday, November 6, 2026</td><td class="time-cell">08:30 AM</td><td class="desc-cell"><strong>Employment Situation</strong></td></tr></table>'
+        self.assertIn('2026-11-06 21:30',parse_bls_list(raw)[0]['taipei_display'])
+        self.assertEqual(parse_bls_list(raw.replace('Eastern Time','Unknown')),[])
+
+    def test_bls_failure_uses_official_html_and_reports_partial_coverage(self):
+        from zincintel.official_events import fetch_events
+        from types import SimpleNamespace
+        raw='<p>Eastern Time</p><table class="release-list"><tr><td class="date-cell">Friday, November 6, 2026</td><td class="time-cell">08:30 AM</td><td class="desc-cell"><strong>Employment Situation</strong></td></tr></table>'
+        def get(url,**kw):
+            if '11_sched_list' in url:return SimpleNamespace(text=raw,raise_for_status=lambda:None)
+            raise TimeoutError()
+        with patch('zincintel.official_events.requests.get',side_effect=get):
+            data=fetch_events(datetime(2026,10,16,tzinfo=timezone.utc))
+        self.assertEqual(data['sources']['BLS']['status'],'PARTIAL')
+        self.assertEqual(data['upcoming'][0]['source_url'],'https://www.bls.gov/schedule/2026/11_sched_list.htm')
+
+    def test_event_seven_days_boundary_and_far_events_collapsed(self):
+        from zincintel.official_events import event_panel
+        def ev(day):return dict(title='event'+day,date=day,sort_time=day+'T08:00:00+08:00',taipei_display=day,markets='Gold',watch='watch',source_url='https://www.bls.gov',source='BLS',status='SCHEDULED_NOT_RELEASED',time_precision='EXACT')
+        markup=event_panel({'market_research':{'events':{'checked_at':'2026-10-16T00:00:00+00:00','upcoming':[ev('2026-10-22'),ev('2026-10-23')]}}})
+        split=markup.index('<details>')
+        self.assertIn('event2026-10-22',markup[:split]);self.assertNotIn('event2026-10-23',markup[:split])
+        self.assertNotIn('<details open',markup)
+
+    def test_evidence_preserves_dates_and_explains_opposite_horizons(self):
+        from zincintel.radar_evidence import evidence_rows
+        from zincintel.radar import radar_body
+        snap={'decision_book':{'markets':{'gold':{'direction':'BEAR'}}},'market_research':{'cross_assets':{'gold':{'status':'AVAILABLE','as_of':'2026-10-15','chart_points':[{'date':'2026-10-14','close':100},{'date':'2026-10-15','close':102}]}}},'market':{'lme_cash':100,'lme_3m':99,'field_sources':{'lme_cash':{'as_of':'2026-10-15'},'lme_3m':{'as_of':'2026-10-14'}}}}
+        old=deepcopy(snap);rows=evidence_rows(snap)
+        self.assertIn('當日反向',rows[0]['technical'])
+        self.assertNotIn('同日Cash−3M',rows[3]['evidence'])
+        self.assertEqual(old,snap)
+        html=radar_body(snap)
+        markers=['daily-three','evidence-matrix','macro-history','event-clock','radar-sources']
+        positions=[html.index('id="'+m+'"') if 'id="'+m+'"' in html else html.index("id='"+m+"'") for m in markers]
+        self.assertEqual(positions,sorted(positions))
+        self.assertIn('BLS',html)
+
 if __name__=='__main__':unittest.main()

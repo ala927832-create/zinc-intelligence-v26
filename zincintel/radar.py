@@ -15,7 +15,7 @@ def rates_panel(snapshot):
         rows.append(f"<tr><td>{label}</td><td>{n(r.get('value'),'%')}</td><td>{n(r.get('change_1d_bp'),' bp')}</td><td>{n(r.get('change_5d_bp'),' bp')}</td><td>{e(r.get('as_of'))}<br>{e(r.get('status','MISSING'))} · {e(r.get('retrieval_status'))}</td><td>{channel}<br>{source_badge(r.get('source_grade'),r.get('retrieval_status') if r.get('status')=='AVAILABLE' else 'MISSING')} <a href='{e(r.get('source_url') or 'https://home.treasury.gov/treasury-daily-interest-rate-xml-feed')}'>官方資料</a></td></tr>")
     a,b=rates.get('us10y',{}),rates.get('us2y',{})
     slope=n((a['value']-b['value'])*100,' bp') if a.get('status')==b.get('status')=='AVAILABLE' and a.get('as_of')==b.get('as_of') else 'N/A（日期或狀態不一致）'
-    return ("<section class='card'><h2>美債與實質殖利率 · Treasury evidence</h2><p>官方Par Yield／Par Real Yield日資料；1D／5D指有效發布筆數，非盤中報價。1個百分點＝100 bp。</p><div class='table-wrap'><table><tr><th>因素</th><th>最新水準</th><th>1D</th><th>5D</th><th>資料日期／狀態</th><th>影響管道／來源</th></tr>"+''.join(rows)+f"</table></div><p>10Y−2Y曲線：{slope}。曲線形狀是描述，不能單獨推論景氣或Fed下一步。</p></section>")
+    return ("<section class='card' id='treasury-evidence'><h2>美債與實質殖利率 · Treasury evidence</h2><p>官方Par Yield／Par Real Yield日資料；1D／5D指有效發布筆數，非盤中報價。1個百分點＝100 bp。</p><div class='table-wrap'><table><tr><th>因素</th><th>最新水準</th><th>1D</th><th>5D</th><th>資料日期／狀態</th><th>影響管道／來源</th></tr>"+''.join(rows)+f"</table></div><p>10Y−2Y曲線：{slope}。曲線形狀是描述，不能單獨推論景氣或Fed下一步。</p></section>")
 
 def _aligned(rate,series):
     if rate.get('status')!='AVAILABLE' or series.get('status')!='AVAILABLE':return None
@@ -44,22 +44,13 @@ def radar_body(snapshot):
         if a is not None and b is not None:
             alignment='短端與長端方向相反，不能描述為利率全面上升或下降。' if a*b<0 else '短端與長端須連同實質利率分別判讀；沒有單一利率結論。'
             rate_summary=f"截至 {short.get('as_of')}，2Y一日 {a:+.1f} bp，10Y一日 {b:+.1f} bp；{alignment}"
-    intro=("<section class='card'><h2>今日宏觀研究導覽</h2><p>先看利率與美元實際變動，再核對商品有無同步確認；以下屬描述性背景，不改變既有Trigger或交易權限。</p>"
-           f"<p>{e(rate_summary)}</p><p>{dollar}</p><p>已排定事件見官方事件時鐘；突發新聞未查核，不能把空白解讀為沒有重大事件。</p></section>")
-    cards=[]
-    for key,label in [('gold','黃金'),('usdjpy','美元／日圓'),('dxy','美元指數'),('lme_zinc','LME鋅'),('shfe_zinc','SHFE鋅')]:
-        plan=snapshot.get('decision_book',{}).get('markets',{}).get(key,{})
-        factor='real10y' if key=='gold' else 'us2y'
-        aligned=_aligned(rates.get(factor,{}),_market_series(snapshot,key))
-        observation='日期／資料不足，未確認跨市場同步關係。'
-        if aligned:
-            day,bp,ret=aligned
-            expected=-1 if key=='gold' else 1 if key in ('dxy','usdjpy') else 0
-            if abs(bp)<0.5 or abs(ret)<0.01: verdict='變動接近零，方向關係不具辨識力'
-            elif expected==0:verdict='僅並列觀察；美債不是鋅的直接供需證據'
-            elif bp*ret*expected>0:verdict='方向與一般影響管道一致；不代表已證明因果'
-            else:verdict='證據衝突：價格未按一般管道反應，須找其他證據'
-            observation=f'共同日期 {day}：利率變動 {bp:+.1f} bp，商品Close變動 {ret:+.2f}%；{verdict}。'
-        channel={'gold':'實質利率上升一般增加黃金持有機會成本；美元也須獨立核對。','usdjpy':'美國短端利率是美元條件之一；缺日本2Y、政策與干預證據，不能計算美日利差。','dxy':'美國短端利率與美元方向並列；缺其他國家利率及成分貢獻，無法完成相對利率判斷。','lme_zinc':'美元與利率屬外部環境；Cash−3M、庫存與TC才是另外的實體證據，須逐項核對日期。','shfe_zinc':'美元與美債只提供外部背景；缺人民幣調整比價、需求及套利成本，不直接套用LME結論。'}[key]
-        cards.append(f"<article class='card half'><h2>{asset_icon(key,compact=True)} {label} · {e(plan.get('direction'))}</h2><p><b>影響管道｜</b>{channel}</p><p><b>當次驗證｜</b>{e(observation)}</p><p><b>下一觀察｜</b>觀察下一個共同資料日是否延續；進場仍依商品頁的Trigger、失效與執行條件。</p><a href='market-{key}.html'>查看商品證據與計畫 →</a></article>")
-    return "<div class='grid'>"+brief_panel(snapshot)+intro+comparison_chart(snapshot)+event_panel(snapshot)+rates_panel(snapshot)+f"<section class='card'><h2>美元因素</h2><p>{dollar}</p><p>美元走強對美元計價商品通常形成外部壓力；此為分析管道，需商品價格與專屬供需確認。</p></section>"+''.join(cards)+"</div>"
+    from .radar_evidence import evidence_rows
+    rows=[]
+    for x in evidence_rows(snapshot):
+        rows.append(f"<tr><td>{asset_icon(x['key'],compact=True)} <a href='market-{x['key']}.html'>{e(x['label'])}</a><br>{e(x['as_of'])}</td><td>{e(x['technical'])}</td><td>{e(x['macro'])}</td><td>{e(x['evidence'])}</td><td>{e(x['missing'])}<details><summary>確認／反證條件</summary><p><b>確認｜</b>{e(x['confirm'])}</p><p><b>反證｜</b>{e(x['refute'])}</p></details></td></tr>")
+    matrix="<section class='card' id='evidence-matrix'><h2>商品證據矩陣 · 今日宏觀研究導覽</h2><p>技術方向是中期分類；宏觀欄只核對當日影響管道，並非宏觀評分或交易核准。當次驗證｜比較日期與方向；下一觀察｜展開各商品確認與反證條件。</p><div class='table-wrap'><table><thead><tr><th>商品／技術日期</th><th>技術方向與時間尺度</th><th>宏觀順逆風／證據衝突</th><th>商品專屬證據</th><th>尚未確認／觀察條件</th></tr></thead><tbody>"+''.join(rows)+"</tbody></table></div></section>"
+    sources=snapshot.get('market_research',{}).get('events',{}).get('sources',{})
+    missing=[k for k in ('BLS','Fed','BoJ','NBS') if sources.get(k,{}).get('status')!='VERIFIED_FETCH']
+    warning="<aside class='card' role='status'><b>影響判斷的缺口</b><p>"+e(('、'.join(missing)+' 事件覆蓋不完整；' if missing else ''))+"突發新聞未查核；LME無真實完整OHLC；跨市場同日同步不證明因果。沒有事件列不代表沒有重大事件。</p></aside>"
+    details="<section class='card' id='radar-sources'><h2>來源與限制</h2><details><summary>展開利率數值、來源與日期</summary>"+rates_panel(snapshot)+"<p>"+dollar+"</p></details><p>資料用途為研究背景；缺口、日期不一致與反證不會被隱藏，也不改變Trigger或交易權限。</p></section>"
+    return "<div class='grid'>"+brief_panel(snapshot)+warning+matrix+comparison_chart(snapshot)+event_panel(snapshot)+details+"</div>"

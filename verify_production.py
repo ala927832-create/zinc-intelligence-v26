@@ -120,10 +120,13 @@ def _id_block(raw_html: str, element_id: str) -> str:
     return parser.block
 
 
-def _table_row_text(raw_html: str, label: str) -> str:
+def _table_row_text(raw_html: str, label: str, *, first_cell_exact: bool = False) -> str:
     for block in re.findall(r"<tr\b[^>]*>(.*?)</tr>", raw_html, flags=re.IGNORECASE | re.DOTALL):
         text = _visible_text(block)
-        if _norm(label) in _norm(text):
+        first=re.search(r'<t[dh]\b[^>]*>(.*?)</t[dh]>',block,re.DOTALL | re.IGNORECASE)
+        if first_cell_exact:
+            if first and _norm(_visible_text(first[1]))==_norm(label):return text
+        elif _norm(label) in _norm(text):
             return text
     return ""
 
@@ -196,11 +199,25 @@ def main() -> int:
     failures: list[str] = []
 
     radar_html = _fetch(urljoin(page_url, 'radar.html'), run_id, marker='Treasury evidence')
-    for marker in ('今日宏觀研究導覽', '當次驗證｜', '下一觀察｜', '缺日本2Y', '突發新聞未查核', 'Official event clock', 'radar-history-data', '每日三項摘要'):
+    for marker in ('今日宏觀研究導覽', '當次驗證｜', '下一觀察｜', '缺日本2Y', '突發新聞未查核', 'Official event clock', 'radar-history-data', '每日三項摘要', '商品證據矩陣', '確認／反證條件', '影響判斷的缺口', '其餘已驗證事件'):
         _expect(radar_html, marker, failures, f'Radar context {marker}')
+    order_ids=('daily-three','evidence-matrix','macro-history','event-clock','radar-sources')
+    positions=[]
+    for element_id in order_ids:
+        match=re.search(r'''id=["']'''+re.escape(element_id)+r'''["']''',radar_html)
+        positions.append(match.start() if match else -1)
+    if -1 in positions or positions!=sorted(positions):
+        failures.append('Radar reading order differs from approved structure')
+    event_block=_id_block(radar_html,'event-clock')
+    if re.search(r'<details[^>]*\bopen\b',radar_html):
+        failures.append('Radar distant event details must default to collapsed')
+    for provider in ('BLS','Fed','BoJ','NBS'):
+        state=snapshot.get('market_research',{}).get('events',{}).get('sources',{}).get(provider,{})
+        if state.get('status')!='VERIFIED_FETCH':
+            _expect(radar_html, provider, failures, 'event coverage gap')
     today_brief=_id_block(raw_html, 'daily-three')
     radar_brief=_id_block(radar_html, 'daily-three')
-    for marker in ('主要變化', '證據核對', '下一關卡'):
+    for marker in ('主要變化', '重要矛盾', '下一關卡'):
         _expect(today_brief,marker,failures,'Today daily brief')
     if _norm(today_brief)!=_norm(radar_brief):
         failures.append('Today and Radar daily brief texts differ')
@@ -211,7 +228,7 @@ def main() -> int:
     for key, rate in snapshot.get('market_research', {}).get('rates', {}).items():
         label = {'us2y':'美國2Y', 'us10y':'美國10Y', 'us30y':'美國30Y', 'real10y':'美國10Y實質'}.get(key)
         if not label:continue
-        row = _table_row_text(radar_html, label)
+        row = _table_row_text(radar_html, label, first_cell_exact=True)
         for field, suffix in (('value','%'),('change_1d_bp',' bp'),('change_5d_bp',' bp')):
             value=rate.get(field)
             if value is not None:

@@ -42,6 +42,37 @@ def parse_bls(raw):
         out.append(event(title,dt,'BLS',True))
     return out
 
+def parse_bls_list(raw):
+    """Official monthly list; never infer a day or clock from release conventions."""
+    soup=BeautifulSoup(raw,'html.parser');out=[]
+    if 'Eastern Time' not in soup.get_text(' ',strip=True):return out
+    for row in soup.select('table.release-list tr'):
+        d,t,desc=(row.select_one('.'+k) for k in ('date-cell','time-cell','desc-cell'))
+        if d is None or t is None or desc is None:continue
+        title=desc.find('strong')
+        title=title.get_text(' ',strip=True) if title else ''
+        if title not in ('Consumer Price Index','Employment Situation'):continue
+        try:
+            dt=datetime.strptime(d.get_text(' ',strip=True)+' '+t.get_text(' ',strip=True),'%A, %B %d, %Y %I:%M %p').replace(tzinfo=ZoneInfo('America/New_York'))
+        except ValueError:continue
+        out.append(event(title,dt,'BLS',True))
+    return out
+
+def fetch_bls_months(now):
+    """Independent official HTML fallback covering every month in the 45-day window."""
+    months=sorted({(now.astimezone(ZoneInfo('Asia/Taipei')).date()+timedelta(days=i)).strftime('%Y/%m') for i in range(46)})
+    out=[];attempts=[]
+    for month in months:
+        url=f'https://www.bls.gov/schedule/{month}_sched_list.htm'
+        try:
+            r=requests.get(url,timeout=12);r.raise_for_status();items=parse_bls_list(r.text)
+            attempts.append({'url':url,'status':'VERIFIED_FETCH' if items else 'UNPARSED'})
+            for x in items:x['source_url']=url
+            out.extend(items)
+        except Exception as exc:attempts.append({'url':url,'status':'UNAVAILABLE','error':type(exc).__name__})
+    status='VERIFIED_FETCH' if all(x['status']=='VERIFIED_FETCH' for x in attempts) else 'PARTIAL' if out else 'UNAVAILABLE'
+    return out,{'status':status,'checked_at':now.isoformat(),'url':attempts[0]['url'],'method':'OFFICIAL_MONTHLY_HTML_FALLBACK','attempts':attempts}
+
 def parse_fed(raw):
     soup=BeautifulSoup(raw,'html.parser');out=[]
     for panel in soup.select('.panel'):
@@ -117,10 +148,14 @@ def fetch_events(now=None):
                 if urlsplit(source_url).hostname!='www.stats.gov.cn':raise ValueError('unexpected_calendar_host')
                 response=requests.get(source_url,timeout=15);response.raise_for_status();response.encoding='utf-8'
             events=parser(response.text)
+            if name=='BLS' and not events:raise ValueError('empty_bls_ics')
             for item in events:item['source_url']=source_url
             sources[name]={'status':'VERIFIED_FETCH' if events else 'UNPARSED','checked_at':now.isoformat(),'url':source_url}
             out.extend(events)
-        except Exception as exc:sources[name]={'status':'UNAVAILABLE','error':type(exc).__name__,'checked_at':now.isoformat(),'url':URLS[name]}
+        except Exception as exc:
+            if name=='BLS':
+                events,state=fetch_bls_months(now);state['primary_error']=type(exc).__name__;sources[name]=state;out.extend(events)
+            else:sources[name]={'status':'UNAVAILABLE','error':type(exc).__name__,'checked_at':now.isoformat(),'url':URLS[name]}
     day=now.astimezone(ZoneInfo('Asia/Taipei')).date()
     upcoming=[]
     for item in out:
@@ -135,7 +170,16 @@ def fetch_events(now=None):
 def event_panel(snapshot):
     from html import escape as e
     data=snapshot.get('market_research',{}).get('events',{})
-    rows=''.join(f"<tr><td>{e(x['title'])}</td><td>{e(x['taipei_display'])}</td><td>{e(x['markets'])}</td><td>{e(x['watch'])}</td><td><a href='{e(x['source_url'])}'>{e(x['source'])}</a> · {e(x['status'])}</td></tr>" for x in data.get('upcoming',[]))
-    states=' · '.join(f"{k}: {v.get('status')} ({v.get('checked_at')})" for k,v in data.get('sources',{}).items())
-    return ("<section class='card' id='event-clock'><h2>官方事件時鐘 · Official event clock</h2><p>已排定事件，不是實際公布結果；沒有可靠共識預估，不判定超出預期。日期型事件不推算發布時刻。</p>"
-            f"<p>{e(states or '尚未查核')}</p><div class='table-wrap'><table><tr><th>事件</th><th>時間／日期</th><th>商品</th><th>觀察條件</th><th>來源／狀態</th></tr>{rows or '<tr><td colspan=5>無已驗證近期排程；不代表沒有重大事件。</td></tr>'}</table></div><p>未來45日排程可修訂，以官方連結為準。突發新聞未查核；中國僅涵蓋NBS國民經濟與PMI。請留意來源UNAVAILABLE／UNPARSED狀態。</p></section>")
+    checked=data.get('checked_at')
+    try:today=datetime.fromisoformat(checked).astimezone(ZoneInfo('Asia/Taipei')).date()
+    except (TypeError,ValueError):today=None
+    near=[];later=[]
+    for x in data.get('upcoming',[]):
+        try:day=datetime.fromisoformat(x['sort_time']).astimezone(ZoneInfo('Asia/Taipei')).date() if x.get('time_precision')=='EXACT' else date.fromisoformat(x['date'])
+        except (KeyError,ValueError):later.append(x);continue
+        (near if today and today<=day<today+timedelta(days=7) else later).append(x)
+    def table(items):
+        rows=''.join(f"<tr><td>{e(x['title'])}</td><td>{e(x['taipei_display'])}</td><td>{e(x['markets'])}</td><td>公布前：核對日期、價格位置與既有計畫。<br>公布後：{e(x['watch'])}<br>檢討：尚未匯入實際值與市場共識，不判定驚喜幅度。</td><td><a href='{e(x['source_url'])}'>{e(x['source'])}</a> · {e(x['status'])}</td></tr>" for x in items)
+        return "<div class='table-wrap'><table><tr><th>事件</th><th>時間／日期</th><th>商品</th><th>觀察流程</th><th>來源／狀態</th></tr>"+(rows or '<tr><td colspan=5>此區間無已驗證排程；不代表沒有重大事件。</td></tr>')+'</table></div>'
+    states=''.join(f"<li><a href='{e(v.get('url',''))}'>{e(k)}</a>: {e(v.get('status'))} · {e(v.get('checked_at'))} · {e(v.get('method','PRIMARY'))}</li>" for k,v in data.get('sources',{}).items())
+    return ("<section class='card' id='event-clock'><h2>近期事件 · Official event clock</h2><p>預設展開快照日起未來7日；較遠排程收合。已排定事件不是實際公布結果，日期型會議不推算公告時刻。</p><h3>未來7日</h3>"+table(near)+f"<details><summary>其餘已驗證事件（{len(later)}項；45日範圍）</summary>"+table(later)+"</details><details><summary>事件來源與覆蓋狀態</summary><ul>"+states+"</ul></details><p>排程可修訂，以官方連結為準。突發新聞未查核；中國僅涵蓋NBS國民經濟與PMI。來源缺失時不推算事件。</p></section>")
