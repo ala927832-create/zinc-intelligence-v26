@@ -10,6 +10,7 @@ class RadarUpgradeTest(unittest.TestCase):
     def test_bls_summer_winter_and_folded_lines(self):
         raw='BEGIN:VEVENT\nSUMMARY:Consumer Price Index\nDTSTART;TZID=US-Eastern:20261014T083000\nEND:VEVENT\nBEGIN:VEVENT\nSUMMARY:Employment Situation\nDTSTART;TZID=America/New_York:20261106T083000\nEND:VEVENT'
         events=parse_bls(raw)
+        self.assertEqual(parse_bls(raw.replace('SUMMARY:Employment Situation','SUMMARY:Employment Situation of Veterans'))[-1]['title'],'Consumer Price Index')
         self.assertIn('20:30',events[0]['taipei_display'])
         self.assertIn('21:30',events[1]['taipei_display'])
         self.assertEqual(parse_bls(raw.replace('TZID=US-Eastern:','VALUE=DATE:').split('END:VEVENT')[0]),[])
@@ -27,7 +28,7 @@ class RadarUpgradeTest(unittest.TestCase):
 
     def test_fetch_failure_is_not_no_event_claim(self):
         with patch('zincintel.official_events.requests.get',side_effect=TimeoutError):
-            data=fetch_events(datetime(2026,10,16,tzinfo=timezone.utc))
+            data=fetch_events(datetime(2026,10,16,tzinfo=timezone.utc),bls_cache_path=None)
         self.assertEqual(data['upcoming'],[])
         self.assertTrue(all(x['status']=='UNAVAILABLE' for x in data['sources'].values()))
         self.assertEqual(data['news_status'],'NOT_CHECKED')
@@ -70,9 +71,41 @@ class RadarEvidenceTest(unittest.TestCase):
             if '11_sched_list' in url:return SimpleNamespace(text=raw,raise_for_status=lambda:None)
             raise TimeoutError()
         with patch('zincintel.official_events.requests.get',side_effect=get):
-            data=fetch_events(datetime(2026,10,16,tzinfo=timezone.utc))
+            data=fetch_events(datetime(2026,10,16,tzinfo=timezone.utc),bls_cache_path=None)
         self.assertEqual(data['sources']['BLS']['status'],'PARTIAL')
         self.assertEqual(data['upcoming'][0]['source_url'],'https://www.bls.gov/schedule/2026/11_sched_list.htm')
+
+    def test_verified_calendar_cache_expires_and_rejects_tampered_provenance(self):
+        from zincintel.official_events import cached_bls,save_bls_cache,event
+        from tempfile import TemporaryDirectory
+        from pathlib import Path
+        import json
+        now=datetime(2026,10,16,tzinfo=timezone.utc)
+        item=event('Employment Situation',datetime(2026,11,6,13,30,tzinfo=timezone.utc),'BLS',True)
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'calendar.json';save_bls_cache([item],now,path)
+            items,meta=cached_bls(now,path)
+            self.assertEqual(items[0]['verification_status'],'CARRY_FORWARD_LAST_VERIFIED')
+            self.assertEqual(cached_bls(datetime(2026,10,24,tzinfo=timezone.utc),path),([],None))
+            self.assertEqual(cached_bls(datetime(2026,10,15,tzinfo=timezone.utc),path),([],None))
+            data=json.loads(path.read_text());data['events'][0]['source_url']='https://example.com/schedule/test';path.write_text(json.dumps(data))
+            self.assertEqual(cached_bls(now,path),([],None))
+
+    def test_runner_block_uses_cache_with_warning_and_original_verification_time(self):
+        from zincintel.official_events import fetch_events,save_bls_cache,event,event_panel
+        from zincintel.radar import radar_body
+        from tempfile import TemporaryDirectory
+        from pathlib import Path
+        now=datetime(2026,10,16,tzinfo=timezone.utc)
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'calendar.json'
+            save_bls_cache([event('Employment Situation',datetime(2026,11,6,13,30,tzinfo=timezone.utc),'BLS',True)],now,path)
+            with patch('zincintel.official_events.requests.get',side_effect=TimeoutError):data=fetch_events(now,bls_cache_path=path)
+        self.assertEqual(data['sources']['BLS']['status'],'CARRY_FORWARD_LAST_VERIFIED')
+        self.assertEqual(data['sources']['BLS']['last_verified_at'],now.isoformat())
+        self.assertIn('2026-11-06 21:30',event_panel({'market_research':{'events':data}}))
+        markup=radar_body({'market_research':{'events':data}})
+        self.assertIn('BLS',markup[markup.index("id='evidence-gaps'"):markup.index("id='evidence-matrix'")])
 
     def test_event_seven_days_boundary_and_far_events_collapsed(self):
         from zincintel.official_events import event_panel

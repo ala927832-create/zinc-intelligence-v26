@@ -214,7 +214,7 @@ def main() -> int:
     for provider in ('BLS','Fed','BoJ','NBS'):
         state=snapshot.get('market_research',{}).get('events',{}).get('sources',{}).get(provider,{})
         if state.get('status')!='VERIFIED_FETCH':
-            _expect(radar_html, provider, failures, 'event coverage gap')
+            _expect(_id_block(radar_html,'evidence-gaps'), provider, failures, 'prominent event coverage gap')
     today_brief=_id_block(raw_html, 'daily-three')
     radar_brief=_id_block(radar_html, 'daily-three')
     for marker in ('主要變化', '重要矛盾', '下一關卡'):
@@ -223,6 +223,9 @@ def main() -> int:
         failures.append('Today and Radar daily brief texts differ')
     for event in snapshot.get('market_research',{}).get('events',{}).get('upcoming',[]):
         event_rows=[_visible_text(row) for row in re.findall(r'<tr\b[^>]*>(.*?)</tr>',radar_html,re.DOTALL) if event['taipei_display'] in _visible_text(row)]
+        if event.get('verification_status')=='CARRY_FORWARD_LAST_VERIFIED':
+            if not any(event['title'] in row and event.get('last_verified_at','__missing__') in row and 'CARRY_FORWARD_LAST_VERIFIED' in row for row in event_rows):
+                failures.append(f"cached event provenance missing: {event['title']}")
         if not any(event['title'] in row for row in event_rows):
             failures.append(f"event row missing: {event['title']} {event['taipei_display']}")
     for key, rate in snapshot.get('market_research', {}).get('rates', {}).items():

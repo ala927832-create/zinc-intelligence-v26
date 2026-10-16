@@ -2,6 +2,8 @@
 from datetime import datetime, date, timedelta, timezone
 from zoneinfo import ZoneInfo
 import re
+import json
+from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlsplit
@@ -10,6 +12,8 @@ URLS={'BLS':'https://www.bls.gov/schedule/news_release/bls.ics',
       'Fed':'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
       'BoJ':'https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm',
       'NBS':'https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/'}
+BLS_CACHE_PATH=Path('data/reference/bls_calendar_verified.json')
+BLS_CACHE_MAX_DAYS=7
 MONTHS={name:i for i,name in enumerate(['January','February','March','April','May','June','July','August','September','October','November','December'],1)}
 
 def event(title,when,provider,exact=False):
@@ -28,7 +32,7 @@ def parse_bls(raw):
             if ':' in line:
                 k,v=line.split(':',1);fields[k]=v
         title=fields.get('SUMMARY','')
-        if not any(x in title.lower() for x in ('consumer price index','employment situation')):continue
+        if title.lower() not in ('consumer price index','employment situation'):continue
         item=next(((k,v) for k,v in fields.items() if k.startswith('DTSTART')),None)
         if not item:continue
         key,value=item
@@ -133,7 +137,28 @@ def parse_nbs(raw):
                 out.append(item)
     return out
 
-def fetch_events(now=None):
+def save_bls_cache(events,now,path):
+    if path is None:return
+    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_text(json.dumps({'verified_at':now.isoformat(),'events':events},ensure_ascii=False,indent=2),encoding='utf-8')
+
+def cached_bls(now,path):
+    if path is None:return [],None
+    try:
+        data=json.loads(Path(path).read_text(encoding='utf-8'))
+        verified=datetime.fromisoformat(data['verified_at'])
+        age=(now-verified).total_seconds()/86400
+        if not 0<=age<=BLS_CACHE_MAX_DAYS:return [],None
+        items=[]
+        for x in data['events']:
+            url=urlsplit(x['source_url']);dt=datetime.fromisoformat(x['sort_time'])
+            if x['source']!='BLS' or x['title'] not in ('Consumer Price Index','Employment Situation') or url.scheme!='https' or url.hostname!='www.bls.gov' or not url.path.startswith('/schedule/') or x['time_precision']!='EXACT' or dt.tzinfo is None or x['date']!=dt.date().isoformat():return [],None
+            item=event(x['title'],dt,'BLS',True);item['source_url']=x['source_url']
+            item['verification_status']='CARRY_FORWARD_LAST_VERIFIED';item['last_verified_at']=data['verified_at'];items.append(item)
+        return items,{'last_verified_at':data['verified_at'],'cache_age_days':round(age,3),'cache_max_days':BLS_CACHE_MAX_DAYS}
+    except (OSError,ValueError,KeyError,TypeError):return [],None
+
+def fetch_events(now=None,*,bls_cache_path=BLS_CACHE_PATH):
     now=now or datetime.now(timezone.utc);out=[];sources={}
     for name,parser in [('BLS',parse_bls),('Fed',parse_fed),('BoJ',parse_boj),('NBS',parse_nbs)]:
         try:
@@ -150,11 +175,18 @@ def fetch_events(now=None):
             events=parser(response.text)
             if name=='BLS' and not events:raise ValueError('empty_bls_ics')
             for item in events:item['source_url']=source_url
+            if name=='BLS':save_bls_cache(events,now,bls_cache_path)
             sources[name]={'status':'VERIFIED_FETCH' if events else 'UNPARSED','checked_at':now.isoformat(),'url':source_url}
             out.extend(events)
         except Exception as exc:
             if name=='BLS':
-                events,state=fetch_bls_months(now);state['primary_error']=type(exc).__name__;sources[name]=state;out.extend(events)
+                events,state=fetch_bls_months(now);state['primary_error']=type(exc).__name__
+                if state['status']=='VERIFIED_FETCH':save_bls_cache(events,now,bls_cache_path)
+                elif not events:
+                    cached,meta=cached_bls(now,bls_cache_path)
+                    if cached:
+                        events=cached;state.update(meta);state['status']='CARRY_FORWARD_LAST_VERIFIED';state['method']='LAST_VERIFIED_OFFICIAL_CALENDAR'
+                sources[name]=state;out.extend(events)
             else:sources[name]={'status':'UNAVAILABLE','error':type(exc).__name__,'checked_at':now.isoformat(),'url':URLS[name]}
     day=now.astimezone(ZoneInfo('Asia/Taipei')).date()
     upcoming=[]
@@ -179,7 +211,7 @@ def event_panel(snapshot):
         except (KeyError,ValueError):later.append(x);continue
         (near if today and today<=day<today+timedelta(days=7) else later).append(x)
     def table(items):
-        rows=''.join(f"<tr><td>{e(x['title'])}</td><td>{e(x['taipei_display'])}</td><td>{e(x['markets'])}</td><td>公布前：核對日期、價格位置與既有計畫。<br>公布後：{e(x['watch'])}<br>檢討：尚未匯入實際值與市場共識，不判定驚喜幅度。</td><td><a href='{e(x['source_url'])}'>{e(x['source'])}</a> · {e(x['status'])}</td></tr>" for x in items)
+        rows=''.join(f"<tr><td>{e(x['title'])}</td><td>{e(x['taipei_display'])}</td><td>{e(x['markets'])}</td><td>公布前：核對日期、價格位置與既有計畫。<br>公布後：{e(x['watch'])}<br>檢討：尚未匯入實際值與市場共識，不判定驚喜幅度。</td><td><a href='{e(x['source_url'])}'>{e(x['source'])}</a> · {e(x['status'])}<br>{e(x.get('verification_status','CURRENT_FETCH'))} {e(x.get('last_verified_at',''))}</td></tr>" for x in items)
         return "<div class='table-wrap'><table><tr><th>事件</th><th>時間／日期</th><th>商品</th><th>觀察流程</th><th>來源／狀態</th></tr>"+(rows or '<tr><td colspan=5>此區間無已驗證排程；不代表沒有重大事件。</td></tr>')+'</table></div>'
-    states=''.join(f"<li><a href='{e(v.get('url',''))}'>{e(k)}</a>: {e(v.get('status'))} · {e(v.get('checked_at'))} · {e(v.get('method','PRIMARY'))}</li>" for k,v in data.get('sources',{}).items())
+    states=''.join(f"<li><a href='{e(v.get('url',''))}'>{e(k)}</a>: {e(v.get('status'))} · {e(v.get('checked_at'))} · {e(v.get('method','PRIMARY'))} · 最後核對 {e(v.get('last_verified_at') or v.get('checked_at'))} · 沿用 {e(str(v.get('cache_age_days','N/A')))} 日</li>" for k,v in data.get('sources',{}).items())
     return ("<section class='card' id='event-clock'><h2>近期事件 · Official event clock</h2><p>預設展開快照日起未來7日；較遠排程收合。已排定事件不是實際公布結果，日期型會議不推算公告時刻。</p><h3>未來7日</h3>"+table(near)+f"<details><summary>其餘已驗證事件（{len(later)}項；45日範圍）</summary>"+table(later)+"</details><details><summary>事件來源與覆蓋狀態</summary><ul>"+states+"</ul></details><p>排程可修訂，以官方連結為準。突發新聞未查核；中國僅涵蓋NBS國民經濟與PMI。來源缺失時不推算事件。</p></section>")

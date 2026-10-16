@@ -41,7 +41,9 @@ def evidence_rows(snapshot):
             else:
                 expected=-1 if key=='gold' else 1
                 verdict='變動接近零，辨識力不足' if abs(bp)<.5 or abs(change)<.01 else '當日管道一致，未證明因果' if bp*change*expected>0 else '當日管道衝突，其他因素待查'
-                macro=f'{day}：{factor} {bp:+.1f} bp，Close {change:+.2f}%；{verdict}。'
+                factor_label='10Y實質殖利率' if key=='gold' else '美國2Y'
+                channel=('實質利率下降，黃金機會成本管道為順風' if bp<0 else '實質利率上升，黃金機會成本管道為逆風' if bp>0 else '實質利率持平') if key=='gold' else '美國利率只提供背景，相對利差仍待核對'
+                macro=f'{day}：{factor_label} {bp:+.1f} bp，Close {change:+.2f}%；{channel}；{verdict}。'
         evidence='專屬證據尚未完成；不把宏觀背景充當商品確認。'
         if key=='lme_zinc':
             market=snapshot.get('market',{});src=market.get('field_sources',{});parts=[]

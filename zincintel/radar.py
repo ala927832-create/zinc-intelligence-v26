@@ -48,9 +48,9 @@ def radar_body(snapshot):
     rows=[]
     for x in evidence_rows(snapshot):
         rows.append(f"<tr><td>{asset_icon(x['key'],compact=True)} <a href='market-{x['key']}.html'>{e(x['label'])}</a><br>{e(x['as_of'])}</td><td>{e(x['technical'])}</td><td>{e(x['macro'])}</td><td>{e(x['evidence'])}</td><td>{e(x['missing'])}<details><summary>確認／反證條件</summary><p><b>確認｜</b>{e(x['confirm'])}</p><p><b>反證｜</b>{e(x['refute'])}</p></details></td></tr>")
-    matrix="<section class='card' id='evidence-matrix'><h2>商品證據矩陣 · 今日宏觀研究導覽</h2><p>技術方向是中期分類；宏觀欄只核對當日影響管道，並非宏觀評分或交易核准。當次驗證｜比較日期與方向；下一觀察｜展開各商品確認與反證條件。</p><div class='table-wrap'><table><thead><tr><th>商品／技術日期</th><th>技術方向與時間尺度</th><th>宏觀順逆風／證據衝突</th><th>商品專屬證據</th><th>尚未確認／觀察條件</th></tr></thead><tbody>"+''.join(rows)+"</tbody></table></div></section>"
+    matrix="<section class='card' id='evidence-matrix'><h2>商品證據矩陣 · 今日宏觀研究導覽</h2><p>技術方向是中期分類；宏觀欄只核對當日影響管道，並非宏觀評分或交易核准。當次驗證｜比較日期與方向；下一觀察｜展開各商品確認與反證條件。</p><p>窄螢幕可橫向滑動矩陣；各商品確認與反證條件可展開。</p><div class='table-wrap'><table style='min-width:1000px;table-layout:fixed'><thead><tr><th>商品／技術日期</th><th>技術方向與時間尺度</th><th>宏觀順逆風／證據衝突</th><th>商品專屬證據</th><th>尚未確認／觀察條件</th></tr></thead><tbody>"+''.join(rows)+"</tbody></table></div></section>"
     sources=snapshot.get('market_research',{}).get('events',{}).get('sources',{})
     missing=[k for k in ('BLS','Fed','BoJ','NBS') if sources.get(k,{}).get('status')!='VERIFIED_FETCH']
-    warning="<aside class='card' role='status'><b>影響判斷的缺口</b><p>"+e(('、'.join(missing)+' 事件覆蓋不完整；' if missing else ''))+"突發新聞未查核；LME無真實完整OHLC；跨市場同日同步不證明因果。沒有事件列不代表沒有重大事件。</p></aside>"
+    warning="<aside class='card' id='evidence-gaps' role='status'><b>影響判斷的缺口</b><p>"+e(('、'.join(missing)+' 事件覆蓋非即時完整查核；' if missing else ''))+"BLS沿用排程時會標示最後核對時間，最長7日，逾期不使用。突發新聞未查核；LME無真實完整OHLC；跨市場同日同步不證明因果。沒有事件列不代表沒有重大事件。</p></aside>"
     details="<section class='card' id='radar-sources'><h2>來源與限制</h2><details><summary>展開利率數值、來源與日期</summary>"+rates_panel(snapshot)+"<p>"+dollar+"</p></details><p>資料用途為研究背景；缺口、日期不一致與反證不會被隱藏，也不改變Trigger或交易權限。</p></section>"
     return "<div class='grid'>"+brief_panel(snapshot)+warning+matrix+comparison_chart(snapshot)+event_panel(snapshot)+details+"</div>"
