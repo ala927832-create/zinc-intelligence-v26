@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 from pathlib import Path
 
 from .utils import PUBLIC_DIR
@@ -76,7 +77,7 @@ STYLE += """
 @media(max-width:620px){.market-lower{grid-template-columns:1fr}.chart-panel .chart{height:215px}.market-tabs{grid-template-columns:repeat(2,1fr)}.market-kpis{grid-template-columns:repeat(2,1fr)}.key-levels{grid-template-columns:1fr}}
 """
 
-from .final_layout import CSS as AB_CSS, compass, CHART_JS
+from .final_layout import CSS as AB_CSS, compass, CHART_JS, LABELS
 STYLE += AB_CSS
 STYLE += VISUAL_CSS
 STYLE += """
@@ -170,7 +171,7 @@ def _sparkline(series: dict, *, group: str | None = None, window: int | None = 1
             for coords in segments if len(coords) > 1
         )
     legend_keys = (["up", "down"] if has_ohlc else ["close"]) + [field for field, _, _, _ in line_specs]
-    return (f"<div class='chart' data-chart-mode='{mode}'><div class='chart-unit'>{_e(series.get('unit') or '')}</div><svg viewBox='0 0 800 190' role='img' aria-label='{label}'>"
+    return (f"<div class='chart' data-chart-mode='{mode}'><div class='chart-unit'>{_e(series.get('unit') or '')}</div><svg preserveAspectRatio='none' viewBox='0 0 800 190' role='img' aria-label='{label}'>"
             "<line x1='20' y1='35' x2='780' y2='35' stroke='#315775'/><line x1='20' y1='165' x2='780' y2='165' stroke='#315775'/>"
             f"{''.join(f'<line x1=\"20\" x2=\"780\" y1=\"{y(low+span*j/4):.1f}\" y2=\"{y(low+span*j/4):.1f}\" stroke=\"#315775\"/><text x=\"25\" y=\"{y(low+span*j/4)-3:.1f}\" fill=\"#bed0dc\" font-size=\"10\">{low+span*j/4:,.2f}</text>' for j in range(1,4))}{body}{''.join(overlays)}<text x='25' y='25' fill='#bed0dc' font-size='11'>{high:.2f}</text>"
             f"<text x='25' y='160' fill='#bed0dc' font-size='11'>{low:.2f}</text>{''.join(ticks)}"
@@ -210,7 +211,7 @@ def _rsi_chart(series: dict, window: int = 120) -> str:
     y = lambda value: 64 - max(0.0, min(100.0, value)) * .56
     coords = " ".join(f"{x(indexed[index]):.1f},{y(value):.1f}" for index, (_, value) in enumerate(points))
     latest = points[-1][1]
-    return ("<div class='rsi-chart' data-indicator='RSI14'><svg viewBox='0 0 800 72' role='img' "
+    return ("<div class='rsi-chart' data-indicator='RSI14'><svg preserveAspectRatio='none' viewBox='0 0 800 72' role='img' "
             "aria-label='Close based RSI14 synchronized with selected price window'>"
             f"<line x1='20' y1='{y(70):.1f}' x2='780' y2='{y(70):.1f}' stroke='#8f5d67' stroke-dasharray='4 4'/>"
             f"<line x1='20' y1='{y(30):.1f}' x2='780' y2='{y(30):.1f}' stroke='#4c806f' stroke-dasharray='4 4'/>"
@@ -342,6 +343,8 @@ def _treasury_placeholder() -> str:
 
 
 def _market_card(key: str, plan: dict, series: dict, snapshot: dict, open_by_default: bool = False) -> str:
+    if key == "lme_zinc":
+        series = {**series, "unit": "USD/t"}
     reference = plan.get("reference") or {}
     daily = plan.get("daily_plan", {})
     decision = plan.get("decision", "NO_TRADE")
@@ -467,12 +470,13 @@ def build_research_pages(snapshot: dict) -> list[Path]:
         detail = detail.replace("<summary>", "<header class='market-summary'>", 1).replace("</summary>", "</header>", 1)
         end = detail.rfind("</details>")
         detail = detail[:end] + "</section>" + detail[end + len("</details>"):]
+        detail = re.sub(r"<header class='market-summary'>.*?</header>", "", detail, count=1, flags=re.S)
         cash_note = ("<section class='rules'><b>LME Cash candlestick · SOURCE NOT VERIFIED</b>"
                      "<p>Cash Official Bid/Offer and Settlement are reference observations, not daily Open/High/Low/Close. "
                      "No verified Cash OHLC feed is connected. The 3M Close chart and SHFE candles below retain their own identities.</p>"
                      "<a href='https://www.lme.com/Market-data/Accessing-market-data/Historical-data' target='_blank' rel='noopener'>LME dataset catalogue</a></section>") if key == "lme_zinc" else ""
         pages[f"market-{key}.html"] = _page(plan.get("market", key), "Markets",
-            "<section class='market-stage'><h2>"+_e(plan.get('market',key))+"｜市場研究</h2>"+_market_tabs()+"</section>" + detail + execution_boundary + constitution, run_date)
+            "<section class='market-stage'><h2>"+_e(LABELS.get(key,plan.get('market',key)))+"｜市場研究</h2>"+_market_tabs()+"</section>" + detail + execution_boundary + constitution, run_date)
     pages["market-us_treasury.html"] = _page("US Rates", "Markets",
         market_intro + rates_panel(snapshot) + constitution, run_date)
     cards = "".join(_market_entry(snapshot,key,plan) for key,plan in visible_decisions)

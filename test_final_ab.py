@@ -18,6 +18,7 @@ class FinalAB(unittest.TestCase):
         original=copy.deepcopy(self.snapshot)
         doc=BeautifulSoup(today(self.snapshot),'html.parser')
         self.assertEqual(len(doc.select('.quote-card')),6)
+        self.assertIsNotNone(doc.select_one('#overview'))
         cash=doc.select_one('[data-market="lme_zinc"]')
         self.assertIsNone(cash.select_one('.market-spark'))
         self.assertIn('Cash 1D N/A',cash.get_text(' ',strip=True))
