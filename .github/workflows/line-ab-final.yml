@@ -7,7 +7,8 @@ permissions:
   contents: read
 jobs:
   send-one-approved-line:
-    if: github.event.head_commit.message == 'test: send one approved LINE A-B final preview 2026-10-16'
+    if: >-
+      github.event.head_commit.message == 'test: send one approved LINE A-B final preview 2026-10-16'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
