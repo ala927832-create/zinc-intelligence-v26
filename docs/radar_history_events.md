@@ -10,8 +10,10 @@
   Fed and BoJ HTML calendars supply final meeting dates. Date-only events do not
   acquire an assumed announcement time. All events are scheduled, not actuals.
 - Every run fetches the official sources anew; errors/parse failures are visible.
-  There is no silent calendar carry-forward. China calendars and unscheduled
-  news are explicitly not covered. No forecasts, consensus or surprise are made up.
+  There is no silent calendar carry-forward. Unscheduled news is explicitly
+  not covered. NBS annual-calendar discovery covers economic
+  performance and PMI; other China releases remain outside coverage. No forecasts,
+  consensus or surprise are made up.
 - Upcoming horizon is 45 days. Date-only meetings use the source's calendar date;
   exact timestamps are converted to Asia/Taipei. Source links remain authoritative.
 - Today, Radar and the LINE daily message call the same three-point function.
@@ -23,3 +25,4 @@ Official sources:
 https://www.bls.gov/schedule/news_release/bls.ics
 https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
 https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm
+https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/

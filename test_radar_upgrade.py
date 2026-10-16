@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime,timezone
 from copy import deepcopy
 from unittest.mock import patch
-from zincintel.official_events import parse_bls,parse_fed,parse_boj,fetch_events
+from zincintel.official_events import parse_bls,parse_fed,parse_boj,parse_nbs,fetch_events
 from zincintel.daily_brief import build_brief
 from zincintel.radar_chart import comparison_chart
 
@@ -31,6 +31,14 @@ class RadarUpgradeTest(unittest.TestCase):
         self.assertEqual(data['upcoming'],[])
         self.assertTrue(all(x['status']=='UNAVAILABLE' for x in data['sources'].values()))
         self.assertEqual(data['news_status'],'NOT_CHECKED')
+
+    def test_nbs_month_columns_and_times_stay_aligned(self):
+        cells=['19/Mon','……','16/Mon','16/Thu','18/Mon','16/Tue','15/Wed','17/Mon','15/Tue','19/Mon','16/Mon','15/Tue']
+        raw='<h1>Regular Press Release Calendar of NBS in 2026</h1><table><tr><td>1</td><td>National Economic Performance</td>'+''.join('<td>'+x+'</td>' for x in cells)+'</tr><tr>'+('<td>10:00</td>'*11)+'</tr></table>'
+        events=parse_nbs(raw)
+        october=next(x for x in events if x['date']=='2026-10-19')
+        self.assertIn('10:00 台灣時間',october['taipei_display'])
+        self.assertEqual(len(events),11)
 
     def test_summary_deterministic_non_mutating_missing_data(self):
         snapshot={};original=deepcopy(snapshot)
