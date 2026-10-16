@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-16T05:19:19.067564+00:00",
+  "run_time": "2026-10-16T05:25:50.323505+00:00",
   "run_date": "2026-10-16",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-16T05:19:19.070430+00:00",
+    "as_of": "2026-10-16T05:25:50.326272+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-16T05:19:19.070430+00:00",
+        "as_of": "2026-10-16T05:25:50.326272+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -165,7 +165,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-15",
-        "age_days": 1.22,
+        "age_days": 1.23,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -177,7 +177,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-15",
-        "age_days": 1.22,
+        "age_days": 1.23,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -189,7 +189,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 4.22,
+        "age_days": 4.23,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -201,7 +201,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 4.22,
+        "age_days": 4.23,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -213,7 +213,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-12",
-        "age_days": 4.22,
+        "age_days": 4.23,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -225,7 +225,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-09-30",
-        "age_days": 16.22,
+        "age_days": 16.23,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -237,7 +237,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-10-16",
-        "age_days": 0.22,
+        "age_days": 0.23,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -268,7 +268,7 @@
       "source": "SMM_PUBLIC",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 16.22,
+      "age_days": 16.23,
       "url": "https://www-old.metal.com/Zinc/202506030011",
       "error": null
     },
@@ -282,7 +282,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 7.22,
+      "age_days": 7.23,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -296,7 +296,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Monthly",
-      "age_days": 15.22,
+      "age_days": 15.23,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -309,7 +309,7 @@
       "source": "Fastmarkets reported Teck / Korea Zinc annual benchmark",
       "source_grade": "B_VERIFIED_BENCHMARK",
       "expected_update": "Annual",
-      "age_days": 224.22,
+      "age_days": 224.23,
       "url": "https://www.fastmarkets.com/insights/teck-korea-zinc-benchmark-zinc-concentrate-tcs-85-per-tonne/",
       "notes": "Annual benchmark reference only. Do not substitute for China import spot TC or China domestic TC."
     },
@@ -326,27 +326,26 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": null,
-      "change_pct": null,
+      "value": 105.37000274658203,
+      "change_pct": -0.519255505920635,
       "ticker": "BZ=F",
-      "status": "MISSING",
-      "error": "single positional indexer is out-of-bounds"
+      "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.2230000495910645,
-      "change_pct": -0.4017308775925432,
+      "value": 3.2219998836517334,
+      "change_pct": -0.4326383535031342,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 101.91600036621094,
-      "change_pct": -0.08235258214613905,
+      "value": 101.91999816894531,
+      "change_pct": -0.07843316770067554,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.630000114440918,
-      "change_pct": 1.8198607824406077,
+      "value": 6.635499954223633,
+      "change_pct": 1.9043242683132622,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -357,14 +356,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 32.43199920654297,
-      "change_pct": 0.7520985344477538,
+      "value": 32.4119987487793,
+      "change_pct": 0.689965821675198,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 57.904998779296875,
-      "change_pct": 1.8790522809555954,
+      "value": 57.92499923706055,
+      "change_pct": 1.9142414308580769,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -37796,13 +37795,13 @@
       }
     },
     "events": {
-      "checked_at": "2026-10-16T05:20:52.703264+00:00",
+      "checked_at": "2026-10-16T05:27:01.030932+00:00",
       "sources": {
         "BLS": {
-          "status": "UNAVAILABLE",
-          "checked_at": "2026-10-16T05:20:52.703264+00:00",
+          "status": "CARRY_FORWARD_LAST_VERIFIED",
+          "checked_at": "2026-10-16T05:27:01.030932+00:00",
           "url": "https://www.bls.gov/schedule/2026/10_sched_list.htm",
-          "method": "OFFICIAL_MONTHLY_HTML_FALLBACK",
+          "method": "LAST_VERIFIED_OFFICIAL_CALENDAR",
           "attempts": [
             {
               "url": "https://www.bls.gov/schedule/2026/10_sched_list.htm",
@@ -37815,21 +37814,24 @@
               "error": "HTTPError"
             }
           ],
-          "primary_error": "HTTPError"
+          "primary_error": "HTTPError",
+          "last_verified_at": "2026-10-16T05:22:52.459775+00:00",
+          "cache_age_days": 0.003,
+          "cache_max_days": 7
         },
         "Fed": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-10-16T05:20:52.703264+00:00",
+          "checked_at": "2026-10-16T05:27:01.030932+00:00",
           "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
         },
         "BoJ": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-10-16T05:20:52.703264+00:00",
+          "checked_at": "2026-10-16T05:27:01.030932+00:00",
           "url": "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm"
         },
         "NBS": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-10-16T05:20:52.703264+00:00",
+          "checked_at": "2026-10-16T05:27:01.030932+00:00",
           "url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html"
         }
       },
@@ -37881,6 +37883,34 @@
           "status": "SCHEDULED_NOT_RELEASED",
           "watch": "核對工業生產、投資或PMI與鋅需求／價格反應；缺市場共識時不判定超出預期。",
           "markets": "LME Zinc／SHFE Zinc／USD"
+        },
+        {
+          "title": "Employment Situation",
+          "date": "2026-11-06",
+          "sort_time": "2026-11-06T08:30:00-05:00",
+          "taipei_display": "2026-11-06 21:30 台灣時間",
+          "time_precision": "EXACT",
+          "source": "BLS",
+          "source_url": "https://www.bls.gov/schedule/news_release/bls.ics",
+          "status": "SCHEDULED_NOT_RELEASED",
+          "watch": "觀察公布後美元、利率與商品價格是否確認；避免把第一波反應直接當作突破。",
+          "markets": "USD／Gold／Zinc",
+          "verification_status": "CARRY_FORWARD_LAST_VERIFIED",
+          "last_verified_at": "2026-10-16T05:22:52.459775+00:00"
+        },
+        {
+          "title": "Consumer Price Index",
+          "date": "2026-11-10",
+          "sort_time": "2026-11-10T08:30:00-05:00",
+          "taipei_display": "2026-11-10 21:30 台灣時間",
+          "time_precision": "EXACT",
+          "source": "BLS",
+          "source_url": "https://www.bls.gov/schedule/news_release/bls.ics",
+          "status": "SCHEDULED_NOT_RELEASED",
+          "watch": "觀察公布後美元、利率與商品價格是否確認；避免把第一波反應直接當作突破。",
+          "markets": "USD／Gold／Zinc",
+          "verification_status": "CARRY_FORWARD_LAST_VERIFIED",
+          "last_verified_at": "2026-10-16T05:22:52.459775+00:00"
         },
         {
           "title": "中國國民經濟運行情況",
@@ -38528,16 +38558,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99955688950206,
     "physical_market": 99.63157601005639,
-    "macro": 57.69120604049312,
+    "macro": 54.82038643525032,
     "technical": 46.49583430309374
   },
   "component_coverage": 0.8,
-  "market_score": 71.43405916358137,
+  "market_score": 71.075206712926,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 53.97730176124002,
-    "20D": 60.21185797636194,
-    "60D": 65.19950294845945
+    "5D": 53.86964602604341,
+    "20D": 60.01448912850149,
+    "60D": 64.93036361046794
   },
   "market_quality": {
     "confidence": 93.0,
@@ -38565,7 +38595,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 2.974078567662037
+    "max_age_days": 2.978402375451389
   },
   "procurement": {
     "status": "OK",
