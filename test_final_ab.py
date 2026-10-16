@@ -42,6 +42,7 @@ class FinalAB(unittest.TestCase):
                 self.assertEqual(len(p.select('.ab-cursor')),2)
             self.assertEqual([p['data-chart-window'] for p in panels if not p.has_attr('hidden')],['60'])
             self.assertNotIn('lme_linked_shfe',str(doc))
+            self.assertEqual(len(doc.select('[data-role="evidence-context"] > section')),3)
             self.assertEqual(len(doc.select('.ab-private')),1)
             gold=(Path(t)/'market-gold.html').read_text()
             self.assertNotIn("class='ab-private'",gold)

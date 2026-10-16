@@ -11,7 +11,10 @@ CSS='''
 def today(snapshot):
     from .dashboard_v27 import _market_series,_today_market_metrics,_decision_reference,_spark_path,fmt,_change_text
     from .visual_language import asset_icon,source_badge,source_legend
-    from .daily_brief import brief_panel
+    from .line_flex import compact_brief
+    from .daily_brief import build_brief
+    brief_cards=''.join("<article><h3>"+escape(item['title'])+"</h3><p>"+escape(item['text'])+"</p><a href='"+escape(full['url'])+"'>核對證據 →</a></article>" for item,full in zip(compact_brief(snapshot),build_brief(snapshot)))
+    brief_html="<section class='daily-three' id='daily-three'><h2>今日三項重點 · 同批資料</h2><div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px'>"+brief_cards+"</div></section>"
     plans=snapshot.get('decision_book',{}).get('markets',{})
     cards=[]
     for key,title in LABELS.items():
@@ -44,7 +47,7 @@ def today(snapshot):
         contract=series.get('latest_contract') or ''
         cards.append(f"""<article class='quote-card' data-market='{key}'><div class='asset-identity'>{asset_icon(key)}<h2>{title}</h2></div><small>{escape(contract)}</small><div class='quote-main'><strong>{fmt(value,2)}</strong><span>{escape(str(unit))}</span>{spark}</div><div class='quote-changes'>{''.join(changes)}</div>{secondary}<p class='quote-summary'>{note}</p><div class='quote-foot'><span>資料日 {escape(str(asof))}</span><details><summary>來源詳情</summary>{source_badge(grade,status)} {escape(str(source))}</details><a href='market-{key}.html'>查看市場 →</a></div></article>""")
     watches=''.join(f"<div class='ab-watch'>{asset_icon(k,compact=True)}<b>{LABELS[k]}</b><p>{reason}</p><a href='market-{k}.html'>進入 Markets →</a></div>" for k,reason in [('lme_zinc','核對現貨曲線與3M價格趨勢的差異。'),('gold','核對價格結構與實質利率背景。'),('usdjpy','核對匯率方向與利差證據缺口。')])
-    return "<section class='panel s12' id='overview'><span id='market-snapshot'></span><h2>今日行情總覽</h2><p class='muted'>先看行情，再選擇深入研究的市場 · 日／5交易日變動</p><div class='quote-grid'>"+''.join(cards)+"</div></section><section class='panel s12'>"+brief_panel(snapshot)+"</section><section class='panel s12'><h2>優先觀察 · 研究入口（非排名或交易訊號）</h2>"+watches+"</section><section class='panel s12'><details><summary>資料身分與來源說明</summary>"+"<p>核心市場資料狀態："+escape(str(snapshot.get('core_data_gate',{}).get('status','—')))+"</p>"+source_legend()+"</details></section>"
+    return "<section class='panel s12' id='overview'><span id='market-snapshot'></span><h2>今日行情總覽</h2><p class='muted'>先看行情，再選擇深入研究的市場 · 日／5交易日變動</p><div class='quote-grid'>"+''.join(cards)+"</div></section><section class='panel s12'>"+brief_html+"</section><section class='panel s12'><h2>優先觀察 · 研究入口（非排名或交易訊號）</h2>"+watches+"</section><section class='panel s12'><details><summary>資料身分與來源說明</summary>"+"<p>核心市場資料狀態："+escape(str(snapshot.get('core_data_gate',{}).get('status','—')))+"</p>"+source_legend()+"</details></section>"
 
 
 def compass(direction):
@@ -59,3 +62,5 @@ CHART_JS='''<script>(()=>{document.querySelectorAll('.chart-window').forEach(pan
 CSS+='''.final-ab .quote-main{flex-wrap:wrap}.final-ab .market-spark{width:94px;flex:0 0 94px}.final-ab .rsi-chart{padding:7px 10px 4px;border:0}.final-ab .chart-unit{color:#bed0dc;font-size:12px}'''
 
 CSS+=""".final-ab .quote-sub-grid{display:block;line-height:1.8}.final-ab .quote-card>small{display:block;min-height:18px}.final-ab .quote-board h2,.final-ab #overview>h2{font-size:27px}.final-ab .quote-card h2{font-size:18px}.final-ab .market-stage h2{font-size:25px;margin:0 0 12px}.final-ab .period-controls button.active{background:#42c7d1;border-color:#42c7d1;color:#102a40}.final-ab .market-kpis>div{min-width:0}.final-ab .chart-label-row{margin-bottom:8px}@media(max-width:650px){.final-ab .market-stage h2{font-size:21px}.final-ab #overview>h2{font-size:24px}}"""
+
+CSS+=""".final-ab .market-lower{grid-template-columns:repeat(3,minmax(0,1fr))}.final-ab .evidence-card p{line-height:1.8;font-size:14px}.final-ab .evidence-card h2{font-size:17px}.final-ab .market-lower .card{min-width:0}.final-ab .market-lower .card p{overflow-wrap:anywhere}@media(max-width:850px){.final-ab .market-lower{grid-template-columns:1fr}}"""

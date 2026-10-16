@@ -219,8 +219,16 @@ def main() -> int:
     radar_brief=_id_block(radar_html, 'daily-three')
     for marker in ('主要變化', '重要矛盾', '下一關卡'):
         _expect(today_brief,marker,failures,'Today daily brief')
-    if _norm(today_brief)!=_norm(radar_brief):
-        failures.append('Today and Radar daily brief texts differ')
+    # Today intentionally uses the same concise wording as LINE; Radar keeps
+    # the full explanation. Validate each rendered summary against that batch.
+    compact_preview = _fetch(urljoin(page_url,'line-preview.html'),run_id,marker='LINE B')
+    compact_text = _norm(_visible_text(compact_preview))
+    fragments = re.findall(r'<article><h3>.*?</h3><p>(.*?)</p>',raw_html,re.DOTALL)
+    if len(fragments) != 3:
+        failures.append('Today must render exactly three compact briefing items')
+    for fragment in fragments:
+        if _norm(_visible_text(fragment)) not in compact_text:
+            failures.append('Today and LINE compact briefing texts differ')
     for event in snapshot.get('market_research',{}).get('events',{}).get('upcoming',[]):
         event_rows=[_visible_text(row) for row in re.findall(r'<tr\b[^>]*>(.*?)</tr>',radar_html,re.DOTALL) if event['taipei_display'] in _visible_text(row)]
         if event.get('verification_status')=='CARRY_FORWARD_LAST_VERIFIED':
