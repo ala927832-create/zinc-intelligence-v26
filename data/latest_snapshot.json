@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-16T00:43:21.607460+00:00",
+  "run_time": "2026-10-16T00:48:25.389360+00:00",
   "run_date": "2026-10-16",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -135.72,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-16T00:43:21.609938+00:00",
+    "as_of": "2026-10-16T00:48:25.391771+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-16T00:43:21.609938+00:00",
+        "as_of": "2026-10-16T00:48:25.391771+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -326,26 +326,26 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 105.4800033569336,
-      "change_pct": -0.5468548133236828,
+      "value": 105.51000213623047,
+      "change_pct": -0.5185700877085475,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.2060000896453857,
-      "change_pct": 0.25016058587452594,
+      "value": 3.2070000171661377,
+      "change_pct": 0.28142786339375725,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.05400085449219,
-      "change_pct": -0.4836686323795525,
+      "value": 102.05500030517578,
+      "change_pct": -0.4826940339847652,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.552999973297119,
-      "change_pct": -0.8848191026243901,
+      "value": 6.553999900817871,
+      "change_pct": -0.869695037691165,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
@@ -356,14 +356,14 @@
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 32.31399917602539,
-      "change_pct": 0.38552382451200184,
+      "value": 32.301998138427734,
+      "change_pct": 0.3482418267278353,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 57.30500030517578,
-      "change_pct": 3.159317897783831,
+      "value": 57.310001373291016,
+      "change_pct": 3.1683207207971797,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -17108,13 +17108,13 @@
             "open": 4192.1001,
             "high": 4193.8999,
             "low": 4172.8999,
-            "close": 4175.5,
-            "sma20": 4226.57,
-            "sma60": 4331.2167,
-            "ema20": 4224.5304,
+            "close": 4174.6001,
+            "sma20": 4226.525,
+            "sma60": 4331.2017,
+            "ema20": 4224.4447,
             "atr14": 85.8544,
-            "rsi14": 42.84,
-            "volume": 5041.0
+            "rsi14": 42.748,
+            "volume": 5587.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -17127,12 +17127,12 @@
           "open": 4192.1001,
           "high": 4193.8999,
           "low": 4172.8999,
-          "close": 4175.5,
-          "sma20": 4226.57,
-          "sma60": 4331.2167,
-          "ema20": 4224.5304,
+          "close": 4174.6001,
+          "sma20": 4226.525,
+          "sma60": 4331.2017,
+          "ema20": 4224.4447,
           "atr14": 85.8544,
-          "rsi14": 42.84
+          "rsi14": 42.748
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -27305,12 +27305,12 @@
             "open": 102.044,
             "high": 102.083,
             "low": 102.036,
-            "close": 102.053,
-            "sma20": 101.6306,
+            "close": 102.055,
+            "sma20": 101.6307,
             "sma60": 100.3574,
-            "ema20": 101.6189,
+            "ema20": 101.6191,
             "atr14": 0.5117,
-            "rsi14": 59.4518,
+            "rsi14": 59.4815,
             "volume": 0.0
           }
         ],
@@ -27324,12 +27324,12 @@
           "open": 102.044,
           "high": 102.083,
           "low": 102.036,
-          "close": 102.053,
-          "sma20": 101.6306,
+          "close": 102.055,
+          "sma20": 101.6307,
           "sma60": 100.3574,
-          "ema20": 101.6189,
+          "ema20": 101.6191,
           "atr14": 0.5117,
-          "rsi14": 59.4518
+          "rsi14": 59.4815
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -37821,26 +37821,43 @@
       }
     },
     "events": {
-      "checked_at": "2026-10-16T00:44:53.210694+00:00",
+      "checked_at": "2026-10-16T00:49:57.575807+00:00",
       "sources": {
         "BLS": {
           "status": "UNAVAILABLE",
           "error": "HTTPError",
-          "checked_at": "2026-10-16T00:44:53.210694+00:00",
+          "checked_at": "2026-10-16T00:49:57.575807+00:00",
           "url": "https://www.bls.gov/schedule/news_release/bls.ics"
         },
         "Fed": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-10-16T00:44:53.210694+00:00",
+          "checked_at": "2026-10-16T00:49:57.575807+00:00",
           "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
         },
         "BoJ": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-10-16T00:44:53.210694+00:00",
+          "checked_at": "2026-10-16T00:49:57.575807+00:00",
           "url": "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm"
+        },
+        "NBS": {
+          "status": "VERIFIED_FETCH",
+          "checked_at": "2026-10-16T00:49:57.575807+00:00",
+          "url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html"
         }
       },
       "upcoming": [
+        {
+          "title": "中國國民經濟運行情況",
+          "date": "2026-10-19",
+          "sort_time": "2026-10-19T10:00:00+08:00",
+          "taipei_display": "2026-10-19 10:00 台灣時間",
+          "time_precision": "EXACT",
+          "source": "NBS",
+          "source_url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html",
+          "status": "SCHEDULED_NOT_RELEASED",
+          "watch": "核對工業生產、投資或PMI與鋅需求／價格反應；缺市場共識時不判定超出預期。",
+          "markets": "LME Zinc／SHFE Zinc／USD"
+        },
         {
           "title": "FOMC會議最後一日",
           "date": "2026-10-28",
@@ -37864,9 +37881,45 @@
           "status": "SCHEDULED_NOT_RELEASED",
           "watch": "觀察公布後美元、利率與商品價格是否確認；避免把第一波反應直接當作突破。",
           "markets": "USD/JPY／DXY／Gold"
+        },
+        {
+          "title": "中國官方PMI",
+          "date": "2026-10-31",
+          "sort_time": "2026-10-31T09:30:00+08:00",
+          "taipei_display": "2026-10-31 09:30 台灣時間",
+          "time_precision": "EXACT",
+          "source": "NBS",
+          "source_url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html",
+          "status": "SCHEDULED_NOT_RELEASED",
+          "watch": "核對工業生產、投資或PMI與鋅需求／價格反應；缺市場共識時不判定超出預期。",
+          "markets": "LME Zinc／SHFE Zinc／USD"
+        },
+        {
+          "title": "中國國民經濟運行情況",
+          "date": "2026-11-16",
+          "sort_time": "2026-11-16T10:00:00+08:00",
+          "taipei_display": "2026-11-16 10:00 台灣時間",
+          "time_precision": "EXACT",
+          "source": "NBS",
+          "source_url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html",
+          "status": "SCHEDULED_NOT_RELEASED",
+          "watch": "核對工業生產、投資或PMI與鋅需求／價格反應；缺市場共識時不判定超出預期。",
+          "markets": "LME Zinc／SHFE Zinc／USD"
+        },
+        {
+          "title": "中國官方PMI",
+          "date": "2026-11-30",
+          "sort_time": "2026-11-30T09:30:00+08:00",
+          "taipei_display": "2026-11-30 09:30 台灣時間",
+          "time_precision": "EXACT",
+          "source": "NBS",
+          "source_url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html",
+          "status": "SCHEDULED_NOT_RELEASED",
+          "watch": "核對工業生產、投資或PMI與鋅需求／價格反應；缺市場共識時不判定超出預期。",
+          "markets": "LME Zinc／SHFE Zinc／USD"
         }
       ],
-      "coverage": "BLS CPI/Employment, Fed, BoJ; China calendar and unscheduled news not integrated",
+      "coverage": "BLS CPI/Employment, Fed, BoJ, NBS economic performance/PMI; unscheduled news not integrated",
       "news_status": "NOT_CHECKED"
     }
   },
@@ -38072,15 +38125,15 @@
         "execution_gate": "PENDING_LIVE_QUOTE",
         "daily_plan": {
           "setup_zone": [
-            4175.5,
-            4224.5304
+            4174.6001,
+            4224.4447
           ],
           "trigger_price": 4086.9073,
           "maximum_entry": 4069.7364,
-          "hard_stop": 4237.4086,
-          "close_invalidation": 4224.5304,
-          "t1": 3785.9047,
-          "t2": 3635.4034,
+          "hard_stop": 4237.3229,
+          "close_invalidation": 4224.4447,
+          "t1": 3786.0761,
+          "t2": 3635.6605,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
           "risk_distance_atr": 1.75,
@@ -38099,10 +38152,10 @@
           ]
         },
         "reference": {
-          "close": 4175.5,
-          "ema20": 4224.5304,
-          "sma60": 4331.2167,
-          "rsi14": 42.84,
+          "close": 4174.6001,
+          "ema20": 4224.4447,
+          "sma60": 4331.2017,
+          "rsi14": 42.748,
           "atr14": 85.8544,
           "support20": 4091.2,
           "resistance20": 4439.7998
@@ -38116,12 +38169,12 @@
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 4175.5; EMA20 4224.5304; SMA60 4331.2167"
+            "value": "Close 4174.6001; EMA20 4224.4447; SMA60 4331.2017"
           },
           {
             "factor": "Momentum",
             "status": "SUPPORTS",
-            "value": "RSI14 42.84"
+            "value": "RSI14 42.748"
           },
           {
             "factor": "Observed volatility",
@@ -38158,8 +38211,8 @@
           "1_market_direction": "BEAR",
           "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
           "3_risk_location": [
-            4175.5,
-            4224.5304
+            4174.6001,
+            4224.4447
           ],
           "4_entry_permission": {
             "trigger": 4086.9073,
@@ -38168,13 +38221,13 @@
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 167.6722,
+            "price_units_per_contract_unit": 167.5865,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 3785.9047,
-            "t2": 3635.4034,
-            "close_invalidation": 4224.5304
+            "t1": 3786.0761,
+            "t2": 3635.6605,
+            "close_invalidation": 4224.4447
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -38272,15 +38325,15 @@
         "execution_gate": "PENDING_LIVE_QUOTE",
         "daily_plan": {
           "setup_zone": [
-            101.6189,
-            102.053
+            101.6191,
+            102.055
           ],
           "trigger_price": 102.9756,
           "maximum_entry": 103.0779,
-          "hard_stop": 101.5421,
-          "close_invalidation": 101.6189,
-          "t1": 105.8425,
-          "t2": 107.2759,
+          "hard_stop": 101.5423,
+          "close_invalidation": 101.6191,
+          "t1": 105.8421,
+          "t2": 107.2753,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
           "risk_distance_atr": 2.8,
@@ -38299,10 +38352,10 @@
           ]
         },
         "reference": {
-          "close": 102.053,
-          "ema20": 101.6189,
+          "close": 102.055,
+          "ema20": 101.6191,
           "sma60": 100.3574,
-          "rsi14": 59.4518,
+          "rsi14": 59.4815,
           "atr14": 0.5117,
           "support20": 100.17,
           "resistance20": 102.95
@@ -38316,12 +38369,12 @@
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 102.053; EMA20 101.6189; SMA60 100.3574"
+            "value": "Close 102.055; EMA20 101.6191; SMA60 100.3574"
           },
           {
             "factor": "Momentum",
             "status": "SUPPORTS",
-            "value": "RSI14 59.4518"
+            "value": "RSI14 59.4815"
           },
           {
             "factor": "Observed volatility",
@@ -38353,8 +38406,8 @@
           "1_market_direction": "BULL",
           "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
           "3_risk_location": [
-            101.6189,
-            102.053
+            101.6191,
+            102.055
           ],
           "4_entry_permission": {
             "trigger": 102.9756,
@@ -38363,13 +38416,13 @@
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 1.5358,
+            "price_units_per_contract_unit": 1.5356,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 105.8425,
-            "t2": 107.2759,
-            "close_invalidation": 101.6189
+            "t1": 105.8421,
+            "t2": 107.2753,
+            "close_invalidation": 101.6191
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -38487,16 +38540,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99955688950206,
     "physical_market": 99.63157601005639,
-    "macro": 48.70585635427645,
+    "macro": 48.77122325839756,
     "technical": 46.49583430309374
   },
   "component_coverage": 0.8,
-  "market_score": 70.31089045280427,
+  "market_score": 70.31906131581941,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 53.64035114800689,
-    "20D": 59.59411518543454,
-    "60D": 64.35712641537664
+    "5D": 53.642802406911436,
+    "20D": 59.59860916009286,
+    "60D": 64.36325456263799
   },
   "market_quality": {
     "confidence": 93.0,
@@ -38524,7 +38577,7 @@
   "procurement_quality": {
     "confidence": 95,
     "status": "CURRENT",
-    "max_age_days": 2.7823379349652777
+    "max_age_days": 2.7859689022222223
   },
   "procurement": {
     "status": "OK",
