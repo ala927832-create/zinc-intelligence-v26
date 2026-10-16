@@ -109,3 +109,24 @@ def send_line_text(text: str) -> bool:
     )
     response.raise_for_status()
     return True
+
+
+def validate_line_message(message: dict, token: str) -> None:
+    response=requests.post('https://api.line.me/v2/bot/message/validate/push',
+        headers={'Authorization':f'Bearer {token}','Content-Type':'application/json'},
+        json={'messages':[message]},timeout=15)
+    response.raise_for_status()
+
+
+def send_line_daily(snapshot: dict) -> bool:
+    from .line_flex import build_daily_flex,validate_structure
+    token=os.getenv('LINE_CHANNEL_ACCESS_TOKEN','').strip()
+    user_id=os.getenv('LINE_USER_ID','').strip()
+    if not token or not user_id:return False
+    message=build_daily_flex(snapshot);validate_structure(message)
+    validate_line_message(message,token) # Validation does not send a message.
+    response=requests.post('https://api.line.me/v2/bot/message/push',
+        headers={'Authorization':f'Bearer {token}','Content-Type':'application/json'},
+        json={'to':user_id,'messages':[message]},timeout=15)
+    response.raise_for_status()
+    return True

@@ -101,7 +101,7 @@ jobs:
         run: python test_discord.py
 
       - name: Decision framework, LINE and research pages test
-        run: python -m unittest -q test_decision_framework.py test_line_notify.py test_research_pages.py test_cross_asset_research.py test_n8n_templates.py
+        run: python -m unittest -q test_decision_framework.py test_line_notify.py test_line_flex.py test_research_pages.py test_cross_asset_research.py test_n8n_templates.py
 
   build:
     if: github.event_name != 'pull_request'
@@ -168,6 +168,11 @@ jobs:
           ZINC_MARKET_API_URL: ${{ secrets.ZINC_MARKET_API_URL }}
           ZINC_MARKET_API_KEY: ${{ secrets.ZINC_MARKET_API_KEY }}
         run: python main.py
+
+      - name: Validate LINE Flex without delivery
+        env:
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+        run: python validate_line_flex.py
 
       - name: Validate data before deploy
         run: python validate_deploy.py

@@ -239,6 +239,14 @@ def main() -> int:
         if rate.get('as_of'):
             _expect(row, rate['as_of'], failures, f'Radar {key} as-of')
 
+    line_preview=_fetch(urljoin(page_url,'line-preview.html'),run_id,marker='LINE B')
+    for token in ('閱讀今日完整報告','閱讀完整 Today','市場研究','漲跌 N/A','Markets 商品圖表','Radar 事件證據'):
+        _expect(line_preview,token,failures,'LINE B preview')
+    cash_date=snapshot.get('market',{}).get('field_sources',{}).get('lme_cash',{}).get('as_of')
+    if cash_date:_expect(line_preview,cash_date,failures,'LINE Cash date')
+    for key in ('gold','usdjpy','dxy'):
+        date=snapshot.get('market_research',{}).get('cross_assets',{}).get(key,{}).get('as_of')
+        if date:_expect(line_preview,date,failures,'LINE '+key+' date')
     market_index = _fetch(urljoin(page_url, "markets.html"), run_id, marker="CHARTS BEFORE COMMENTARY")
     for label in ("事實｜", "解讀｜", "觀察｜", "entry-price", "market-us_treasury.html"):
         _expect(market_index, label, failures, f"Markets research entry {label}")

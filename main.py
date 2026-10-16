@@ -19,7 +19,7 @@ from zincintel.free_mirrors import enrich_market_with_free_mirrors
 from zincintel.indicators import add_close_indicators, add_indicators, latest_indicator_dict
 from zincintel.market_research import describe_close_series, recover_verified_close_history
 from zincintel.line_notify import (
-    build_alert_message, build_daily_message, notification_plan, send_line_text,
+    build_alert_message, build_daily_message, notification_plan, send_line_text, send_line_daily,
 )
 from zincintel.models import (
     event_overlay, macro_score, market_regime, market_structure_score, multi_horizon_scores,
@@ -281,6 +281,8 @@ def main() -> None:
 
     out = build_dashboard_v27(snapshot, {"daily": daily, "weekly": weekly, "1h": h1_raw, "15m": m15_raw}, trades, perf)
     build_research_pages(snapshot)
+    from zincintel.line_flex import write_preview
+    write_preview(snapshot)
     # The chart digest is known only after rendering and must travel with the
     # exact snapshot used by the production verifier.
     save_latest(snapshot)
@@ -303,7 +305,7 @@ def main() -> None:
             plan = notification_plan(snapshot, previous, line_mode)
             sent = 0
             if plan["daily"]:
-                sent += int(send_line_text(build_daily_message(snapshot)))
+                sent += int(send_line_daily(snapshot))
             if plan["alerts"]:
                 sent += int(send_line_text(build_alert_message(snapshot, plan["alerts"])))
             status = "SENT" if sent else "SKIPPED_NO_NEW_EVENT"
