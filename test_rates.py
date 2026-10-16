@@ -28,7 +28,7 @@ class RatesTest(unittest.TestCase):
 
     def test_missing_data_never_claims_no_events(self):
         s=radar_body({})
-        self.assertIn('未完成',s.replace('沒有完成','未完成'))
+        self.assertIn('突發新聞未查核',s)
         self.assertIn('日期／資料不足',s)
         self.assertIn('缺日本2Y',s)
 

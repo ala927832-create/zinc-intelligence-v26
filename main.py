@@ -9,6 +9,7 @@ from zincintel.china_tc import fetch_china_tc
 from zincintel.config import load_settings
 from zincintel.cross_asset_research import fetch_reference_markets, recover_last_verified as recover_cross_assets
 from zincintel.rates import fetch_rates
+from zincintel.official_events import fetch_events
 from zincintel.dashboard_v27 import build_dashboard_v27
 from zincintel.data_governance import annotate_data_health, apply_last_known_good, core_data_gate
 from zincintel.decision_framework import build_decision_book
@@ -136,6 +137,7 @@ def main() -> None:
         shfe_research["error"] = type(exc).__name__
     cross_assets = recover_cross_assets(fetch_reference_markets(), prior_snapshots)
     rates = fetch_rates(prior_snapshots)
+    official_events = fetch_events()
     decision_book = build_decision_book(research_close, shfe_research, cross_assets, market)
 
     daily = add_indicators(daily_raw) if not daily_raw.empty else pd.DataFrame()
@@ -220,7 +222,7 @@ def main() -> None:
         "candle_sources": {"daily": candle_source, "1h": candle_1h_source, "15m": candle_15m_source, "close_history": close_history_source},
         "technical_mode": technical_mode,
         "daily_candle_status": candle_status,
-        "market_research": {"close_series": research_close, "shfe_zinc": shfe_research, "cross_assets": cross_assets, "rates": rates},
+        "market_research": {"close_series": research_close, "shfe_zinc": shfe_research, "cross_assets": cross_assets, "rates": rates, "events": official_events},
         "decision_book": decision_book,
         "free_close_history_points": int(len(close_history)),
         "indicators": indicators,

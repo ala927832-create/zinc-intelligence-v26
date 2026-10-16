@@ -79,6 +79,9 @@ jobs:
       - name: Treasury rates and macro alignment test
         run: python -m unittest -q test_rates.py
 
+      - name: Radar history and official event clock test
+        run: python -m unittest -q test_radar_upgrade.py
+
       - name: SHFE official daily OHLC test
         run: python -m unittest -q test_shfe_research.py
 

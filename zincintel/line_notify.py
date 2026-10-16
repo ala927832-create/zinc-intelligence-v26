@@ -39,6 +39,8 @@ def build_daily_message(snapshot: dict) -> str:
         "執行規則：沒有 Trigger 不下單；沒有可接受 Bid/Ask 不承認可成交。",
         "完整價位、T1/T2 與 No-Trade 理由請見研究面板。",
     ])
+    from .daily_brief import build_brief
+    lines.extend(f"{i}. {item['title']}：{item['text']}" for i,item in enumerate(build_brief(snapshot),1))
     return "\n".join(lines)
 
 

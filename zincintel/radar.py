@@ -30,6 +30,9 @@ def _aligned(rate,series):
     return b,(r[b]-r[a])*100,(p[b]/p[a]-1)*100
 
 def radar_body(snapshot):
+    from .daily_brief import brief_panel
+    from .radar_chart import comparison_chart
+    from .official_events import event_panel
     research=snapshot.get('market_research',{});rates=research.get('rates',{})
     dxy=research.get('cross_assets',{}).get('dxy',{})
     dm=_today_market_metrics(snapshot,'dxy')
@@ -42,7 +45,7 @@ def radar_body(snapshot):
             alignment='短端與長端方向相反，不能描述為利率全面上升或下降。' if a*b<0 else '短端與長端須連同實質利率分別判讀；沒有單一利率結論。'
             rate_summary=f"截至 {short.get('as_of')}，2Y一日 {a:+.1f} bp，10Y一日 {b:+.1f} bp；{alignment}"
     intro=("<section class='card'><h2>今日宏觀研究導覽</h2><p>先看利率與美元實際變動，再核對商品有無同步確認；以下屬描述性背景，不改變既有Trigger或交易權限。</p>"
-           f"<p>{e(rate_summary)}</p><p>{dollar}</p><p>重大新聞與事件時鐘尚未接入：此頁沒有完成當日事件查核，不能把空白解讀為沒有重大事件。</p></section>")
+           f"<p>{e(rate_summary)}</p><p>{dollar}</p><p>已排定事件見官方事件時鐘；突發新聞未查核，不能把空白解讀為沒有重大事件。</p></section>")
     cards=[]
     for key,label in [('gold','黃金'),('usdjpy','美元／日圓'),('dxy','美元指數'),('lme_zinc','LME鋅'),('shfe_zinc','SHFE鋅')]:
         plan=snapshot.get('decision_book',{}).get('markets',{}).get(key,{})
@@ -59,4 +62,4 @@ def radar_body(snapshot):
             observation=f'共同日期 {day}：利率變動 {bp:+.1f} bp，商品Close變動 {ret:+.2f}%；{verdict}。'
         channel={'gold':'實質利率上升一般增加黃金持有機會成本；美元也須獨立核對。','usdjpy':'美國短端利率是美元條件之一；缺日本2Y、政策與干預證據，不能計算美日利差。','dxy':'美國短端利率與美元方向並列；缺其他國家利率及成分貢獻，無法完成相對利率判斷。','lme_zinc':'美元與利率屬外部環境；Cash−3M、庫存與TC才是另外的實體證據，須逐項核對日期。','shfe_zinc':'美元與美債只提供外部背景；缺人民幣調整比價、需求及套利成本，不直接套用LME結論。'}[key]
         cards.append(f"<article class='card half'><h2>{asset_icon(key,compact=True)} {label} · {e(plan.get('direction'))}</h2><p><b>影響管道｜</b>{channel}</p><p><b>當次驗證｜</b>{e(observation)}</p><p><b>下一觀察｜</b>觀察下一個共同資料日是否延續；進場仍依商品頁的Trigger、失效與執行條件。</p><a href='market-{key}.html'>查看商品證據與計畫 →</a></article>")
-    return "<div class='grid'>"+intro+rates_panel(snapshot)+f"<section class='card'><h2>美元因素</h2><p>{dollar}</p><p>美元走強對美元計價商品通常形成外部壓力；此為分析管道，需商品價格與專屬供需確認。</p></section>"+''.join(cards)+"</div>"
+    return "<div class='grid'>"+brief_panel(snapshot)+intro+comparison_chart(snapshot)+event_panel(snapshot)+rates_panel(snapshot)+f"<section class='card'><h2>美元因素</h2><p>{dollar}</p><p>美元走強對美元計價商品通常形成外部壓力；此為分析管道，需商品價格與專屬供需確認。</p></section>"+''.join(cards)+"</div>"

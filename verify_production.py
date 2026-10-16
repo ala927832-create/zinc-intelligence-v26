@@ -196,8 +196,18 @@ def main() -> int:
     failures: list[str] = []
 
     radar_html = _fetch(urljoin(page_url, 'radar.html'), run_id, marker='Treasury evidence')
-    for marker in ('今日宏觀研究導覽', '當次驗證｜', '下一觀察｜', '缺日本2Y', '重大新聞與事件時鐘尚未接入'):
+    for marker in ('今日宏觀研究導覽', '當次驗證｜', '下一觀察｜', '缺日本2Y', '突發新聞未查核', 'Official event clock', 'radar-history-data', '每日三項摘要'):
         _expect(radar_html, marker, failures, f'Radar context {marker}')
+    today_brief=_id_block(raw_html, 'daily-three')
+    radar_brief=_id_block(radar_html, 'daily-three')
+    for marker in ('主要變化', '證據核對', '下一關卡'):
+        _expect(today_brief,marker,failures,'Today daily brief')
+    if _norm(today_brief)!=_norm(radar_brief):
+        failures.append('Today and Radar daily brief texts differ')
+    for event in snapshot.get('market_research',{}).get('events',{}).get('upcoming',[]):
+        event_rows=[_visible_text(row) for row in re.findall(r'<tr\b[^>]*>(.*?)</tr>',radar_html,re.DOTALL) if event['taipei_display'] in _visible_text(row)]
+        if not any(event['title'] in row for row in event_rows):
+            failures.append(f"event row missing: {event['title']} {event['taipei_display']}")
     for key, rate in snapshot.get('market_research', {}).get('rates', {}).items():
         label = {'us2y':'美國2Y', 'us10y':'美國10Y', 'us30y':'美國30Y', 'real10y':'美國10Y實質'}.get(key)
         if not label:continue

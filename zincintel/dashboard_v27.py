@@ -743,6 +743,7 @@ def _zinc_context(snapshot: dict) -> str:
 
 
 def build_dashboard_v27(snapshot: dict, candle_frames: dict[str, pd.DataFrame], trades: list[dict], perf: dict) -> Path:
+    from .daily_brief import brief_panel
     build_legacy_dashboard(snapshot, candle_frames, trades, perf)
     PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -817,6 +818,7 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 <main class='wrap'><div class='grid'>
 <section class='s12'>{source_legend()}</section>
 {_today_market_cards(snapshot)}
+<section class='panel s12'>{brief_panel(snapshot)}</section>
 {_today_posture(snapshot)}
 {_today_changes(snapshot)}
 <section class='panel s12' id='data-health' hidden aria-hidden='true'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
