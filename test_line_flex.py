@@ -12,12 +12,29 @@ class LineFlexTest(unittest.TestCase):
         message=build_daily_flex(s);raw=json.dumps(message,ensure_ascii=False)
         self.assertLess(validate_structure(message),30000)
         self.assertNotIn('PRIVATE_CANARY_123',raw)
-        for label in ('閱讀完整 Today','閱讀今日完整報告','Markets 商品圖表','Radar 事件證據','交易日：','來源：','非指定到期合約'):
+        for label in ('閱讀完整 Today','每日市場簡報','Markets 圖表','Radar 事件','行情交易日','COMEX連續參考'):
             self.assertIn(label,raw)
         r=next(r for r in build_market_rows(s) if r['key']=='lme_zinc')
         self.assertIsNone(r['change']);self.assertEqual(r['value'],s['market']['lme_cash'])
         self.assertEqual(r['as_of'],s['market']['field_sources']['lme_cash']['as_of'])
         self.assertEqual(s['decision_book'],old['decision_book'])
+
+    def test_single_date_block_no_sources_and_unified_board(self):
+        from pathlib import Path
+        import re
+        from zincintel.line_flex import date_summary
+        s=json.loads(Path('data/latest_snapshot.json').read_text())
+        m=build_daily_flex(s);raw=json.dumps(m,ensure_ascii=False)
+        self.assertEqual(raw.count('行情交易日'),1)
+        for forbidden in ('來源：','B_PUBLIC_REFERENCE','CURRENT_FETCH','查看此商品','3M交易日','摘要時間：'):
+            self.assertNotIn(forbidden,raw)
+        self.assertEqual(raw.count('閱讀完整 Today'),1)
+        board=m['contents']['body']['contents'][1]
+        self.assertEqual(board['backgroundColor'],'#252C33')
+        rows=build_market_rows(s)
+        rows[0]['as_of']='2026-10-14'
+        dates=date_summary(s,rows)
+        self.assertTrue(any('2026-10-14' in x and '黃金' in x for x in dates))
 
     def test_sparse_and_long_values_fit_and_do_not_infer(self):
         m=build_daily_flex({});validate_structure(m)

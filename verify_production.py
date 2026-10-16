@@ -239,8 +239,8 @@ def main() -> int:
         if rate.get('as_of'):
             _expect(row, rate['as_of'], failures, f'Radar {key} as-of')
 
-    line_preview=_fetch(urljoin(page_url,'line-preview.html'),run_id,marker='LINE B')
-    for token in ('閱讀今日完整報告','閱讀完整 Today','市場研究','漲跌 N/A','Markets 商品圖表','Radar 事件證據'):
+    line_preview=_fetch(urljoin(page_url,'line-preview.html'),run_id,marker='LINE B1')
+    for token in ('閱讀完整 Today','每日市場簡報','漲跌 N/A','Markets 圖表','Radar 事件','30秒重點','怎麼看今天'):
         _expect(line_preview,token,failures,'LINE B preview')
     cash_date=snapshot.get('market',{}).get('field_sources',{}).get('lme_cash',{}).get('as_of')
     if cash_date:_expect(line_preview,cash_date,failures,'LINE Cash date')

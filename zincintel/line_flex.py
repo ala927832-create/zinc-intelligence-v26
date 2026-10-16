@@ -8,7 +8,7 @@ from .dashboard_v27 import _today_market_metrics, _market_series
 from .daily_brief import build_brief
 
 BASE='https://ala927832-create.github.io/zinc-intelligence-v26/'
-NAVY='#102D4B'; BLUE='#1264D9'; INK='#17334D'; UP='#23D0B4'; DOWN='#FF727D'; MUTED='#617487'
+NAVY='#252C33'; BLUE='#176C66'; INK='#202A30'; UP='#23D0B4'; DOWN='#FF727D'; MUTED='#617487'
 
 def text(value,size='sm',color=INK,**kw):
     return dict(type='text',text=str(value if value not in (None,'') else 'N/A'),size=size,color=color,wrap=True,**kw)
@@ -67,16 +67,37 @@ def build_market_rows(snapshot):
         rows.append(dict(key=key,label=label,unit=unit,identity=identity,value=value,change=change,as_of=as_of,source=source,grade=grade,status=status,sentence=sentence,extra=extra))
     return rows
 
-def market_card(r):
+def board_row(r,snapshot):
+    """A continuous graphite board row, not a standalone nested card."""
+    identity={'gold':'COMEX連續參考','lme_zinc':'LME Cash','usdjpy':'USD/JPY','dxy':'DXY','shfe_zinc':'SHFE '+str(_market_series(snapshot,'shfe_zinc').get('latest_contract') or '合約缺失')}[r['key']]
+    heading=dict(type='box',layout='horizontal',spacing='sm',alignItems='center',contents=[
+        dict(type='image',url=BASE+'assets/line-icons-b1/'+r['key']+'.png',size='28px',aspectRatio='1:1',flex=0),
+        text(r['label'],'md','#FFFFFF',weight='bold',flex=1),text(identity,'xs','#C6CCD0',flex=1)])
     d,color=delta(r['change'])
-    header=dict(type='box',layout='horizontal',spacing='md',contents=[
-        dict(type='image',url=BASE+'assets/line-icons/'+r['key']+'.png',size='40px',aspectRatio='1:1',flex=0),
-        box([text(r['label'],'lg',weight='bold'),text(r['identity'],'xs',MUTED)],flex=1)])
-    quote=box([dict(type='box',layout='horizontal',alignItems='center',spacing='sm',contents=[text(price(r['value']),'xxl','#FFFFFF',weight='bold',flex=1),text(d,'sm',color,weight='bold',flex=0)]),text(r['unit'],'xs','#CDDFEE')],backgroundColor=NAVY,paddingAll='12px',cornerRadius='8px',margin='md')
-    contents=[header,quote]
-    if r['extra']:contents.append(box(r['extra'],backgroundColor='#EDF4FC',paddingAll='8px',margin='sm',cornerRadius='6px'))
-    contents.extend([box([text(r['sentence'])],backgroundColor='#F1F6FB',paddingAll='8px',margin='sm',cornerRadius='6px'),text('交易日：'+str(r['as_of'] or 'N/A'),'xs',MUTED,margin='sm'),text('來源：'+r['source'],'xs',MUTED),text(r['grade']+'｜'+r['status'],'xs','#946000' if 'CARRY' in r['status'] else MUTED),link('查看此商品 →','market-'+r['key']+'.html')])
-    return box(contents,backgroundColor='#FFFFFF',paddingAll='12px',cornerRadius='10px',margin='md',borderWidth='1px',borderColor='#D9E8F8')
+    quotes=dict(type='box',layout='horizontal',spacing='sm',alignItems='center',contents=[
+        box([text(price(r['value']),'xl','#FFFFFF',weight='bold'),text(r['unit'],'xs','#CED2D4')],flex=1),text(d,'sm',color,weight='bold',flex=0)])
+    contents=[heading,quotes]
+    if r['key']=='lme_zinc':
+        series=_market_series(snapshot,'lme_zinc');m=_today_market_metrics(snapshot,'lme_zinc')
+        d,c=delta(valid_change(series,m))
+        contents.append(dict(type='box',layout='horizontal',spacing='sm',alignItems='center',contents=[text('3M參考收盤 '+price(m.get('technical_close'))+' USD/t','xs','#CED2D4',flex=1),text(d,'sm',c,flex=0)]))
+    return box(contents,spacing='sm',paddingTop='12px',paddingBottom='12px')
+
+def date_summary(snapshot,rows):
+    groups={}
+    dates=[(r['label'],r['as_of']) for r in rows]+[('LME 3M',_market_series(snapshot,'lme_zinc').get('as_of')),('美債10Y',snapshot.get('market_research',{}).get('rates',{}).get('us10y',{}).get('as_of'))]
+    for label,day in dates:groups.setdefault(day or '日期缺失',[]).append(label)
+    if len(groups)==1:
+        return ['行情交易日：'+next(iter(groups))]
+    return ['行情交易日（異日集中列示）']+[day+'｜'+'、'.join(labels) for day,labels in sorted(groups.items(),reverse=True)]
+
+def observation(snapshot):
+    phrases=[]
+    for key,label in [('gold','黃金'),('lme_zinc','鋅3M')]:
+        m=_today_market_metrics(snapshot,key);p,ema=m.get('technical_close'),m.get('ema20')
+        if finite(p) and finite(ema):
+            phrases.append(label+('在EMA20下方，反彈結構仍待確認。' if p<ema else '在EMA20上方，觀察後續收盤是否守穩。'))
+    return ''.join(phrases) or '結構證據不足，保留No Trade；完整條件見Today。'
 
 def compact_brief(snapshot):
     """Short mobile wording of the same frozen facts; no extra signal model."""
@@ -85,7 +106,7 @@ def compact_brief(snapshot):
     if key in ('gold','lme_zinc','usdjpy','dxy','shfe_zinc'):
         m=_today_market_metrics(snapshot,key);change=m.get('change_1d')
         labels={'gold':'黃金參考Close','lme_zinc':'LME 3M參考Close','usdjpy':'USD/JPY','dxy':'DXY','shfe_zinc':'SHFE鋅'}
-        if finite(change):first=f"{labels[key]} {change:+.2f}%｜{_market_series(snapshot,key).get('as_of') or '日期缺失'}。"
+        if finite(change):first=f"{labels[key]} {change:+.2f}%。"
     from .radar_evidence import evidence_rows
     candidates=[r for r in evidence_rows(snapshot) if '當日反向' in r['technical'] or '美元下降但鋅下跌' in r['macro'] or '管道衝突' in r['macro']]
     chosen=next((r for r in candidates if '美元下降但鋅下跌' in r['macro']),candidates[0] if candidates else None)
@@ -99,18 +120,20 @@ def compact_brief(snapshot):
     return [dict(title='主要變化',text=first),dict(title='重要矛盾',text=second),dict(title='下一關卡',text=third)]
 
 def build_daily_flex(snapshot):
-    try:stamp=datetime.fromisoformat(snapshot.get('run_time','')).astimezone(ZoneInfo('Asia/Taipei')).strftime('%Y-%m-%d %H:%M 台灣時間')
-    except (ValueError,TypeError):stamp=snapshot.get('run_date') or '時間缺失'
-    header=box([text('每日市場研究','xl','#FFFFFF',weight='bold'),text('摘要時間：'+stamp,'xs','#D5E5F5'),text('延遲研究資料｜各市場交易日分別標示','xs','#D5E5F5'),dict(type='button',style='link',height='sm',color='#79C7FF',action=dict(type='uri',label='閱讀完整 Today →',uri=BASE))],backgroundColor=NAVY,paddingAll='16px')
-    contents=[]
-    for i,(item,tint) in enumerate(zip(compact_brief(snapshot),['#E8F6F3','#FFF3DB','#EAF3FF']),1):
-        contents.append(box([text(f'{i:02}  '+item['title'],'sm',weight='bold'),text(item['text'],'sm')],backgroundColor=tint,paddingAll='12px',cornerRadius='8px',margin='sm'))
-    contents.extend(market_card(r) for r in build_market_rows(snapshot))
+    rows=build_market_rows(snapshot)
+    header=box([text('每日市場簡報','xl',weight='bold')]+[text(x,'xs',MUTED) for x in date_summary(snapshot,rows)],backgroundColor='#F2EFE8',paddingAll='16px')
+    summary=[text('30秒重點','lg',weight='bold')]
+    for item,color in zip(compact_brief(snapshot),['#176C66','#A66B27','#56616C']):
+        summary.append(dict(type='box',layout='horizontal',spacing='sm',margin='sm',contents=[text(item['title'],'sm',color,weight='bold',flex=0),text(item['text'],'sm',flex=1)]))
+    board=[text('主要行情','lg','#FFFFFF',weight='bold')]
+    for r in rows:
+        board.extend([board_row(r,snapshot),dict(type='separator',color='#596168')])
     rate=snapshot.get('market_research',{}).get('rates',{}).get('us10y',{})
-    rd,_=delta(rate.get('change_1d_bp'),' bp')
-    contents.append(box([text('利率背景｜美債10Y '+price(rate.get('value'))+'%','sm',weight='bold'),text(rd+'｜'+str(rate.get('as_of') or 'N/A'),'xs'),text('來源：美國財政部｜'+str(rate.get('retrieval_status') or rate.get('status') or 'MISSING'),'xs',MUTED)],backgroundColor='#EDF4FC',paddingAll='10px',margin='md',cornerRadius='8px'))
-    footer=box([dict(type='button',style='primary',color=BLUE,height='md',action=dict(type='uri',label='閱讀今日完整報告 → Today',uri=BASE)),link('Markets 商品圖表','markets.html'),link('Radar 事件證據','radar.html'),text('研究用途｜非即時可成交報價','xs',MUTED),text('沒有Trigger不下單；仍須核對Bid/Ask與Actual R:R。','xs',MUTED)],spacing='sm',paddingAll='16px')
-    return dict(type='flex',altText='每日市場研究｜'+str(snapshot.get('run_date') or '')+'｜黃金・鋅・日圓・美元｜點開閱讀Today',contents=dict(type='bubble',size='mega',header=header,body=box(contents,backgroundColor='#F4F8FC',paddingAll='12px'),footer=footer))
+    rd,rc=delta(rate.get('change_1d_bp'),' bp')
+    board.append(box([text('利率背景｜美債10Y '+price(rate.get('value'))+('%' if finite(rate.get('value')) else ''),'sm','#FFFFFF'),text(rd,'sm',rc)],spacing='sm',paddingTop='12px'))
+    contents=[box(summary,backgroundColor='#FFFCF6',paddingAll='14px',cornerRadius='8px'),box(board,backgroundColor=NAVY,paddingAll='14px',cornerRadius='8px',margin='md'),box([text('怎麼看今天？','lg',weight='bold'),text(observation(snapshot)),text('USD/JPY下跌代表日圓升值。','xs',MUTED)],backgroundColor='#FFFCF6',paddingAll='14px',spacing='sm',margin='md',cornerRadius='8px')]
+    footer=box([dict(type='button',style='primary',color=BLUE,height='md',action=dict(type='uri',label='閱讀完整 Today →',uri=BASE)),dict(type='box',layout='horizontal',contents=[link('Markets 圖表','markets.html'),link('Radar 事件','radar.html')]),text('研究用途｜延遲報價｜非即時可成交價格','xs',MUTED)],paddingAll='14px',spacing='sm',backgroundColor='#F2EFE8')
+    return dict(type='flex',altText='每日市場簡報 B1｜黃金・鋅・日圓・美元｜閱讀Today',contents=dict(type='bubble',size='mega',header=header,body=box(contents,backgroundColor='#F2EFE8',paddingAll='10px'),footer=footer))
 
 def validate_structure(message):
     raw=json.dumps(message,ensure_ascii=False)
@@ -134,13 +157,14 @@ def write_preview(snapshot):
     def render(x):
         typ=x.get('type');style=''
         if typ=='text':
-            sizes={'xs':12,'sm':14,'lg':19,'xl':22,'xxl':28}
+            sizes={'xs':12,'sm':14,'md':16,'lg':19,'xl':22,'xxl':28}
             return '<div style="font-size:'+str(sizes.get(x.get('size'),14))+'px;color:'+x.get('color',INK)+';font-weight:'+('700' if x.get('weight')=='bold' else '400')+';overflow-wrap:anywhere;flex:'+str(x.get('flex',1))+'">'+html.escape(x['text'])+'</div>'
-        if typ=='image':return '<img width="40" height="40" src="'+html.escape(x['url'])+'" alt="商品圖示">'
+        if typ=='separator':return '<hr style="border:0;border-top:1px solid '+x.get('color','#DDD')+';margin:0">'
+        if typ=='image':return '<img width="28" height="28" src="'+html.escape(x['url'])+'" alt="商品圖示">'
         if typ=='button':return '<a class="button '+('primary' if x.get('style')=='primary' else '')+'" href="'+html.escape(x['action']['uri'])+'">'+html.escape(x['action']['label'])+'</a>'
         if typ=='box':
-            style='display:flex;flex-direction:'+('row' if x['layout']=='horizontal' else 'column')+';gap:8px;align-items:'+('center' if x.get('alignItems') else 'stretch')+';background:'+x.get('backgroundColor','transparent')+';padding:'+x.get('paddingAll','0')+';border-radius:'+x.get('cornerRadius','0')+';margin-top:'+('12px' if x.get('margin') else '0')+';flex:'+str(x.get('flex',1))+';min-width:0;'
+            style='display:flex;flex-direction:'+('row' if x['layout']=='horizontal' else 'column')+';gap:8px;align-items:'+('center' if x.get('alignItems') else 'stretch')+';background:'+x.get('backgroundColor','transparent')+';padding:'+x.get('paddingAll','0')+';padding-top:'+x.get('paddingTop',x.get('paddingAll','0'))+';padding-bottom:'+x.get('paddingBottom',x.get('paddingAll','0'))+';border-radius:'+x.get('cornerRadius','0')+';margin-top:'+('12px' if x.get('margin') else '0')+';flex:'+str(x.get('flex',1))+';min-width:0;'
             return '<div style="'+style+'">'+''.join(render(c) for c in x['contents'])+'</div>'
         return ''
-    page='<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LINE B｜閱讀預覽</title><style>body{margin:0;background:#E9F1F8;font:14px/1.55 Arial,sans-serif}.preview{max-width:430px;margin:auto;background:white}.button{display:block;text-align:center;text-decoration:none;color:#1264D9;padding:12px;min-height:24px}.primary{background:#1264D9;color:white;border-radius:8px}aside{padding:12px;color:#617487;max-width:406px;margin:auto}</style><aside>版本B網頁近似預覽；實際LINE顯示以手機為準。<br>可縮窄視窗檢查360／390／430px閱讀。<a href="./">返回Today</a></aside><main class="preview">'+''.join(render(msg['contents'][k]) for k in ('header','body','footer'))+'</main></html>'
+    page='<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LINE B1｜閱讀預覽</title><style>body{margin:0;background:#F2EFE8;font:14px/1.55 Arial,sans-serif}.preview{max-width:430px;margin:auto;background:white}.button{display:block;text-align:center;text-decoration:none;color:#176C66;padding:12px;min-height:24px}.primary{background:#176C66;color:white;border-radius:8px}aside{padding:12px;color:#617487;max-width:406px;margin:auto}</style><aside>B1網頁近似預覽；實際LINE顯示以手機為準。<br>可縮窄視窗檢查360／390／430px閱讀。<a href="./">返回Today</a></aside><main class="preview">'+''.join(render(msg['contents'][k]) for k in ('header','body','footer'))+'</main></html>'
     path=Path('public/line-preview.html');path.write_text(page,encoding='utf-8');return path
