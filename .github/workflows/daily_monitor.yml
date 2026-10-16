@@ -76,6 +76,9 @@ jobs:
       - name: Phase 1 visual language and data identity test
         run: python -m unittest -q test_visual_language.py
 
+      - name: Final A/B information architecture and chart synchronization
+        run: python -m unittest -q test_final_ab.py
+
       - name: Phase 2A enriched Today decision layer test
         run: python -m unittest -q test_today_phase2a.py
 

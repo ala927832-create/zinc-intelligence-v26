@@ -253,7 +253,7 @@ def main() -> int:
     market_pages = {}
     for key in ("lme_zinc", "shfe_zinc", "gold", "usdjpy", "dxy", "us_treasury"):
         _expect(market_index, f"market-{key}.html", failures, f"Markets route {key}")
-        market_pages[key] = _fetch(urljoin(page_url, f"market-{key}.html"), run_id, marker="CHARTS BEFORE COMMENTARY")
+        market_pages[key] = _fetch(urljoin(page_url, f"market-{key}.html"), run_id, marker="RESEARCH ONLY")
     markets_html = "".join(market_pages.values())
     markets_text = _visible_text(markets_html)
     decisions = snapshot.get("decision_book", {}).get("markets", {})
@@ -266,7 +266,7 @@ def main() -> int:
         for number, label in enumerate(("市場方向", "證據一致性", "風險位置", "准許進場條件",
                                         "看錯損失", "出場計畫", "理論風報比", "No-Trade 理由"), 1):
             _expect(markets_html, f"{number}. {label}", failures, f"{key} audit question {number}")
-    for marker in ("CHARTS BEFORE COMMENTARY", "Markets · price structure and conditional plans",
+    for marker in ("交易日精確查值", "與主圖相同日期範圍",
                    "Decision brief · eight required questions", "Asset-specific evidence",
                    "Conditional plan · RESEARCH ONLY", "Execution approval boundary",
                    "Treasury evidence"):
@@ -276,8 +276,9 @@ def main() -> int:
     for period in ("20D", "60D", "120D", "1Y", "ALL"):
         _expect(markets_html, period, failures, f"Markets chart period {period}")
     _expect(markets_html, "data-indicator='RSI14'", failures, "Markets close-based RSI14 chart")
-    _expect(markets_html, "Separate China-market contract for cross-market confirmation", failures,
-            "LME/SHFE market identity boundary")
+    _expect(market_pages.get("shfe_zinc", ""), "SHFE", failures, "SHFE independent market identity")
+    if "lme_linked_shfe" in market_pages.get("lme_zinc", ""):
+        failures.append("LME detail must not mix SHFE charts into its primary study")
     for obsolete_section in ("Market comparison · first decision layer", "CROSS-MARKET DECISION MATRIX"):
         if obsolete_section in markets_html or obsolete_section in raw_html:
             failures.append(f"obsolete repeated comparison remains: {obsolete_section}")
@@ -295,10 +296,7 @@ def main() -> int:
     _expect(text, "GLOBAL MACRO RESEARCH DESK", failures)
     _expect(text, f"Model {snapshot.get('model_version')}", failures, "model version")
     _expect(text, str(gate.get("status", "—")), failures, "core data gate")
-    for marker in ("MARKET SNAPSHOT", "FIRST LOOK · PRICES BEFORE OPINIONS", "TODAY'S MARKET POSTURE",
-                   "TODAY'S LARGEST MOVES / CONDITIONS", "1D", "5D", "20D", "vs EMA20",
-                   "Next trigger", "今日重點", "PRIMARY WATCH", "US TREASURY 10Y",
-                   "LME ZINC · CONTEXT SPLIT", "WHAT PERMITS ACTION", "RESEARCH ONLY"):
+    for marker in ("今日行情總覽", "優先觀察", "1D", "5D", "Cash歷史待補", "3M參考", "RESEARCH ONLY"):
         _expect(text, marker, failures, f"Today information architecture: {marker}")
     _expect(raw_html, "class='side-nav'", failures, "left research navigation")
     for section_id in ("overview", "data-health"):
@@ -392,6 +390,9 @@ def main() -> int:
         elif status in {"AVAILABLE", "VERIFIED_REFERENCE"}:
             failures.append(f"snapshot governance failure: {key} has status {status} but no age_days")
 
+    for marker in ("PRIMARY WATCH", "WHAT PERMITS ACTION", "Next trigger"):
+        if marker in text:
+            failures.append("Today contains Markets-only content: " + marker)
     # Public privacy guarantee: exact internal inventory and demand must not be rendered.
     if not snapshot.get("privacy", {}).get("public_dashboard_include_private", False):
         _expect(lme_block, "Public privacy mode", failures, "privacy boundary")

@@ -744,6 +744,7 @@ def _zinc_context(snapshot: dict) -> str:
 
 def build_dashboard_v27(snapshot: dict, candle_frames: dict[str, pd.DataFrame], trades: list[dict], perf: dict) -> Path:
     from .daily_brief import brief_panel
+    from .final_layout import today, CSS as AB_CSS
     build_legacy_dashboard(snapshot, candle_frames, trades, perf)
     PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -808,7 +809,7 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 @media(max-width:1100px){{.site-shell{{grid-template-columns:1fr}}.side-nav{{position:sticky;top:0;min-height:0;display:flex;gap:4px;overflow-x:auto;padding:7px 10px;border-right:0;border-bottom:1px solid #d4dce2}}.side-nav a{{white-space:nowrap;margin:0}}.side-nav .nav-sep{{display:none}}.cockpit-banner,.today-hero{{grid-template-columns:1fr}}.quote-grid{{grid-template-columns:repeat(2,minmax(0,1fr))}}}}
 @media(max-width:680px){{.site-header .top{{padding:14px}}.site-header h1{{font-size:22px}}.side-nav .nav-icon{{display:none}}.trend-band{{min-width:560px}}.trend-ribbon{{overflow-x:auto}}.today-metrics,.watch-levels,.today-rules{{grid-template-columns:1fr 1fr}}.today-hero .posture{{font-size:31px}}.quote-grid{{grid-template-columns:1fr}}.quote-main strong{{font-size:29px}}.today-watch>div:not(.eyebrow){{grid-template-columns:1fr}}}}
 {VISUAL_CSS}
-</style></head><body>
+{AB_CSS}</style></head><body class='final-ab'>
 <header class='site-header'><div class='top'><div><h1>GLOBAL MACRO RESEARCH DESK</h1><div class='muted'>Daily decision brief · evidence first · execution requires a private live quote</div></div><div><b>{_esc(snapshot.get('run_date'))}</b><br><span class='muted'>Model {_esc(snapshot.get('model_version'))} · RESEARCH ONLY</span></div></div></header>
 <div class='site-shell'><nav class='side-nav' aria-label='Research sections'>
 <a class='active' href='index.html'><span class='nav-icon'>⌂</span>TODAY</a>
@@ -816,15 +817,10 @@ th{{color:#264f70;background:#f3f5f4}}th,td{{border-bottom-color:#dfe5e8}}.chart
 <a href='radar.html'><span class='nav-icon'>⌁</span>RADAR</a>
 <a href='journal.html'><span class='nav-icon'>□</span>JOURNAL</a></nav>
 <main class='wrap'><div class='grid'>
-<section class='s12'>{source_legend()}</section>
-{_today_market_cards(snapshot)}
-<section class='panel s12'>{brief_panel(snapshot)}</section>
-{_today_posture(snapshot)}
-{_today_changes(snapshot)}
+{today(snapshot)}
 <section class='panel s12' id='data-health' hidden aria-hidden='true'><h2>DATA HEALTH · SOURCE / AS-OF / DELAY</h2><div class='health-scroll'><table><tr><th>Field</th><th>As of</th><th>Age</th><th>Expected update</th><th>Source grade / provider</th><th>Freshness</th></tr>{_health_rows(snapshot)}</table></div></section>
-{_primary_watch(snapshot)}
-{_zinc_context(snapshot)}
-<section class='panel s12'><div class='section-head'><div><div class='eyebrow'>OPERATING CONSTITUTION</div><h2>WHAT PERMITS ACTION</h2></div><span class='pill warn'>RESEARCH ONLY</span></div><div class='today-rules'><div><b>1 · Verified data</b><span>No complete data → no signal</span></div><div><b>2 · Confirmed trigger</b><span>No trigger → no order</span></div><div><b>3 · Private quote check</b><span>Bid/Ask and spread must be acceptable</span></div><div><b>4 · Risk approval</b><span>Actual R:R below 1:2 → reject</span></div></div></section>
+
+
 </div><div class='footer'>GLOBAL MACRO RESEARCH DESK · RESEARCH ONLY · Today shows decisions once; Markets holds evidence and levels · private inputs are never deployed.</div></main></div></body></html>"""
 
     out = PUBLIC_DIR / "index.html"
