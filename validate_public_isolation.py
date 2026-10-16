@@ -16,6 +16,8 @@ def validate(root: Path) -> None:
         *[p for p in data.rglob("*candle*") if "shfe" not in p.name.lower()],
         *data.glob("lme_zinc_3m_*.csv"),
         *public.rglob("*candle*.png"),
+        *data.rglob("*zscs*"),
+        *public.rglob("*zscs*"),
     ]
     forbidden = sorted({p for p in forbidden if p.is_file()})
     if forbidden:
@@ -40,9 +42,11 @@ def validate(root: Path) -> None:
         raise ValueError("Public page must not reference a private candle chart")
     if shfe.get("status") == "AVAILABLE" and "SHFE ZINC" not in page.upper():
         raise ValueError("SHFE chart identity missing from public page")
-    public_text = "\n".join(path.read_text(encoding="utf-8") for path in public.glob("*.html"))
+    public_text = "\n".join(path.read_text(encoding="utf-8") for path in public.rglob("*")
+                            if path.is_file() and path.suffix.lower() in {".html", ".json", ".js", ".csv"})
     private_fields = ("name=\"account_equity\"", "name='account_equity'", "/api/execution/preview",
-                      "/api/trades", "execution_journal.jsonl")
+                      "/api/trades", "execution_journal.jsonl", "CNYES_ZSCS_REFERENCE",
+                      "cnyes_zscs_private_archive", "globalData.push(")
     leaked = [field for field in private_fields if field in public_text]
     if leaked:
         raise ValueError("Private execution controls referenced by public Pages: " + ", ".join(leaked))

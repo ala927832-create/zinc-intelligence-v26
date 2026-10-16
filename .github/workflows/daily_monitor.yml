@@ -67,6 +67,9 @@ jobs:
       - name: Public data isolation test
         run: python test_public_isolation.py
 
+      - name: Private ZSCS importer tests (synthetic offline data only)
+        run: python -m unittest -q test_private_zscs.py
+
       - name: Phase 0 durable baseline guardrails
         run: python -m unittest -q test_phase0_guardrails.py
 

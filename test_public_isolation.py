@@ -38,6 +38,16 @@ def run() -> None:
         except ValueError:
             pass
 
+        page.write_text("Public market summary")
+        nested = root / "public/assets/innocent.json"
+        nested.write_text('{"series":"CNYES_ZSCS_REFERENCE"}')
+        try:
+            validate(root)
+            raise AssertionError("Private ZSCS payload passed validation")
+        except ValueError:
+            pass
+        nested.unlink()
+
     workflow = (Path(__file__).parent / ".github/workflows/daily_monitor.yml").read_text()
     assert "CANDLE_API_KEY:" not in workflow
     assert "ZINC_DAILY_CANDLE_URL:" not in workflow
