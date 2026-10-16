@@ -2,7 +2,7 @@ name: One approved LINE B1 preview — 2026-10-16
 on:
   push:
     branches: [line-b1-preview-20261016]
-    paths: [.github/workflows/line_one_approved.yml]
+    paths: [.github/workflows/line_b1_approved.yml]
 permissions:
   contents: read
 concurrency:
