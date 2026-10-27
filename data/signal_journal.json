@@ -1908,5 +1908,19 @@
     "data_confidence": 93.0,
     "event_overlay": "NONE",
     "core_data_gate": "HEALTHY"
+  },
+  {
+    "run_time": "2026-10-27T08:11:22.252940+00:00",
+    "run_date": "2026-10-27",
+    "model_version": "2.7.0",
+    "market_score": 81.69162055663708,
+    "market_regime": "STRONG_BULL",
+    "conservative_action": "NO_SIGNAL",
+    "aggressive_action": "NO_SIGNAL",
+    "conservative_probability": null,
+    "aggressive_probability": null,
+    "data_confidence": 93.0,
+    "event_overlay": "NONE",
+    "core_data_gate": "HEALTHY"
   }
 ]
