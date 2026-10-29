@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-10-29T08:45:11.961751+00:00",
+  "run_time": "2026-10-29T16:19:46.833007+00:00",
   "run_date": "2026-10-29",
   "model_version": "2.7.0",
   "market": {
@@ -25,7 +25,7 @@
     "tc_smelter_usd_t": -156.5,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-10-29T08:45:11.963540+00:00",
+    "as_of": "2026-10-29T16:19:46.835391+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-10-29T08:45:11.963540+00:00",
+        "as_of": "2026-10-29T16:19:46.835391+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -165,7 +165,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-28",
-        "age_days": 1.36,
+        "age_days": 1.68,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -177,7 +177,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
         "as_of": "2026-10-28",
-        "age_days": 1.36,
+        "age_days": 1.68,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -189,7 +189,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-27",
-        "age_days": 2.36,
+        "age_days": 2.68,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -201,7 +201,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-27",
-        "age_days": 2.36,
+        "age_days": 2.68,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -213,7 +213,7 @@
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
         "as_of": "2026-10-27",
-        "age_days": 2.36,
+        "age_days": 2.68,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -225,7 +225,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-10-23",
-        "age_days": 6.36,
+        "age_days": 6.68,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -237,7 +237,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-10-29",
-        "age_days": 0.36,
+        "age_days": 0.68,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -268,7 +268,7 @@
       "source": "SMM_PUBLIC",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 6.36,
+      "age_days": 6.68,
       "url": "https://www-old.metal.com/Zinc/202506030011",
       "error": null
     },
@@ -282,7 +282,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 6.36,
+      "age_days": 6.68,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -309,7 +309,7 @@
       "source": "Fastmarkets reported Teck / Korea Zinc annual benchmark",
       "source_grade": "B_VERIFIED_BENCHMARK",
       "expected_update": "Annual",
-      "age_days": 237.36,
+      "age_days": 237.68,
       "url": "https://www.fastmarkets.com/insights/teck-korea-zinc-benchmark-zinc-concentrate-tcs-85-per-tonne/",
       "notes": "Annual benchmark reference only. Do not substitute for China import spot TC or China domestic TC."
     },
@@ -326,44 +326,44 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 110.7300033569336,
-      "change_pct": -3.980225763126355,
+      "value": 109.94000244140625,
+      "change_pct": -4.6652768536726175,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.0339999198913574,
-      "change_pct": 7.703230897694646,
+      "value": 2.9539999961853027,
+      "change_pct": 4.863332914104812,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.25199890136719,
-      "change_pct": 0.060667832938432475,
+      "value": 101.99099731445312,
+      "change_pct": -0.19474030942236986,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.616499900817871,
-      "change_pct": -0.3764224253826831,
+      "value": 6.598499774932861,
+      "change_pct": -0.6474474332174851,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Aluminium Proxy": {
-      "value": 3278.0,
-      "change_pct": -0.2206833574309397,
+      "value": 3182.0,
+      "change_pct": -2.9286150091519247,
       "ticker": "ALI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 32.51599884033203,
-      "change_pct": 0.2791009570419334,
+      "value": 32.540000915527344,
+      "change_pct": 0.3531231801791712,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 52.95000076293945,
-      "change_pct": -0.9484257675064889,
+      "value": 52.44499969482422,
+      "change_pct": -1.8931122654321952,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -30836,9 +30836,9 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
-        "as_of": "2026-10-27",
-        "observations": 455,
+        "retrieval_status": "CURRENT_FETCH",
+        "as_of": "2026-10-28",
+        "observations": 456,
         "history": [
           {
             "date": "2025-01-02",
@@ -32659,14 +32659,18 @@
           {
             "date": "2026-10-27",
             "value": 4.7
+          },
+          {
+            "date": "2026-10-28",
+            "value": 4.67
           }
         ],
-        "value": 4.7,
-        "age_days": 2,
-        "change_1d_bp": 2.0,
-        "change_5d_bp": -9.0,
+        "value": 4.67,
+        "age_days": 1,
+        "change_1d_bp": -3.0,
+        "change_5d_bp": -14.0,
         "largest_gap_days": 4,
-        "current_provider_error": "ReadTimeout"
+        "current_provider_error": null
       },
       "us10y": {
         "status": "AVAILABLE",
@@ -32676,9 +32680,9 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
-        "as_of": "2026-10-27",
-        "observations": 455,
+        "retrieval_status": "CURRENT_FETCH",
+        "as_of": "2026-10-28",
+        "observations": 456,
         "history": [
           {
             "date": "2025-01-02",
@@ -34499,14 +34503,18 @@
           {
             "date": "2026-10-27",
             "value": 4.99
+          },
+          {
+            "date": "2026-10-28",
+            "value": 5.05
           }
         ],
-        "value": 4.99,
-        "age_days": 2,
-        "change_1d_bp": -1.0,
-        "change_5d_bp": -13.0,
+        "value": 5.05,
+        "age_days": 1,
+        "change_1d_bp": 6.0,
+        "change_5d_bp": -8.0,
         "largest_gap_days": 4,
-        "current_provider_error": "ReadTimeout"
+        "current_provider_error": null
       },
       "us30y": {
         "status": "AVAILABLE",
@@ -34516,9 +34524,9 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
-        "as_of": "2026-10-27",
-        "observations": 455,
+        "retrieval_status": "CURRENT_FETCH",
+        "as_of": "2026-10-28",
+        "observations": 456,
         "history": [
           {
             "date": "2025-01-02",
@@ -36339,14 +36347,18 @@
           {
             "date": "2026-10-27",
             "value": 5.3
+          },
+          {
+            "date": "2026-10-28",
+            "value": 5.37
           }
         ],
-        "value": 5.3,
-        "age_days": 2,
-        "change_1d_bp": -1.0,
-        "change_5d_bp": -12.0,
+        "value": 5.37,
+        "age_days": 1,
+        "change_1d_bp": 7.0,
+        "change_5d_bp": -5.0,
         "largest_gap_days": 4,
-        "current_provider_error": "ReadTimeout"
+        "current_provider_error": null
       },
       "real10y": {
         "status": "AVAILABLE",
@@ -36356,9 +36368,9 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_real_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
-        "as_of": "2026-10-27",
-        "observations": 455,
+        "retrieval_status": "CURRENT_FETCH",
+        "as_of": "2026-10-28",
+        "observations": 456,
         "history": [
           {
             "date": "2025-01-02",
@@ -38179,22 +38191,26 @@
           {
             "date": "2026-10-27",
             "value": 2.64
+          },
+          {
+            "date": "2026-10-28",
+            "value": 2.67
           }
         ],
-        "value": 2.64,
-        "age_days": 2,
-        "change_1d_bp": -2.0,
-        "change_5d_bp": -13.0,
+        "value": 2.67,
+        "age_days": 1,
+        "change_1d_bp": 3.0,
+        "change_5d_bp": -9.0,
         "largest_gap_days": 4,
-        "current_provider_error": "ReadTimeout"
+        "current_provider_error": null
       }
     },
     "events": {
-      "checked_at": "2026-10-29T08:46:26.636707+00:00",
+      "checked_at": "2026-10-29T16:21:15.236432+00:00",
       "sources": {
         "BLS": {
           "status": "UNAVAILABLE",
-          "checked_at": "2026-10-29T08:46:26.636707+00:00",
+          "checked_at": "2026-10-29T16:21:15.236432+00:00",
           "url": "https://www.bls.gov/schedule/2026/10_sched_list.htm",
           "method": "OFFICIAL_MONTHLY_HTML_FALLBACK",
           "attempts": [
@@ -38218,17 +38234,17 @@
         },
         "Fed": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-10-29T08:46:26.636707+00:00",
+          "checked_at": "2026-10-29T16:21:15.236432+00:00",
           "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
         },
         "BoJ": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-10-29T08:46:26.636707+00:00",
+          "checked_at": "2026-10-29T16:21:15.236432+00:00",
           "url": "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm"
         },
         "NBS": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-10-29T08:46:26.636707+00:00",
+          "checked_at": "2026-10-29T16:21:15.236432+00:00",
           "url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html"
         }
       },
@@ -38970,16 +38986,16 @@
     "supply_demand": null,
     "smelter_economics": 99.99986484886401,
     "physical_market": 99.18374288468401,
-    "macro": 44.813754992725045,
+    "macro": 44.257331022488664,
     "technical": 69.4730443073731
   },
   "component_coverage": 0.8,
-  "market_score": 82.41182574788238,
+  "market_score": 82.34227275160283,
   "market_regime": "STRONG_BULL",
   "horizons": {
-    "5D": 73.35467873952588,
-    "20D": 76.5893740996532,
-    "60D": 79.17713038775506
+    "5D": 73.33381284064201,
+    "20D": 76.55111995169946,
+    "60D": 79.12496564054541
   },
   "market_quality": {
     "confidence": 93.0,
@@ -39007,7 +39023,7 @@
   "procurement_quality": {
     "confidence": 80,
     "status": "CARRY_FORWARD",
-    "max_age_days": 7.305482722048611
+    "max_age_days": 7.6213328196875
   },
   "procurement": {
     "status": "OK",
