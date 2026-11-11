@@ -1,12 +1,12 @@
 {
-  "run_time": "2026-11-10T17:13:10.311208+00:00",
-  "run_date": "2026-11-10",
+  "run_time": "2026-11-11T09:43:15.303696+00:00",
+  "run_date": "2026-11-11",
   "model_version": "2.7.0",
   "market": {
-    "lme_cash": 3754.0,
-    "lme_3m": 3724.0,
-    "lme_inventory_t": 146375.0,
-    "cancelled_warrants_t": 13675.0,
+    "lme_cash": 3768.0,
+    "lme_3m": 3734.0,
+    "lme_inventory_t": 144975.0,
+    "cancelled_warrants_t": 12275.0,
     "tc_usd_t": -167.5,
     "physical_premium_usd_t": 85.0,
     "smelter_margin_usd_t": null,
@@ -14,10 +14,10 @@
     "global_balance_kt": null,
     "smelter_utilization_pct": null,
     "lme_cash_bid": null,
-    "lme_cash_offer": 3754.0,
+    "lme_cash_offer": 3768.0,
     "lme_3m_bid": null,
-    "lme_3m_offer": 3724.0,
-    "lme_settlement": 3754.0,
+    "lme_3m_offer": 3734.0,
+    "lme_settlement": 3768.0,
     "lme_closing_stock_t": null,
     "live_warrants_t": 132700.0,
     "delivered_in_t": null,
@@ -25,48 +25,48 @@
     "tc_smelter_usd_t": -167.5,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-11-10T17:13:10.313395+00:00",
+    "as_of": "2026-11-11T09:43:15.306292+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
         "provider": "grillo_lme_zinc",
         "status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-06"
+        "as_of": "2026-11-09"
       },
       "live_warrants_t": {
         "provider": "grillo_lme_zinc",
         "status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-06"
+        "as_of": "2026-11-09"
       },
       "cancelled_warrants_t": {
         "provider": "grillo_lme_zinc",
         "status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-06"
+        "as_of": "2026-11-09"
       },
       "lme_cash": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-09"
+        "as_of": "2026-11-10"
       },
       "lme_cash_offer": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-09"
+        "as_of": "2026-11-10"
       },
       "lme_settlement": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-09"
+        "as_of": "2026-11-10"
       },
       "lme_3m": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-09"
+        "as_of": "2026-11-10"
       },
       "lme_3m_offer": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-09"
+        "as_of": "2026-11-10"
       },
       "tc_usd_t": {
         "provider": "smm_tc_direct",
@@ -81,7 +81,7 @@
       "physical_premium_usd_t": {
         "provider": "smm_premium_direct",
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-10"
+        "as_of": "2026-11-11"
       }
     },
     "provider_status": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-11-10T17:13:10.313395+00:00",
+        "as_of": "2026-11-11T09:43:15.306292+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -128,12 +128,12 @@
       },
       "grillo_lme_zinc": {
         "status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-06",
+        "as_of": "2026-11-09",
         "error": null
       },
       "westmetall_lme_zinc": {
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-09",
+        "as_of": "2026-11-10",
         "error": null
       },
       "smm_tc_direct": {
@@ -144,13 +144,13 @@
       },
       "smm_premium_direct": {
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-10",
+        "as_of": "2026-11-11",
         "error": null,
         "redistribution_caution": true
       }
     },
-    "cash_3m": 30.0,
-    "cancelled_ratio_pct": 9.342442356959864,
+    "cash_3m": 34.0,
+    "cancelled_ratio_pct": 8.466977065011209,
     "free_data_limitations": [
       "True LME Zinc 3M Daily OHLC is not exposed as a stable unauthenticated free API; free current-year viewing/download may require an LME account.",
       "LME 15m/1H OHLC suitable for automated candlestick backtests is not available as a stable anonymous free feed.",
@@ -164,8 +164,8 @@
         "source": "westmetall_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-09",
-        "age_days": 1.72,
+        "as_of": "2026-11-10",
+        "age_days": 1.41,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -176,8 +176,8 @@
         "source": "westmetall_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-09",
-        "age_days": 1.72,
+        "as_of": "2026-11-10",
+        "age_days": 1.41,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -188,8 +188,8 @@
         "source": "grillo_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-06",
-        "age_days": 4.72,
+        "as_of": "2026-11-09",
+        "age_days": 2.41,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -200,8 +200,8 @@
         "source": "grillo_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-06",
-        "age_days": 4.72,
+        "as_of": "2026-11-09",
+        "age_days": 2.41,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -212,8 +212,8 @@
         "source": "grillo_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-06",
-        "age_days": 4.72,
+        "as_of": "2026-11-09",
+        "age_days": 2.41,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -225,7 +225,7 @@
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
         "as_of": "2026-11-06",
-        "age_days": 4.72,
+        "age_days": 5.41,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -236,8 +236,8 @@
         "source": "smm_premium_direct",
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-10",
-        "age_days": 0.72,
+        "as_of": "2026-11-11",
+        "age_days": 0.41,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -268,7 +268,7 @@
       "source": "SMM_PUBLIC",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 4.72,
+      "age_days": 5.41,
       "url": "https://www-old.metal.com/Zinc/202506030011",
       "error": null
     },
@@ -282,7 +282,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 4.72,
+      "age_days": 5.41,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -296,7 +296,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Monthly",
-      "age_days": 9.72,
+      "age_days": 10.41,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -309,7 +309,7 @@
       "source": "Fastmarkets reported Teck / Korea Zinc annual benchmark",
       "source_grade": "B_VERIFIED_BENCHMARK",
       "expected_update": "Annual",
-      "age_days": 249.72,
+      "age_days": 250.41,
       "url": "https://www.fastmarkets.com/insights/teck-korea-zinc-benchmark-zinc-concentrate-tcs-85-per-tonne/",
       "notes": "Annual benchmark reference only. Do not substitute for China import spot TC or China domestic TC."
     },
@@ -333,38 +333,38 @@
       "error": "single positional indexer is out-of-bounds"
     },
     "Natural Gas": {
-      "value": 3.2950000762939453,
-      "change_pct": 2.3927949874307908,
+      "value": 3.311000108718872,
+      "change_pct": 0.455100269624209,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 102.36199951171875,
-      "change_pct": 0.7004407035434923,
+      "value": 102.47200012207031,
+      "change_pct": 0.23671794697275317,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 6.223999977111816,
-      "change_pct": -1.6512573326383229,
+      "value": 6.296999931335449,
+      "change_pct": 1.2460787149692898,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Aluminium Proxy": {
-      "value": 3116.0,
-      "change_pct": -3.5368779506230186,
+      "value": 3144.0,
+      "change_pct": -0.9841744744508274,
       "ticker": "ALI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 33.0099983215332,
-      "change_pct": 0.7621988850379902,
+      "value": 32.87200164794922,
+      "change_pct": 0.25435890515028703,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 51.275001525878906,
-      "change_pct": -2.4522442552932677,
+      "value": 52.939998626708984,
+      "change_pct": 3.598749192005468,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -394,15 +394,15 @@
       "source": "westmetall_lme_3m_reference",
       "source_grade": "B_PUBLIC_REFERENCE",
       "series": "LME zinc 3M reference (Westmetall table)",
-      "as_of": "2026-11-09",
-      "observations": 470,
+      "as_of": "2026-11-10",
+      "observations": 471,
       "returns_20": 20,
-      "latest_close": 3724.0,
-      "sma_14": 3801.5,
-      "sma_30": 3775.5,
-      "ema_20": 3794.73,
-      "rsi_14": 42.15,
-      "close_indicator_sessions": 470,
+      "latest_close": 3734.0,
+      "sma_14": 3802.21,
+      "sma_30": 3770.93,
+      "ema_20": 3788.95,
+      "rsi_14": 43.39,
+      "close_indicator_sessions": 471,
       "material_gap_count": 0,
       "largest_gap_days": 5,
       "open_status": "MISSING_UNVERIFIED_SOURCE",
@@ -4166,6 +4166,14 @@
           "sma30": 3775.5,
           "ema20": 3794.73,
           "rsi14": 42.15
+        },
+        {
+          "date": "2026-11-10",
+          "close": 3734.0,
+          "sma14": 3802.21,
+          "sma30": 3770.93,
+          "ema20": 3788.95,
+          "rsi14": 43.39
         }
       ],
       "weekly_close_ranges": [
@@ -4948,31 +4956,31 @@
         {
           "week": "2026-11-13",
           "first_close": 3724.0,
-          "highest_close": 3724.0,
+          "highest_close": 3734.0,
           "lowest_close": 3724.0,
-          "last_close": 3724.0,
-          "sessions": 1
+          "last_close": 3734.0,
+          "sessions": 2
         }
       ],
       "coverage_start": "2025-01-02",
-      "coverage_end": "2026-11-09",
+      "coverage_end": "2026-11-10",
       "coverage_by_year": {
         "2025": 253,
-        "2026": 217
+        "2026": 218
       },
       "requested_history_start": "2025-01-01",
       "requested_start_covered": true,
       "trend": {
         "status": "AVAILABLE",
-        "score": -60,
-        "regime": "STRONG_BEAR",
+        "score": -50,
+        "regime": "BEAR",
         "reasons": [
           "Close 低於 EMA20",
           "EMA20 高於 SMA30",
-          "EMA20 近 5 個交易日斜率 -0.17%",
-          "SMA30 近 10 個交易日斜率 -0.53%",
-          "RSI14 42.15",
-          "Close 位於近 20 日收盤區間的 20% 位置"
+          "EMA20 近 5 個交易日斜率 -0.35%",
+          "SMA30 近 10 個交易日斜率 -0.68%",
+          "RSI14 43.39",
+          "Close 位於近 20 日收盤區間的 25% 位置"
         ],
         "components": {
           "close_vs_ema20": -20,
@@ -4980,18 +4988,18 @@
           "ema20_slope_5d": -15,
           "sma30_slope_10d": -15,
           "rsi14": -20,
-          "close_position_20d": -10
+          "close_position_20d": 0
         },
-        "ema20_slope_5d_pct": -0.17,
-        "sma30_slope_10d_pct": -0.53,
-        "close_position_20d_pct": 20.4,
+        "ema20_slope_5d_pct": -0.35,
+        "sma30_slope_10d_pct": -0.68,
+        "close_position_20d_pct": 25.2,
         "persistence_days": 1,
         "data_confidence": "MEDIUM",
         "risk_level": "NORMAL"
       },
       "returns_60": 60,
-      "volatility_20_pct": 18.06,
-      "volatility_60_pct": 19.47,
+      "volatility_20_pct": 18.09,
+      "volatility_60_pct": 19.48,
       "method": "Sample standard deviation of daily log returns × √252; historical, not a forecast",
       "retrieval_status": "CURRENT_FETCH",
       "retrieval_age_days": null,
@@ -5006,8 +5014,8 @@
       "source_grade": "A_OFFICIAL_EXCHANGE",
       "source_page": "https://www.shfe.com.cn/reports/tradedata/dailyandweeklydata/",
       "selection_rule": "highest_open_interest_then_volume",
-      "as_of": "2026-11-09",
-      "observations": 447,
+      "as_of": "2026-11-10",
+      "observations": 448,
       "chart_points": [
         {
           "date": "2025-01-02",
@@ -12607,29 +12615,46 @@
           "volume": 169058,
           "open_interest": 90217,
           "roll": false
+        },
+        {
+          "date": "2026-11-10",
+          "contract": "zn2612",
+          "open": 25330.0,
+          "high": 25445.0,
+          "low": 25000.0,
+          "close": 25075.0,
+          "sma20": 25552.25,
+          "sma50": 26157.8,
+          "sma60": 26076.17,
+          "ema20": 25624.02,
+          "atr14": 398.53,
+          "rsi14": 37.32,
+          "volume": 151352,
+          "open_interest": 88807,
+          "roll": false
         }
       ],
       "roll_count": 22,
       "coverage_start": "2025-01-02",
-      "coverage_end": "2026-11-09",
+      "coverage_end": "2026-11-10",
       "trend": {
         "regime": "BEAR",
         "method": "Close vs SMA20 and SMA20 vs SMA50"
       },
       "latest_contract": "zn2612",
-      "latest_close": 25325.0,
-      "latest_open_interest": 90217,
+      "latest_close": 25075.0,
+      "latest_open_interest": 88807,
       "latest_session": {
-        "open": 25260.0,
-        "high": 25535.0,
-        "low": 25095.0,
-        "close": 25325.0,
-        "sma20": 25585.0,
-        "sma50": 26174.4,
-        "sma60": 26085.17,
-        "ema20": 25681.81,
-        "atr14": 394.96,
-        "rsi14": 41.16
+        "open": 25330.0,
+        "high": 25445.0,
+        "low": 25000.0,
+        "close": 25075.0,
+        "sma20": 25552.25,
+        "sma50": 26157.8,
+        "sma60": 26076.17,
+        "ema20": 25624.02,
+        "atr14": 398.53,
+        "rsi14": 37.32
       }
     },
     "cross_assets": {
@@ -12642,10 +12667,10 @@
         "unit": "USD/oz",
         "source": "Yahoo Finance public reference via yfinance",
         "source_grade": "B_PUBLIC_REFERENCE",
-        "as_of": "2026-11-09",
-        "observations": 378,
+        "as_of": "2026-11-10",
+        "observations": 379,
         "coverage_start": "2025-05-12",
-        "coverage_end": "2026-11-09",
+        "coverage_end": "2026-11-10",
         "chart_points": [
           {
             "date": "2025-05-12",
@@ -17559,7 +17584,20 @@
             "ema20": 4085.3943,
             "atr14": 87.2126,
             "rsi14": 50.3099,
-            "volume": 178024.0
+            "volume": 190642.0
+          },
+          {
+            "date": "2026-11-10",
+            "open": 4149.0,
+            "high": 4156.2002,
+            "low": 4020.8,
+            "close": 4030.2,
+            "sma20": 4069.555,
+            "sma60": 4276.555,
+            "ema20": 4080.1377,
+            "atr14": 90.6545,
+            "rsi14": 44.2784,
+            "volume": 190642.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -17569,15 +17607,15 @@
           "No bid/ask, spread, actual fill or slippage."
         ],
         "latest_session": {
-          "open": 4074.3,
-          "high": 4157.7002,
-          "low": 4062.5,
-          "close": 4114.5,
-          "sma20": 4076.91,
-          "sma60": 4283.9466,
-          "ema20": 4085.3943,
-          "atr14": 87.2126,
-          "rsi14": 50.3099
+          "open": 4149.0,
+          "high": 4156.2002,
+          "low": 4020.8,
+          "close": 4030.2,
+          "sma20": 4069.555,
+          "sma60": 4276.555,
+          "ema20": 4080.1377,
+          "atr14": 90.6545,
+          "rsi14": 44.2784
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -17590,24 +17628,11 @@
         "unit": "JPY per USD",
         "source": "Alpha Vantage FX_DAILY",
         "source_grade": "B_PUBLIC_API",
-        "as_of": "2026-11-09",
+        "as_of": "2026-11-10",
         "observations": 5000,
-        "coverage_start": "2007-09-10",
-        "coverage_end": "2026-11-09",
+        "coverage_start": "2007-09-11",
+        "coverage_end": "2026-11-10",
         "chart_points": [
-          {
-            "date": "2025-04-29",
-            "open": 142.069,
-            "high": 142.757,
-            "low": 141.968,
-            "close": 142.264,
-            "sma20": 144.0209,
-            "sma60": 148.0296,
-            "ema20": 144.0501,
-            "atr14": 1.7457,
-            "rsi14": 39.1001,
-            "volume": 0.0
-          },
           {
             "date": "2025-04-30",
             "open": 142.268,
@@ -17705,7 +17730,7 @@
             "high": 146.187,
             "low": 144.82,
             "close": 145.323,
-            "sma20": 143.1901,
+            "sma20": 143.19,
             "sma60": 146.9472,
             "ema20": 144.234,
             "atr14": 1.8144,
@@ -17744,7 +17769,7 @@
             "high": 147.67,
             "low": 145.601,
             "close": 146.63,
-            "sma20": 143.9193,
+            "sma20": 143.9192,
             "sma60": 146.738,
             "ema20": 145.0605,
             "atr14": 1.8776,
@@ -17835,7 +17860,7 @@
             "high": 144.07,
             "low": 142.418,
             "close": 142.55,
-            "sma20": 144.5876,
+            "sma20": 144.5875,
             "sma60": 146.1335,
             "ema20": 144.6257,
             "atr14": 1.6671,
@@ -17939,7 +17964,7 @@
             "high": 144.395,
             "low": 142.6,
             "close": 142.734,
-            "sma20": 144.6838,
+            "sma20": 144.6837,
             "sma60": 145.5015,
             "ema20": 144.0607,
             "atr14": 1.6429,
@@ -17952,7 +17977,7 @@
             "high": 143.977,
             "low": 142.52,
             "close": 143.5,
-            "sma20": 144.5633,
+            "sma20": 144.5632,
             "sma60": 145.431,
             "ema20": 144.0073,
             "atr14": 1.6296,
@@ -17966,7 +17991,7 @@
             "low": 143.3,
             "close": 144.85,
             "sma20": 144.5396,
-            "sma60": 145.3683,
+            "sma60": 145.3684,
             "ema20": 144.0875,
             "atr14": 1.6404,
             "rsi14": 52.3581,
@@ -17979,7 +18004,7 @@
             "low": 143.96,
             "close": 144.58,
             "sma20": 144.3511,
-            "sma60": 145.2924,
+            "sma60": 145.2925,
             "ema20": 144.1344,
             "atr14": 1.5932,
             "rsi14": 51.2458,
@@ -18004,8 +18029,8 @@
             "high": 145.46,
             "low": 144.31,
             "close": 144.54,
-            "sma20": 144.1154,
-            "sma60": 145.1481,
+            "sma20": 144.1155,
+            "sma60": 145.1482,
             "ema20": 144.233,
             "atr14": 1.5162,
             "rsi14": 50.9372,
@@ -18017,7 +18042,7 @@
             "high": 144.56,
             "low": 143.16,
             "close": 143.47,
-            "sma20": 144.0094,
+            "sma20": 144.0093,
             "sma60": 145.06,
             "ema20": 144.1603,
             "atr14": 1.5079,
@@ -18083,7 +18108,7 @@
             "low": 144.73,
             "close": 145.45,
             "sma20": 144.1105,
-            "sma60": 144.6146,
+            "sma60": 144.6147,
             "ema20": 144.4841,
             "atr14": 1.411,
             "rsi14": 55.1565,
@@ -18134,7 +18159,7 @@
             "high": 145.94,
             "low": 144.58,
             "close": 145.25,
-            "sma20": 144.5119,
+            "sma20": 144.5118,
             "sma60": 144.3531,
             "ema20": 144.8347,
             "atr14": 1.4536,
@@ -18317,7 +18342,7 @@
             "low": 147.53,
             "close": 148.86,
             "sma20": 145.5805,
-            "sma60": 144.6982,
+            "sma60": 144.6983,
             "ema20": 145.8724,
             "atr14": 1.3135,
             "rsi14": 68.7337,
@@ -18369,7 +18394,7 @@
             "low": 147.06,
             "close": 147.38,
             "sma20": 146.075,
-            "sma60": 145.051,
+            "sma60": 145.0509,
             "ema20": 146.6219,
             "atr14": 1.3647,
             "rsi14": 56.0435,
@@ -18616,7 +18641,7 @@
             "low": 146.73,
             "close": 147.18,
             "sma20": 147.7435,
-            "sma60": 146.0144,
+            "sma60": 146.0143,
             "ema20": 147.5545,
             "atr14": 1.3406,
             "rsi14": 48.8464,
@@ -18655,7 +18680,7 @@
             "low": 146.85,
             "close": 147.32,
             "sma20": 147.8605,
-            "sma60": 146.1985,
+            "sma60": 146.1984,
             "ema20": 147.565,
             "atr14": 1.2462,
             "rsi14": 49.3624,
@@ -18694,7 +18719,7 @@
             "low": 146.69,
             "close": 147.77,
             "sma20": 147.8545,
-            "sma60": 146.4028,
+            "sma60": 146.4027,
             "ema20": 147.5926,
             "atr14": 1.3063,
             "rsi14": 51.6515,
@@ -22794,6 +22819,19 @@
             "atr14": 0.9639,
             "rsi14": 50.2092,
             "volume": 0.0
+          },
+          {
+            "date": "2026-11-10",
+            "open": 157.9,
+            "high": 158.85,
+            "low": 157.85,
+            "close": 158.73,
+            "sma20": 157.9455,
+            "sma60": 157.5855,
+            "ema20": 157.9919,
+            "atr14": 0.9665,
+            "rsi14": 56.4282,
+            "volume": 0.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -22803,18 +22841,18 @@
           "No bid/ask, spread, actual fill or slippage."
         ],
         "latest_session": {
-          "open": 158.3,
-          "high": 158.53,
-          "low": 157.65,
-          "close": 157.9,
-          "sma20": 157.9235,
-          "sma60": 157.6003,
-          "ema20": 157.9142,
-          "atr14": 0.9639,
-          "rsi14": 50.2092
+          "open": 157.9,
+          "high": 158.85,
+          "low": 157.85,
+          "close": 158.73,
+          "sma20": 157.9455,
+          "sma60": 157.5855,
+          "ema20": 157.9919,
+          "atr14": 0.9665,
+          "rsi14": 56.4282
         },
         "fallback_provider": "Yahoo Finance public reference via yfinance",
-        "cross_source_deviation_pct": -0.2476,
+        "cross_source_deviation_pct": 0.4728,
         "retrieval_status": "CURRENT_FETCH"
       },
       "dxy": {
@@ -22826,10 +22864,10 @@
         "unit": "index",
         "source": "Yahoo Finance public reference via yfinance",
         "source_grade": "B_PUBLIC_REFERENCE",
-        "as_of": "2026-11-09",
-        "observations": 378,
+        "as_of": "2026-11-10",
+        "observations": 379,
         "coverage_start": "2025-05-12",
-        "coverage_end": "2026-11-09",
+        "coverage_end": "2026-11-10",
         "chart_points": [
           {
             "date": "2025-05-12",
@@ -27744,6 +27782,19 @@
             "atr14": 0.5296,
             "rsi14": 49.1041,
             "volume": 0.0
+          },
+          {
+            "date": "2026-11-10",
+            "open": 101.72,
+            "high": 102.41,
+            "low": 101.49,
+            "close": 102.23,
+            "sma20": 101.9275,
+            "sma60": 100.8495,
+            "ema20": 101.8515,
+            "atr14": 0.5574,
+            "rsi14": 56.1632,
+            "volume": 0.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -27753,15 +27804,15 @@
           "No bid/ask, spread, actual fill or slippage."
         ],
         "latest_session": {
-          "open": 102.24,
-          "high": 102.28,
-          "low": 101.64,
-          "close": 101.65,
-          "sma20": 101.925,
-          "sma60": 100.8063,
-          "ema20": 101.8117,
-          "atr14": 0.5296,
-          "rsi14": 49.1041
+          "open": 101.72,
+          "high": 102.41,
+          "low": 101.49,
+          "close": 102.23,
+          "sma20": 101.9275,
+          "sma60": 100.8495,
+          "ema20": 101.8515,
+          "atr14": 0.5574,
+          "rsi14": 56.1632
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -30994,7 +31045,7 @@
           "rsi14": 50.1198
         },
         "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
-        "retrieval_age_days": 2,
+        "retrieval_age_days": 3,
         "current_provider_error": "ValueError"
       },
       "usd_basket": {
@@ -31027,9 +31078,9 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
-        "as_of": "2026-11-09",
-        "observations": 464,
+        "retrieval_status": "CURRENT_FETCH",
+        "as_of": "2026-11-10",
+        "observations": 465,
         "history": [
           {
             "date": "2025-01-02",
@@ -32886,14 +32937,18 @@
           {
             "date": "2026-11-09",
             "value": 4.56
+          },
+          {
+            "date": "2026-11-10",
+            "value": 4.73
           }
         ],
-        "value": 4.56,
+        "value": 4.73,
         "age_days": 1,
-        "change_1d_bp": 5.0,
-        "change_5d_bp": -3.0,
+        "change_1d_bp": 17.0,
+        "change_5d_bp": 12.0,
         "largest_gap_days": 4,
-        "current_provider_error": "ReadTimeout"
+        "current_provider_error": null
       },
       "us10y": {
         "status": "AVAILABLE",
@@ -32903,9 +32958,9 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
-        "as_of": "2026-11-09",
-        "observations": 464,
+        "retrieval_status": "CURRENT_FETCH",
+        "as_of": "2026-11-10",
+        "observations": 465,
         "history": [
           {
             "date": "2025-01-02",
@@ -34762,14 +34817,18 @@
           {
             "date": "2026-11-09",
             "value": 4.88
+          },
+          {
+            "date": "2026-11-10",
+            "value": 4.98
           }
         ],
-        "value": 4.88,
+        "value": 4.98,
         "age_days": 1,
-        "change_1d_bp": 2.0,
-        "change_5d_bp": -3.0,
+        "change_1d_bp": 10.0,
+        "change_5d_bp": 3.0,
         "largest_gap_days": 4,
-        "current_provider_error": "ReadTimeout"
+        "current_provider_error": null
       },
       "us30y": {
         "status": "AVAILABLE",
@@ -34779,9 +34838,9 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
-        "as_of": "2026-11-09",
-        "observations": 464,
+        "retrieval_status": "CURRENT_FETCH",
+        "as_of": "2026-11-10",
+        "observations": 465,
         "history": [
           {
             "date": "2025-01-02",
@@ -36638,14 +36697,18 @@
           {
             "date": "2026-11-09",
             "value": 5.26
+          },
+          {
+            "date": "2026-11-10",
+            "value": 5.35
           }
         ],
-        "value": 5.26,
+        "value": 5.35,
         "age_days": 1,
-        "change_1d_bp": 0.0,
-        "change_5d_bp": -2.0,
+        "change_1d_bp": 9.0,
+        "change_5d_bp": 3.0,
         "largest_gap_days": 4,
-        "current_provider_error": "ReadTimeout"
+        "current_provider_error": null
       },
       "real10y": {
         "status": "AVAILABLE",
@@ -36656,8 +36719,8 @@
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_real_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
         "retrieval_status": "CURRENT_FETCH",
-        "as_of": "2026-11-09",
-        "observations": 464,
+        "as_of": "2026-11-10",
+        "observations": 465,
         "history": [
           {
             "date": "2025-01-02",
@@ -38514,22 +38577,26 @@
           {
             "date": "2026-11-09",
             "value": 2.66
+          },
+          {
+            "date": "2026-11-10",
+            "value": 2.78
           }
         ],
-        "value": 2.66,
+        "value": 2.78,
         "age_days": 1,
-        "change_1d_bp": 3.0,
-        "change_5d_bp": 4.0,
+        "change_1d_bp": 12.0,
+        "change_5d_bp": 13.0,
         "largest_gap_days": 4,
         "current_provider_error": null
       }
     },
     "events": {
-      "checked_at": "2026-11-10T17:14:21.306873+00:00",
+      "checked_at": "2026-11-11T09:44:41.908133+00:00",
       "sources": {
         "BLS": {
           "status": "UNAVAILABLE",
-          "checked_at": "2026-11-10T17:14:21.306873+00:00",
+          "checked_at": "2026-11-11T09:44:41.908133+00:00",
           "url": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
           "method": "OFFICIAL_MONTHLY_HTML_FALLBACK",
           "attempts": [
@@ -38548,17 +38615,17 @@
         },
         "Fed": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-11-10T17:14:21.306873+00:00",
+          "checked_at": "2026-11-11T09:44:41.908133+00:00",
           "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
         },
         "BoJ": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-11-10T17:14:21.306873+00:00",
+          "checked_at": "2026-11-11T09:44:41.908133+00:00",
           "url": "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm"
         },
         "NBS": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-11-10T17:14:21.306873+00:00",
+          "checked_at": "2026-11-11T09:44:41.908133+00:00",
           "url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html"
         }
       },
@@ -38634,25 +38701,25 @@
     "markets": {
       "lme_zinc": {
         "market": "LME Zinc Cash primary / 3M technical reference",
-        "as_of": "2026-11-09",
+        "as_of": "2026-11-10",
         "decision": "WAIT_FOR_TRIGGER",
-        "direction": "STRONG_BEAR",
+        "direction": "BEAR",
         "evidence_alignment": "PARTIAL_CLOSE_AND_FUNDAMENTAL",
         "data_gate": "PASS_CLOSE_ONLY",
-        "regime_gate": "STRONG_BEAR",
+        "regime_gate": "BEAR",
         "strategy_gate": "CLOSE_CONFIRMED_RESEARCH_ONLY",
         "trigger_gate": "NOT_TRIGGERED_CLOSE_ONLY",
         "execution_gate": "PENDING_PRIVATE_EXECUTION_CHECK",
         "daily_plan": {
           "plan_basis": "LME_3M_CLOSE_ONLY_RESEARCH",
           "setup_zone": [
-            3724.0,
-            3794.73
+            3734.0,
+            3788.95
           ],
           "trigger_price": 3678.3,
           "maximum_entry": 3678.3,
           "hard_stop": 3893.2,
-          "close_invalidation": 3775.5,
+          "close_invalidation": 3770.93,
           "t1": 3248.5,
           "t2": 3033.6,
           "planned_rr_t1": 2.0,
@@ -38660,15 +38727,15 @@
           "conditional_order": "DAILY_CLOSE_CONFIRMATION_RESEARCH_ONLY"
         },
         "reference": {
-          "cash": 3754.0,
-          "three_month": 3724.0,
-          "cash_3m": 30.0,
-          "close": 3724.0,
+          "cash": 3768.0,
+          "three_month": 3734.0,
+          "cash_3m": 34.0,
+          "close": 3734.0,
           "price_basis": "Cash headline; 3M close-only technical levels",
-          "sma14": 3801.5,
-          "sma30": 3775.5,
-          "ema20": 3794.73,
-          "rsi14": 42.15
+          "sma14": 3802.21,
+          "sma30": 3770.93,
+          "ema20": 3788.95,
+          "rsi14": 43.39
         },
         "execution_check": {
           "status": "PRIVATE_INPUT_REQUIRED",
@@ -38690,27 +38757,27 @@
           {
             "factor": "Cash headline",
             "status": "AVAILABLE",
-            "value": 3754.0
+            "value": 3768.0
           },
           {
             "factor": "3M technical reference",
             "status": "AVAILABLE",
-            "value": 3724.0
+            "value": 3734.0
           },
           {
             "factor": "Cash−3M curve",
             "status": "BACKWARDATION",
-            "value": 30.0
+            "value": 34.0
           },
           {
             "factor": "Inventory",
             "status": "AVAILABLE",
-            "value": 146375.0
+            "value": 144975.0
           },
           {
             "factor": "Cancelled warrants",
             "status": "AVAILABLE",
-            "value": 9.342442356959864
+            "value": 8.466977065011209
           },
           {
             "factor": "TC",
@@ -38719,11 +38786,11 @@
           }
         ],
         "decision_audit": {
-          "1_market_direction": "STRONG_BEAR",
+          "1_market_direction": "BEAR",
           "2_evidence_consistency": "PARTIAL_CLOSE_AND_FUNDAMENTAL",
           "3_risk_location": [
-            3724.0,
-            3794.73
+            3734.0,
+            3788.95
           ],
           "4_entry_permission": {
             "trigger": 3678.3,
@@ -38738,7 +38805,7 @@
           "6_exit_plan": {
             "t1": 3248.5,
             "t2": 3033.6,
-            "close_invalidation": 3775.5
+            "close_invalidation": 3770.93
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -38754,7 +38821,7 @@
       "shfe_zinc": {
         "market": "SHFE Zinc",
         "symbol": "zn2612",
-        "as_of": "2026-11-09",
+        "as_of": "2026-11-10",
         "decision": "WAIT_FOR_TRIGGER",
         "direction": "BEAR",
         "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
@@ -38765,18 +38832,18 @@
         "execution_gate": "PENDING_LIVE_QUOTE",
         "daily_plan": {
           "setup_zone": [
-            25325.0,
-            25681.81
+            25075.0,
+            25624.02
           ],
-          "trigger_price": 25075.252,
-          "maximum_entry": 24996.26,
-          "hard_stop": 25741.054,
-          "close_invalidation": 25681.81,
-          "t1": 23743.648,
-          "t2": 23077.846,
+          "trigger_price": 24980.0735,
+          "maximum_entry": 24900.3675,
+          "hard_stop": 25683.7995,
+          "close_invalidation": 25624.02,
+          "t1": 23572.6215,
+          "t2": 22868.8955,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
-          "risk_distance_atr": 1.69,
+          "risk_distance_atr": 1.77,
           "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
         },
         "execution_check": {
@@ -38792,13 +38859,13 @@
           ]
         },
         "reference": {
-          "close": 25325.0,
-          "ema20": 25681.81,
-          "sma60": 26085.17,
-          "rsi14": 41.16,
-          "atr14": 394.96,
-          "support20": 25095.0,
-          "resistance20": 26105.0
+          "close": 25075.0,
+          "ema20": 25624.02,
+          "sma60": 26076.17,
+          "rsi14": 37.32,
+          "atr14": 398.53,
+          "support20": 25000.0,
+          "resistance20": 26045.0
         },
         "no_trade_reasons": [
           "Trigger has not been confirmed.",
@@ -38809,22 +38876,22 @@
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 25325.0; EMA20 25681.81; SMA60 26085.17"
+            "value": "Close 25075.0; EMA20 25624.02; SMA60 26076.17"
           },
           {
             "factor": "Momentum",
-            "status": "SUPPORTS",
-            "value": "RSI14 41.16"
+            "status": "CAUTION",
+            "value": "RSI14 37.32"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 394.96"
+            "value": "ATR14 398.53"
           },
           {
             "factor": "20-session range",
             "status": "AVAILABLE",
-            "value": "Support 25095.0; resistance 26105.0"
+            "value": "Support 25000.0; resistance 26045.0"
           },
           {
             "factor": "cross-market FX-adjusted parity",
@@ -38841,23 +38908,23 @@
           "1_market_direction": "BEAR",
           "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
           "3_risk_location": [
-            25325.0,
-            25681.81
+            25075.0,
+            25624.02
           ],
           "4_entry_permission": {
-            "trigger": 25075.252,
-            "maximum_entry": 24996.26,
+            "trigger": 24980.0735,
+            "maximum_entry": 24900.3675,
             "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 744.794,
+            "price_units_per_contract_unit": 783.432,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 23743.648,
-            "t2": 23077.846,
-            "close_invalidation": 25681.81
+            "t1": 23572.6215,
+            "t2": 22868.8955,
+            "close_invalidation": 25624.02
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -38873,35 +38940,78 @@
       },
       "gold": {
         "market": "COMEX Gold continuous reference",
-        "decision": "NO_TRADE",
-        "direction": "NEUTRAL",
-        "evidence_alignment": "MIXED",
+        "symbol": "GC=F",
+        "as_of": "2026-11-10",
+        "decision": "WAIT_FOR_TRIGGER",
+        "direction": "BEAR",
+        "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
         "data_gate": "PASS",
-        "strategy_gate": "BLOCKED",
-        "trigger_gate": "BLOCKED",
-        "execution_gate": "BLOCKED",
-        "daily_plan": {},
+        "regime_gate": "BEAR",
+        "strategy_gate": "BREAKDOWN_OR_RALLY_SHORT",
+        "trigger_gate": "NOT_TRIGGERED",
+        "execution_gate": "PENDING_LIVE_QUOTE",
+        "daily_plan": {
+          "setup_zone": [
+            4030.2,
+            4080.1377
+          ],
+          "trigger_price": 3874.7673,
+          "maximum_entry": 3856.6364,
+          "hard_stop": 4093.7359,
+          "close_invalidation": 4080.1377,
+          "t1": 3436.8301,
+          "t2": 3217.8615,
+          "planned_rr_t1": 2.0,
+          "planned_rr_t2": 3.0,
+          "risk_distance_atr": 2.42,
+          "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
+        },
         "execution_check": {
-          "status": "NOT_AVAILABLE"
+          "status": "REQUIRED_AT_ORDER_TIME",
+          "required": [
+            "bid",
+            "ask",
+            "spread",
+            "actual_fill",
+            "slippage",
+            "actual_rr",
+            "contract_quantity"
+          ]
+        },
+        "reference": {
+          "close": 4030.2,
+          "ema20": 4080.1377,
+          "sma60": 4276.555,
+          "rsi14": 44.2784,
+          "atr14": 90.6545,
+          "support20": 3879.3,
+          "resistance20": 4220.3999
         },
         "no_trade_reasons": [
-          "Close, EMA20 and SMA60 are not directionally aligned."
+          "Trigger has not been confirmed.",
+          "Live bid/ask and acceptable spread are unavailable.",
+          "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
         ],
         "evidence": [
           {
             "factor": "Trend structure",
-            "status": "MIXED",
-            "value": "Close 4114.5; EMA20 4085.3943; SMA60 4283.9466"
+            "status": "SUPPORTS",
+            "value": "Close 4030.2; EMA20 4080.1377; SMA60 4276.555"
           },
           {
             "factor": "Momentum",
-            "status": "AVAILABLE",
-            "value": "RSI14 50.3099"
+            "status": "SUPPORTS",
+            "value": "RSI14 44.2784"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 87.2126"
+            "value": "ATR14 90.6545"
+          },
+          {
+            "factor": "20-session range",
+            "status": "AVAILABLE",
+            "value": "Support 3879.3; resistance 4220.3999"
           },
           {
             "factor": "COMEX contract-specific OI",
@@ -38925,58 +39035,113 @@
           }
         ],
         "decision_audit": {
-          "1_market_direction": "NEUTRAL",
-          "2_evidence_consistency": "MIXED",
-          "3_risk_location": "NO_VALIDATED_SETUP_ZONE",
-          "4_entry_permission": "ENTRY_NOT_PERMITTED",
-          "5_loss_if_wrong": "NOT_COMPUTABLE",
-          "6_exit_plan": "NOT_AVAILABLE",
-          "7_planned_rr": "NOT_AVAILABLE",
+          "1_market_direction": "BEAR",
+          "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
+          "3_risk_location": [
+            4030.2,
+            4080.1377
+          ],
+          "4_entry_permission": {
+            "trigger": 3874.7673,
+            "maximum_entry": 3856.6364,
+            "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
+            "execution_check": "PENDING_LIVE_QUOTE"
+          },
+          "5_loss_if_wrong": {
+            "price_units_per_contract_unit": 237.0995,
+            "note": "Account loss requires live fill, multiplier, fees and quantity."
+          },
+          "6_exit_plan": {
+            "t1": 3436.8301,
+            "t2": 3217.8615,
+            "close_invalidation": 4080.1377
+          },
+          "7_planned_rr": {
+            "t1": 2.0,
+            "t2": 3.0
+          },
           "8_no_trade_reason": [
-            "Close, EMA20 and SMA60 are not directionally aligned."
+            "Trigger has not been confirmed.",
+            "Live bid/ask and acceptable spread are unavailable.",
+            "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
           ]
         },
-        "regime_gate": "RANGE_OR_TRANSITION",
-        "reference": {
-          "close": 4114.5,
-          "ema20": 4085.3943,
-          "sma60": 4283.9466,
-          "rsi14": 50.3099,
-          "atr14": 87.2126
-        },
-        "evidence_completeness": 42.9
+        "evidence_completeness": 50.0
       },
       "usdjpy": {
         "market": "USD/JPY",
-        "decision": "NO_TRADE",
-        "direction": "NEUTRAL",
-        "evidence_alignment": "MIXED",
+        "symbol": "USDJPY",
+        "as_of": "2026-11-10",
+        "decision": "WAIT_FOR_TRIGGER",
+        "direction": "BULL",
+        "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
         "data_gate": "PASS",
-        "strategy_gate": "BLOCKED",
-        "trigger_gate": "BLOCKED",
-        "execution_gate": "BLOCKED",
-        "daily_plan": {},
+        "regime_gate": "BULL",
+        "strategy_gate": "BREAKOUT_OR_PULLBACK_LONG",
+        "trigger_gate": "NOT_TRIGGERED",
+        "execution_gate": "PENDING_LIVE_QUOTE",
+        "daily_plan": {
+          "setup_zone": [
+            157.9919,
+            158.73
+          ],
+          "trigger_price": 158.9883,
+          "maximum_entry": 159.1816,
+          "hard_stop": 157.8469,
+          "close_invalidation": 157.9919,
+          "t1": 161.2711,
+          "t2": 162.4125,
+          "planned_rr_t1": 2.0,
+          "planned_rr_t2": 3.0,
+          "risk_distance_atr": 1.18,
+          "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
+        },
         "execution_check": {
-          "status": "NOT_AVAILABLE"
+          "status": "REQUIRED_AT_ORDER_TIME",
+          "required": [
+            "bid",
+            "ask",
+            "spread",
+            "actual_fill",
+            "slippage",
+            "actual_rr",
+            "contract_quantity"
+          ]
+        },
+        "reference": {
+          "close": 158.73,
+          "ema20": 157.9919,
+          "sma60": 157.5855,
+          "rsi14": 56.4282,
+          "atr14": 0.9665,
+          "support20": 156.06,
+          "resistance20": 158.94
         },
         "no_trade_reasons": [
-          "Close, EMA20 and SMA60 are not directionally aligned."
+          "Trigger has not been confirmed.",
+          "Live bid/ask and acceptable spread are unavailable.",
+          "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
         ],
         "evidence": [
           {
             "factor": "Trend structure",
-            "status": "MIXED",
-            "value": "Close 157.9; EMA20 157.9142; SMA60 157.6003"
+            "status": "SUPPORTS",
+            "value": "Close 158.73; EMA20 157.9919; SMA60 157.5855"
           },
           {
             "factor": "Momentum",
-            "status": "AVAILABLE",
-            "value": "RSI14 50.2092"
+            "status": "SUPPORTS",
+            "value": "RSI14 56.4282"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 0.9639"
+            "value": "ATR14 0.9665"
+          },
+          {
+            "factor": "20-session range",
+            "status": "AVAILABLE",
+            "value": "Support 156.06; resistance 158.94"
           },
           {
             "factor": "US-Japan 2Y yield spread",
@@ -38995,58 +39160,113 @@
           }
         ],
         "decision_audit": {
-          "1_market_direction": "NEUTRAL",
-          "2_evidence_consistency": "MIXED",
-          "3_risk_location": "NO_VALIDATED_SETUP_ZONE",
-          "4_entry_permission": "ENTRY_NOT_PERMITTED",
-          "5_loss_if_wrong": "NOT_COMPUTABLE",
-          "6_exit_plan": "NOT_AVAILABLE",
-          "7_planned_rr": "NOT_AVAILABLE",
+          "1_market_direction": "BULL",
+          "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
+          "3_risk_location": [
+            157.9919,
+            158.73
+          ],
+          "4_entry_permission": {
+            "trigger": 158.9883,
+            "maximum_entry": 159.1816,
+            "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
+            "execution_check": "PENDING_LIVE_QUOTE"
+          },
+          "5_loss_if_wrong": {
+            "price_units_per_contract_unit": 1.3347,
+            "note": "Account loss requires live fill, multiplier, fees and quantity."
+          },
+          "6_exit_plan": {
+            "t1": 161.2711,
+            "t2": 162.4125,
+            "close_invalidation": 157.9919
+          },
+          "7_planned_rr": {
+            "t1": 2.0,
+            "t2": 3.0
+          },
           "8_no_trade_reason": [
-            "Close, EMA20 and SMA60 are not directionally aligned."
+            "Trigger has not been confirmed.",
+            "Live bid/ask and acceptable spread are unavailable.",
+            "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
           ]
         },
-        "regime_gate": "RANGE_OR_TRANSITION",
-        "reference": {
-          "close": 157.9,
-          "ema20": 157.9142,
-          "sma60": 157.6003,
-          "rsi14": 50.2092,
-          "atr14": 0.9639
-        },
-        "evidence_completeness": 50.0
+        "evidence_completeness": 57.1
       },
       "dxy": {
         "market": "US Dollar Index",
-        "decision": "NO_TRADE",
-        "direction": "NEUTRAL",
-        "evidence_alignment": "MIXED",
+        "symbol": "DX-Y.NYB",
+        "as_of": "2026-11-10",
+        "decision": "WAIT_FOR_TRIGGER",
+        "direction": "BULL",
+        "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
         "data_gate": "PASS",
-        "strategy_gate": "BLOCKED",
-        "trigger_gate": "BLOCKED",
-        "execution_gate": "BLOCKED",
-        "daily_plan": {},
+        "regime_gate": "BULL",
+        "strategy_gate": "BREAKOUT_OR_PULLBACK_LONG",
+        "trigger_gate": "NOT_TRIGGERED",
+        "execution_gate": "PENDING_LIVE_QUOTE",
+        "daily_plan": {
+          "setup_zone": [
+            101.8515,
+            102.23
+          ],
+          "trigger_price": 102.9779,
+          "maximum_entry": 103.0893,
+          "hard_stop": 101.7679,
+          "close_invalidation": 101.8515,
+          "t1": 105.3978,
+          "t2": 106.6078,
+          "planned_rr_t1": 2.0,
+          "planned_rr_t2": 3.0,
+          "risk_distance_atr": 2.17,
+          "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
+        },
         "execution_check": {
-          "status": "NOT_AVAILABLE"
+          "status": "REQUIRED_AT_ORDER_TIME",
+          "required": [
+            "bid",
+            "ask",
+            "spread",
+            "actual_fill",
+            "slippage",
+            "actual_rr",
+            "contract_quantity"
+          ]
+        },
+        "reference": {
+          "close": 102.23,
+          "ema20": 101.8515,
+          "sma60": 100.8495,
+          "rsi14": 56.1632,
+          "atr14": 0.5574,
+          "support20": 101.1,
+          "resistance20": 102.95
         },
         "no_trade_reasons": [
-          "Close, EMA20 and SMA60 are not directionally aligned."
+          "Trigger has not been confirmed.",
+          "Live bid/ask and acceptable spread are unavailable.",
+          "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
         ],
         "evidence": [
           {
             "factor": "Trend structure",
-            "status": "MIXED",
-            "value": "Close 101.65; EMA20 101.8117; SMA60 100.8063"
+            "status": "SUPPORTS",
+            "value": "Close 102.23; EMA20 101.8515; SMA60 100.8495"
           },
           {
             "factor": "Momentum",
-            "status": "AVAILABLE",
-            "value": "RSI14 49.1041"
+            "status": "SUPPORTS",
+            "value": "RSI14 56.1632"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 0.5296"
+            "value": "ATR14 0.5574"
+          },
+          {
+            "factor": "20-session range",
+            "status": "AVAILABLE",
+            "value": "Support 101.1; resistance 102.95"
           },
           {
             "factor": "Fed rate path",
@@ -39065,26 +39285,38 @@
           }
         ],
         "decision_audit": {
-          "1_market_direction": "NEUTRAL",
-          "2_evidence_consistency": "MIXED",
-          "3_risk_location": "NO_VALIDATED_SETUP_ZONE",
-          "4_entry_permission": "ENTRY_NOT_PERMITTED",
-          "5_loss_if_wrong": "NOT_COMPUTABLE",
-          "6_exit_plan": "NOT_AVAILABLE",
-          "7_planned_rr": "NOT_AVAILABLE",
+          "1_market_direction": "BULL",
+          "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
+          "3_risk_location": [
+            101.8515,
+            102.23
+          ],
+          "4_entry_permission": {
+            "trigger": 102.9779,
+            "maximum_entry": 103.0893,
+            "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
+            "execution_check": "PENDING_LIVE_QUOTE"
+          },
+          "5_loss_if_wrong": {
+            "price_units_per_contract_unit": 1.3214,
+            "note": "Account loss requires live fill, multiplier, fees and quantity."
+          },
+          "6_exit_plan": {
+            "t1": 105.3978,
+            "t2": 106.6078,
+            "close_invalidation": 101.8515
+          },
+          "7_planned_rr": {
+            "t1": 2.0,
+            "t2": 3.0
+          },
           "8_no_trade_reason": [
-            "Close, EMA20 and SMA60 are not directionally aligned."
+            "Trigger has not been confirmed.",
+            "Live bid/ask and acceptable spread are unavailable.",
+            "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
           ]
         },
-        "regime_gate": "RANGE_OR_TRANSITION",
-        "reference": {
-          "close": 101.65,
-          "ema20": 101.8117,
-          "sma60": 100.8063,
-          "rsi14": 49.1041,
-          "atr14": 0.5296
-        },
-        "evidence_completeness": 50.0
+        "evidence_completeness": 57.1
       },
       "gold_spot": {
         "market": "Gold spot research",
@@ -39172,34 +39404,34 @@
       }
     }
   },
-  "free_close_history_points": 470,
+  "free_close_history_points": 471,
   "indicators": {
-    "Close": 3724.0,
-    "EMA20": 3794.733956982726,
-    "EMA50": 3787.8439962159673,
-    "EMA200": 3572.7992061358364,
-    "RSI14": 42.14893089929853,
+    "Close": 3734.0,
+    "EMA20": 3788.949770603419,
+    "EMA50": 3785.732466952596,
+    "EMA200": 3574.403194134485,
+    "RSI14": 43.392074214553695,
     "ATR14": null,
-    "ROC20": -0.9574468085106425,
-    "ROC60": -1.0495549355653,
-    "BB_UPPER": 3913.699367116061,
-    "BB_LOWER": 3640.1506328839396
+    "ROC20": -0.5857294994675133,
+    "ROC60": -0.9023354564755892,
+    "BB_UPPER": 3913.6049967339195,
+    "BB_LOWER": 3638.04500326608
   },
   "components": {
-    "market_structure": 56.23396697575993,
+    "market_structure": 55.95670391124564,
     "supply_demand": null,
     "smelter_economics": 99.999927916665,
     "physical_market": 98.78715650157258,
-    "macro": 39.892767151729245,
-    "technical": 50.07326876271605
+    "macro": 53.80072512501339,
+    "technical": 51.29962027848029
   },
   "component_coverage": 0.8,
-  "market_score": 69.29682500876322,
+  "market_score": 71.17861595696883,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 55.8403356365302,
-    "20D": 60.64622469804199,
-    "60D": 64.49093594725143
+    "5D": 57.263318982026846,
+    "20D": 62.233067901648994,
+    "60D": 66.20886703734669
   },
   "market_quality": {
     "confidence": 93.0,
@@ -39227,7 +39459,7 @@
   "procurement_quality": {
     "confidence": 35,
     "status": "REVIEW_REQUIRED",
-    "max_age_days": 19.658180143912038
+    "max_age_days": 20.345974117731483
   },
   "procurement": {
     "status": "OK",
