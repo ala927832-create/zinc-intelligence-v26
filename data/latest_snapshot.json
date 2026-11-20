@@ -1,87 +1,87 @@
 {
-  "run_time": "2026-11-19T18:30:14.237988+00:00",
-  "run_date": "2026-11-19",
+  "run_time": "2026-11-20T10:18:02.028228+00:00",
+  "run_date": "2026-11-20",
   "model_version": "2.7.0",
   "market": {
-    "lme_cash": 3732.0,
-    "lme_3m": 3600.0,
-    "lme_inventory_t": 146775.0,
-    "cancelled_warrants_t": 9075.0,
-    "tc_usd_t": -168.23,
+    "lme_cash": 3714.5,
+    "lme_3m": 3536.0,
+    "lme_inventory_t": 146200.0,
+    "cancelled_warrants_t": 8325.0,
+    "tc_usd_t": -173.57,
     "physical_premium_usd_t": 85.0,
     "smelter_margin_usd_t": null,
     "china_demand_yoy_pct": null,
     "global_balance_kt": null,
     "smelter_utilization_pct": null,
     "lme_cash_bid": null,
-    "lme_cash_offer": 3732.0,
+    "lme_cash_offer": 3714.5,
     "lme_3m_bid": null,
-    "lme_3m_offer": 3600.0,
-    "lme_settlement": 3732.0,
+    "lme_3m_offer": 3536.0,
+    "lme_settlement": 3714.5,
     "lme_closing_stock_t": null,
-    "live_warrants_t": 137700.0,
+    "live_warrants_t": 137875.0,
     "delivered_in_t": null,
     "delivered_out_t": null,
-    "tc_smelter_usd_t": -168.23,
+    "tc_smelter_usd_t": -173.57,
     "tc_trader_usd_t": null,
     "tc_annual_benchmark_usd_t": null,
-    "as_of": "2026-11-19T18:30:14.240464+00:00",
+    "as_of": "2026-11-20T10:18:02.031441+00:00",
     "source": "adapter_chain",
     "field_sources": {
       "lme_inventory_t": {
         "provider": "grillo_lme_zinc",
         "status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-17"
+        "as_of": "2026-11-18"
       },
       "live_warrants_t": {
         "provider": "grillo_lme_zinc",
         "status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-17"
+        "as_of": "2026-11-18"
       },
       "cancelled_warrants_t": {
         "provider": "grillo_lme_zinc",
         "status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-17"
+        "as_of": "2026-11-18"
       },
       "lme_cash": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-18"
+        "as_of": "2026-11-19"
       },
       "lme_cash_offer": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-18"
+        "as_of": "2026-11-19"
       },
       "lme_settlement": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-18"
+        "as_of": "2026-11-19"
       },
       "lme_3m": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-18"
+        "as_of": "2026-11-19"
       },
       "lme_3m_offer": {
         "provider": "westmetall_lme_zinc",
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-18"
+        "as_of": "2026-11-19"
       },
       "tc_usd_t": {
         "provider": "smm_tc_direct",
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-13"
+        "as_of": "2026-11-20"
       },
       "tc_smelter_usd_t": {
         "provider": "smm_tc_direct",
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-13"
+        "as_of": "2026-11-20"
       },
       "physical_premium_usd_t": {
         "provider": "smm_premium_direct",
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-19"
+        "as_of": "2026-11-20"
       }
     },
     "provider_status": {
@@ -112,7 +112,7 @@
       },
       "manual_market": {
         "status": "MANUAL_FALLBACK",
-        "as_of": "2026-11-19T18:30:14.240464+00:00",
+        "as_of": "2026-11-20T10:18:02.031441+00:00",
         "error": null
       },
       "lme_public_summary": {
@@ -128,29 +128,29 @@
       },
       "grillo_lme_zinc": {
         "status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-17",
+        "as_of": "2026-11-18",
         "error": null
       },
       "westmetall_lme_zinc": {
         "status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-18",
+        "as_of": "2026-11-19",
         "error": null
       },
       "smm_tc_direct": {
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-13",
+        "as_of": "2026-11-20",
         "error": null,
         "redistribution_caution": true
       },
       "smm_premium_direct": {
         "status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-19",
+        "as_of": "2026-11-20",
         "error": null,
         "redistribution_caution": true
       }
     },
-    "cash_3m": 132.0,
-    "cancelled_ratio_pct": 6.182933060807358,
+    "cash_3m": 178.5,
+    "cancelled_ratio_pct": 5.694254445964432,
     "free_data_limitations": [
       "True LME Zinc 3M Daily OHLC is not exposed as a stable unauthenticated free API; free current-year viewing/download may require an LME account.",
       "LME 15m/1H OHLC suitable for automated candlestick backtests is not available as a stable anonymous free feed.",
@@ -164,8 +164,8 @@
         "source": "westmetall_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-18",
-        "age_days": 1.77,
+        "as_of": "2026-11-19",
+        "age_days": 1.43,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -176,8 +176,8 @@
         "source": "westmetall_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_REFERENCE_DAY_DELAYED",
-        "as_of": "2026-11-18",
-        "age_days": 1.77,
+        "as_of": "2026-11-19",
+        "age_days": 1.43,
         "expected_update": "T+1 business day",
         "max_age_days": 4,
         "importance": "CORE",
@@ -188,8 +188,8 @@
         "source": "grillo_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-17",
-        "age_days": 2.77,
+        "as_of": "2026-11-18",
+        "age_days": 2.43,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -200,8 +200,8 @@
         "source": "grillo_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-17",
-        "age_days": 2.77,
+        "as_of": "2026-11-18",
+        "age_days": 2.43,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -212,8 +212,8 @@
         "source": "grillo_lme_zinc",
         "source_grade": "B_PUBLIC_REFERENCE",
         "source_status": "PUBLIC_MIRROR_DAY_DELAYED",
-        "as_of": "2026-11-17",
-        "age_days": 2.77,
+        "as_of": "2026-11-18",
+        "age_days": 2.43,
         "expected_update": "T+1/T+2 business day",
         "max_age_days": 5,
         "importance": "CORE",
@@ -224,8 +224,8 @@
         "source": "smm_tc_direct",
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-13",
-        "age_days": 6.77,
+        "as_of": "2026-11-20",
+        "age_days": 0.43,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -236,8 +236,8 @@
         "source": "smm_premium_direct",
         "source_grade": "B_MARKET_SOURCE_RESTRICTED",
         "source_status": "PUBLIC_WEB_DELAYED",
-        "as_of": "2026-11-19",
-        "age_days": 0.77,
+        "as_of": "2026-11-20",
+        "age_days": 0.43,
         "expected_update": "Weekly or better",
         "max_age_days": 14,
         "importance": "SECONDARY",
@@ -260,29 +260,29 @@
   "china_tc": {
     "import_weekly": {
       "label": "China import zinc concentrate TC",
-      "value": -168.23,
+      "value": -173.57,
       "unit": "USD/dmt",
-      "as_of": "2026-11-13",
+      "as_of": "2026-11-20",
       "update_time": "17:00 GMT+8",
       "status": "AVAILABLE",
       "source": "SMM_PUBLIC",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 6.77,
+      "age_days": 0.43,
       "url": "https://www-old.metal.com/Zinc/202506030011",
       "error": null
     },
     "domestic_weekly": {
       "label": "China domestic zinc concentrate TC (weekly)",
-      "value": -312.18,
+      "value": -311.33,
       "unit": "USD/tonne",
-      "as_of": "2026-11-13",
+      "as_of": "2026-11-20",
       "update_time": null,
       "status": "AVAILABLE",
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Weekly",
-      "age_days": 6.77,
+      "age_days": 0.43,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -296,7 +296,7 @@
       "source": "SMM_ZINC_TABLE",
       "source_grade": "B_MARKET_SOURCE",
       "expected_update": "Monthly",
-      "age_days": 18.77,
+      "age_days": 19.43,
       "url": "https://www-old.metal.com/Zinc",
       "error": null
     },
@@ -309,12 +309,12 @@
       "source": "Fastmarkets reported Teck / Korea Zinc annual benchmark",
       "source_grade": "B_VERIFIED_BENCHMARK",
       "expected_update": "Annual",
-      "age_days": 258.77,
+      "age_days": 259.43,
       "url": "https://www.fastmarkets.com/insights/teck-korea-zinc-benchmark-zinc-concentrate-tcs-85-per-tonne/",
       "notes": "Annual benchmark reference only. Do not substitute for China import spot TC or China domestic TC."
     },
-    "primary_import_tc_usd_dmt": -168.23,
-    "primary_domestic_tc": -312.18,
+    "primary_import_tc_usd_dmt": -173.57,
+    "primary_domestic_tc": -311.33,
     "primary_domestic_unit": "USD/tonne",
     "notes": [
       "Import and domestic TC are separate market series and are not arithmetically blended.",
@@ -326,44 +326,44 @@
   },
   "macro": {
     "Brent Oil": {
-      "value": 89.88999938964844,
-      "change_pct": -2.240345434435742,
+      "value": 87.80999755859375,
+      "change_pct": -4.533600398075544,
       "ticker": "BZ=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Natural Gas": {
-      "value": 3.309000015258789,
-      "change_pct": -1.868326339038151,
+      "value": 3.5869998931884766,
+      "change_pct": 9.761322420649044,
       "ticker": "NG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "DXY": {
-      "value": 103.86599731445312,
-      "change_pct": 0.005773834071165496,
+      "value": 103.81700134277344,
+      "change_pct": -0.07988467939030741,
       "ticker": "DX-Y.NYB",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Copper": {
-      "value": 5.618500232696533,
-      "change_pct": -0.7244436520796649,
+      "value": 5.561999797821045,
+      "change_pct": -1.1200035942925401,
       "ticker": "HG=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Aluminium Proxy": {
-      "value": 2810.0,
-      "change_pct": -3.7341555327166875,
+      "value": 2839.5,
+      "change_pct": -2.7235354573484027,
       "ticker": "ALI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "USD/TWD": {
-      "value": 33.018001556396484,
-      "change_pct": 0.3257308224558386,
+      "value": 32.91400146484375,
+      "change_pct": -0.04828334632318576,
       "ticker": "TWD=X",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     },
     "Silver": {
-      "value": 44.369998931884766,
-      "change_pct": -1.3978124175053397,
+      "value": 42.33000183105469,
+      "change_pct": -4.485759571302339,
       "ticker": "SI=F",
       "status": "LIVE_OR_DELAYED_PUBLIC"
     }
@@ -393,15 +393,15 @@
       "source": "westmetall_lme_3m_reference",
       "source_grade": "B_PUBLIC_REFERENCE",
       "series": "LME zinc 3M reference (Westmetall table)",
-      "as_of": "2026-11-18",
-      "observations": 477,
+      "as_of": "2026-11-19",
+      "observations": 478,
       "returns_20": 20,
-      "latest_close": 3600.0,
-      "sma_14": 3756.07,
-      "sma_30": 3756.67,
-      "ema_20": 3741.49,
-      "rsi_14": 31.97,
-      "close_indicator_sessions": 477,
+      "latest_close": 3536.0,
+      "sma_14": 3730.79,
+      "sma_30": 3749.97,
+      "ema_20": 3721.92,
+      "rsi_14": 27.78,
+      "close_indicator_sessions": 478,
       "material_gap_count": 0,
       "largest_gap_days": 5,
       "open_status": "MISSING_UNVERIFIED_SOURCE",
@@ -4221,6 +4221,14 @@
           "sma30": 3756.67,
           "ema20": 3741.49,
           "rsi14": 31.97
+        },
+        {
+          "date": "2026-11-19",
+          "close": 3536.0,
+          "sma14": 3730.79,
+          "sma30": 3749.97,
+          "ema20": 3721.92,
+          "rsi14": 27.78
         }
       ],
       "weekly_close_ranges": [
@@ -5012,29 +5020,29 @@
           "week": "2026-11-20",
           "first_close": 3715.0,
           "highest_close": 3715.0,
-          "lowest_close": 3600.0,
-          "last_close": 3600.0,
-          "sessions": 3
+          "lowest_close": 3536.0,
+          "last_close": 3536.0,
+          "sessions": 4
         }
       ],
       "coverage_start": "2025-01-02",
-      "coverage_end": "2026-11-18",
+      "coverage_end": "2026-11-19",
       "coverage_by_year": {
         "2025": 253,
-        "2026": 224
+        "2026": 225
       },
       "requested_history_start": "2025-01-01",
       "requested_start_covered": true,
       "trend": {
         "status": "AVAILABLE",
-        "score": -100,
+        "score": -90,
         "regime": "STRONG_BEAR",
         "reasons": [
           "Close 低於 EMA20",
           "EMA20 低於 SMA30",
-          "EMA20 近 5 個交易日斜率 -1.15%",
-          "SMA30 近 10 個交易日斜率 -0.87%",
-          "RSI14 31.97",
+          "EMA20 近 5 個交易日斜率 -1.51%",
+          "SMA30 近 10 個交易日斜率 -0.98%",
+          "RSI14 27.78",
           "Close 位於近 20 日收盤區間的 0% 位置"
         ],
         "components": {
@@ -5042,19 +5050,19 @@
           "ema20_vs_sma30": -20,
           "ema20_slope_5d": -15,
           "sma30_slope_10d": -15,
-          "rsi14": -20,
+          "rsi14": -10,
           "close_position_20d": -10
         },
-        "ema20_slope_5d_pct": -1.15,
-        "sma30_slope_10d_pct": -0.87,
+        "ema20_slope_5d_pct": -1.51,
+        "sma30_slope_10d_pct": -0.98,
         "close_position_20d_pct": 0.0,
-        "persistence_days": 5,
+        "persistence_days": 6,
         "data_confidence": "MEDIUM",
         "risk_level": "NORMAL"
       },
       "returns_60": 60,
-      "volatility_20_pct": 17.61,
-      "volatility_60_pct": 18.22,
+      "volatility_20_pct": 18.39,
+      "volatility_60_pct": 17.97,
       "method": "Sample standard deviation of daily log returns × √252; historical, not a forecast",
       "retrieval_status": "CURRENT_FETCH",
       "retrieval_age_days": null,
@@ -5069,8 +5077,8 @@
       "source_grade": "A_OFFICIAL_EXCHANGE",
       "source_page": "https://www.shfe.com.cn/reports/tradedata/dailyandweeklydata/",
       "selection_rule": "highest_open_interest_then_volume",
-      "as_of": "2026-11-18",
-      "observations": 454,
+      "as_of": "2026-11-19",
+      "observations": 455,
       "chart_points": [
         {
           "date": "2025-01-02",
@@ -12789,29 +12797,46 @@
           "volume": 203555,
           "open_interest": 120029,
           "roll": false
+        },
+        {
+          "date": "2026-11-19",
+          "contract": "zn2701",
+          "open": 24430.0,
+          "high": 24460.0,
+          "low": 23805.0,
+          "close": 23985.0,
+          "sma20": 25329.25,
+          "sma50": 25933.8,
+          "sma60": 25982.58,
+          "ema20": 25203.03,
+          "atr14": 414.78,
+          "rsi14": 27.19,
+          "volume": 283909,
+          "open_interest": 118271,
+          "roll": false
         }
       ],
       "roll_count": 23,
       "coverage_start": "2025-01-02",
-      "coverage_end": "2026-11-18",
+      "coverage_end": "2026-11-19",
       "trend": {
         "regime": "BEAR",
         "method": "Close vs SMA20 and SMA20 vs SMA50"
       },
       "latest_contract": "zn2701",
-      "latest_close": 24630.0,
-      "latest_open_interest": 120029,
+      "latest_close": 23985.0,
+      "latest_open_interest": 118271,
       "latest_session": {
-        "open": 24825.0,
-        "high": 24915.0,
-        "low": 24540.0,
-        "close": 24630.0,
-        "sma20": 25401.25,
-        "sma50": 25985.8,
-        "sma60": 26004.92,
-        "ema20": 25331.24,
-        "atr14": 383.22,
-        "rsi14": 34.04
+        "open": 24430.0,
+        "high": 24460.0,
+        "low": 23805.0,
+        "close": 23985.0,
+        "sma20": 25329.25,
+        "sma50": 25933.8,
+        "sma60": 25982.58,
+        "ema20": 25203.03,
+        "atr14": 414.78,
+        "rsi14": 27.19
       }
     },
     "cross_assets": {
@@ -12824,24 +12849,11 @@
         "unit": "USD/oz",
         "source": "Yahoo Finance public reference via yfinance",
         "source_grade": "B_PUBLIC_REFERENCE",
-        "as_of": "2026-11-18",
+        "as_of": "2026-11-19",
         "observations": 380,
-        "coverage_start": "2025-05-19",
-        "coverage_end": "2026-11-18",
+        "coverage_start": "2025-05-20",
+        "coverage_end": "2026-11-19",
         "chart_points": [
-          {
-            "date": "2025-05-19",
-            "open": 3220.0,
-            "high": 3252.8999,
-            "low": 3209.1001,
-            "close": 3233.5,
-            "sma20": null,
-            "sma60": null,
-            "ema20": null,
-            "atr14": null,
-            "rsi14": null,
-            "volume": 185135.0
-          },
           {
             "date": "2025-05-20",
             "open": 3233.0,
@@ -13007,7 +13019,7 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 59.503,
+            "atr14": null,
             "rsi14": null,
             "volume": 185366.0
           },
@@ -13020,8 +13032,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 58.5314,
-            "rsi14": 77.5736,
+            "atr14": 75.2915,
+            "rsi14": null,
             "volume": 142005.0
           },
           {
@@ -13033,8 +13045,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 57.8577,
-            "rsi14": 75.8882,
+            "atr14": 73.4207,
+            "rsi14": 69.5535,
             "volume": 158897.0
           },
           {
@@ -13046,8 +13058,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 57.075,
-            "rsi14": 75.9029,
+            "atr14": 71.5264,
+            "rsi14": 69.577,
             "volume": 201534.0
           },
           {
@@ -13059,8 +13071,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 58.434,
-            "rsi14": 78.6475,
+            "atr14": 71.8531,
+            "rsi14": 73.8247,
             "volume": 230166.0
           },
           {
@@ -13072,8 +13084,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 59.1458,
-            "rsi14": 80.682,
+            "atr14": 71.6064,
+            "rsi14": 76.8176,
             "volume": 270627.0
           },
           {
@@ -13082,11 +13094,11 @@
             "high": 3476.3,
             "low": 3400.8999,
             "close": 3417.3,
-            "sma20": 3345.17,
+            "sma20": null,
             "sma60": null,
-            "ema20": 3349.3335,
-            "atr14": 60.3068,
-            "rsi14": 75.2437,
+            "ema20": null,
+            "atr14": 71.8774,
+            "rsi14": 70.6868,
             "volume": 192505.0
           },
           {
@@ -13097,9 +13109,9 @@
             "close": 3406.8999,
             "sma20": 3353.84,
             "sma60": null,
-            "ema20": 3354.816,
-            "atr14": 58.7349,
-            "rsi14": 73.677,
+            "ema20": 3361.7201,
+            "atr14": 69.479,
+            "rsi14": 68.9506,
             "volume": 209083.0
           },
           {
@@ -13110,9 +13122,9 @@
             "close": 3408.1001,
             "sma20": 3360.015,
             "sma60": null,
-            "ema20": 3359.8907,
-            "atr14": 57.3181,
-            "rsi14": 73.7449,
+            "ema20": 3366.1373,
+            "atr14": 67.2948,
+            "rsi14": 69.0451,
             "volume": 0.0
           },
           {
@@ -13123,9 +13135,9 @@
             "close": 3385.7,
             "sma20": 3363.625,
             "sma60": null,
-            "ema20": 3362.3487,
-            "atr14": 56.9311,
-            "rsi14": 70.1078,
+            "ema20": 3368.0004,
+            "atr14": 66.1952,
+            "rsi14": 65.0653,
             "volume": 280833.0
           },
           {
@@ -13136,9 +13148,9 @@
             "close": 3395.0,
             "sma20": 3368.625,
             "sma60": null,
-            "ema20": 3365.4584,
-            "atr14": 56.6075,
-            "rsi14": 70.7527,
+            "ema20": 3370.5718,
+            "atr14": 65.2098,
+            "rsi14": 65.943,
             "volume": 193872.0
           },
           {
@@ -13149,9 +13161,9 @@
             "close": 3333.8999,
             "sma20": 3367.03,
             "sma60": null,
-            "ema20": 3362.4528,
-            "atr14": 58.757,
-            "rsi14": 61.3823,
+            "ema20": 3367.0792,
+            "atr14": 66.7448,
+            "rsi14": 55.9901,
             "volume": 227429.0
           },
           {
@@ -13162,9 +13174,9 @@
             "close": 3343.1001,
             "sma20": 3369.165,
             "sma60": null,
-            "ema20": 3360.6097,
-            "atr14": 56.4029,
-            "rsi14": 62.1942,
+            "ema20": 3364.7955,
+            "atr14": 63.8202,
+            "rsi14": 57.0415,
             "volume": 130010.0
           },
           {
@@ -13175,9 +13187,9 @@
             "close": 3348.0,
             "sma20": 3371.82,
             "sma60": null,
-            "ema20": 3359.4088,
-            "atr14": 55.3312,
-            "rsi14": 62.6447,
+            "ema20": 3363.1959,
+            "atr14": 62.2188,
+            "rsi14": 57.6222,
             "volume": 155584.0
           },
           {
@@ -13188,9 +13200,9 @@
             "close": 3287.6001,
             "sma20": 3370.345,
             "sma60": null,
-            "ema20": 3352.5698,
-            "atr14": 57.2004,
-            "rsi14": 54.0892,
+            "ema20": 3355.9963,
+            "atr14": 63.596,
+            "rsi14": 48.8556,
             "volume": 218869.0
           },
           {
@@ -13201,9 +13213,9 @@
             "close": 3307.7,
             "sma20": 3371.285,
             "sma60": null,
-            "ema20": 3348.2965,
-            "atr14": 58.1933,
-            "rsi14": 56.2314,
+            "ema20": 3351.3967,
+            "atr14": 64.132,
+            "rsi14": 51.5,
             "volume": 144201.0
           },
           {
@@ -13214,9 +13226,9 @@
             "close": 3349.8,
             "sma20": 3368.915,
             "sma60": null,
-            "ema20": 3348.4397,
-            "atr14": 58.5223,
-            "rsi14": 60.3994,
+            "ema20": 3351.2446,
+            "atr14": 64.0369,
+            "rsi14": 56.5656,
             "volume": 168854.0
           },
           {
@@ -13227,9 +13239,9 @@
             "close": 3359.7,
             "sma20": 3368.045,
             "sma60": null,
-            "ema20": 3349.5121,
-            "atr14": 56.7565,
-            "rsi14": 61.3319,
+            "ema20": 3352.0499,
+            "atr14": 61.8771,
+            "rsi14": 57.6849,
             "volume": 132187.0
           },
           {
@@ -13240,9 +13252,9 @@
             "close": 3342.8999,
             "sma20": 3365.23,
             "sma60": null,
-            "ema20": 3348.8824,
-            "atr14": 56.6667,
-            "rsi14": 58.8014,
+            "ema20": 3351.1785,
+            "atr14": 61.4216,
+            "rsi14": 55.0905,
             "volume": 0.0
           },
           {
@@ -13253,9 +13265,9 @@
             "close": 3346.5,
             "sma20": 3363.8,
             "sma60": null,
-            "ema20": 3348.6555,
-            "atr14": 54.2048,
-            "rsi14": 59.19,
+            "ema20": 3350.7329,
+            "atr14": 58.62,
+            "rsi14": 55.5518,
             "volume": 0.0
           },
           {
@@ -13266,9 +13278,9 @@
             "close": 3342.8,
             "sma20": 3363.61,
             "sma60": null,
-            "ema20": 3348.0978,
-            "atr14": 53.7973,
-            "rsi14": 58.5785,
+            "ema20": 3349.9774,
+            "atr14": 57.8972,
+            "rsi14": 54.9273,
             "volume": 235762.0
           },
           {
@@ -13279,9 +13291,9 @@
             "close": 3316.8999,
             "sma20": 3361.71,
             "sma60": null,
-            "ema20": 3345.1266,
-            "atr14": 54.2547,
-            "rsi14": 54.346,
+            "ema20": 3346.8271,
+            "atr14": 58.0617,
+            "rsi14": 50.6361,
             "volume": 218029.0
           },
           {
@@ -13292,9 +13304,9 @@
             "close": 3321.0,
             "sma20": 3360.59,
             "sma60": null,
-            "ema20": 3342.8288,
-            "atr14": 52.9079,
-            "rsi14": 54.9015,
+            "ema20": 3344.3674,
+            "atr14": 56.443,
+            "rsi14": 51.285,
             "volume": 167968.0
           },
           {
@@ -13305,9 +13317,9 @@
             "close": 3325.7,
             "sma20": 3359.69,
             "sma60": null,
-            "ema20": 3341.1975,
-            "atr14": 50.5716,
-            "rsi14": 55.5689,
+            "ema20": 3342.5896,
+            "atr14": 53.8542,
+            "rsi14": 52.0628,
             "volume": 168190.0
           },
           {
@@ -13318,9 +13330,9 @@
             "close": 3364.0,
             "sma20": 3357.77,
             "sma60": null,
-            "ema20": 3343.3692,
-            "atr14": 50.9522,
-            "rsi14": 60.6761,
+            "ema20": 3344.6286,
+            "atr14": 54.0003,
+            "rsi14": 57.9543,
             "volume": 216883.0
           },
           {
@@ -13331,9 +13343,9 @@
             "close": 3359.1001,
             "sma20": 3353.085,
             "sma60": null,
-            "ema20": 3344.8674,
-            "atr14": 50.2271,
-            "rsi14": 59.7301,
+            "ema20": 3346.0069,
+            "atr14": 53.0575,
+            "rsi14": 56.9893,
             "volume": 195336.0
           },
           {
@@ -13344,9 +13356,9 @@
             "close": 3336.7,
             "sma20": 3349.055,
             "sma60": null,
-            "ema20": 3344.0895,
-            "atr14": 50.0751,
-            "rsi14": 55.4725,
+            "ema20": 3345.1205,
+            "atr14": 52.7034,
+            "rsi14": 52.6716,
             "volume": 179884.0
           },
           {
@@ -13357,9 +13369,9 @@
             "close": 3359.1001,
             "sma20": 3346.665,
             "sma60": null,
-            "ema20": 3345.5191,
-            "atr14": 50.7626,
-            "rsi14": 58.6469,
+            "ema20": 3346.4519,
+            "atr14": 53.2031,
+            "rsi14": 56.2419,
             "volume": 235160.0
           },
           {
@@ -13370,9 +13382,9 @@
             "close": 3345.3,
             "sma20": 3343.525,
             "sma60": null,
-            "ema20": 3345.4982,
-            "atr14": 50.3367,
-            "rsi14": 55.9983,
+            "ema20": 3346.3422,
+            "atr14": 52.6029,
+            "rsi14": 53.5612,
             "volume": 161740.0
           },
           {
@@ -13383,9 +13395,9 @@
             "close": 3358.3,
             "sma20": 3342.155,
             "sma60": null,
-            "ema20": 3346.7174,
-            "atr14": 48.9412,
-            "rsi14": 57.926,
+            "ema20": 3347.481,
+            "atr14": 51.0455,
+            "rsi14": 55.7031,
             "volume": 115413.0
           },
           {
@@ -13396,9 +13408,9 @@
             "close": 3406.3999,
             "sma20": 3342.725,
             "sma60": null,
-            "ema20": 3352.4015,
-            "atr14": 50.1526,
-            "rsi14": 64.1791,
+            "ema20": 3353.0924,
+            "atr14": 52.1066,
+            "rsi14": 62.5804,
             "volume": 191195.0
           },
           {
@@ -13409,9 +13421,9 @@
             "close": 3443.7,
             "sma20": 3348.215,
             "sma60": null,
-            "ema20": 3361.0966,
-            "atr14": 50.3274,
-            "rsi14": 68.1341,
+            "ema20": 3361.7217,
+            "atr14": 52.1418,
+            "rsi14": 66.8752,
             "volume": 227372.0
           },
           {
@@ -13422,9 +13434,9 @@
             "close": 3397.6001,
             "sma20": 3350.94,
             "sma60": null,
-            "ema20": 3364.5731,
-            "atr14": 51.0969,
-            "rsi14": 59.4042,
+            "ema20": 3365.1386,
+            "atr14": 52.7817,
+            "rsi14": 58.0129,
             "volume": 263025.0
           },
           {
@@ -13435,9 +13447,9 @@
             "close": 3373.5,
             "sma20": 3352.215,
             "sma60": null,
-            "ema20": 3365.4233,
-            "atr14": 50.7257,
-            "rsi14": 55.4074,
+            "ema20": 3365.935,
+            "atr14": 52.2901,
+            "rsi14": 53.9852,
             "volume": 215271.0
           },
           {
@@ -13448,9 +13460,9 @@
             "close": 3335.6001,
             "sma20": 3354.615,
             "sma60": null,
-            "ema20": 3362.583,
-            "atr14": 50.7524,
-            "rsi14": 49.7397,
+            "ema20": 3363.0459,
+            "atr14": 52.2051,
+            "rsi14": 48.3054,
             "volume": 196380.0
           },
           {
@@ -13461,9 +13473,9 @@
             "close": 3310.0,
             "sma20": 3354.73,
             "sma60": null,
-            "ema20": 3357.5751,
-            "atr14": 50.3701,
-            "rsi14": 46.2949,
+            "ema20": 3357.9939,
+            "atr14": 51.7191,
+            "rsi14": 44.8713,
             "volume": 180215.0
           },
           {
@@ -13474,9 +13486,9 @@
             "close": 3324.0,
             "sma20": 3353.44,
             "sma60": null,
-            "ema20": 3354.3775,
-            "atr14": 48.6651,
-            "rsi14": 48.3996,
+            "ema20": 3354.7564,
+            "atr14": 49.9177,
+            "rsi14": 47.0867,
             "volume": 113144.0
           },
           {
@@ -13487,9 +13499,9 @@
             "close": 3295.8,
             "sma20": 3350.245,
             "sma60": null,
-            "ema20": 3348.7987,
-            "atr14": 50.039,
-            "rsi14": 44.6075,
+            "ema20": 3349.1415,
+            "atr14": 51.2022,
+            "rsi14": 43.3111,
             "volume": 19252.0
           },
           {
@@ -13500,9 +13512,9 @@
             "close": 3293.2,
             "sma20": 3347.76,
             "sma60": null,
-            "ema20": 3343.5035,
-            "atr14": 49.2577,
-            "rsi14": 44.2631,
+            "ema20": 3343.8138,
+            "atr14": 50.3377,
+            "rsi14": 42.969,
             "volume": 158029.0
           },
           {
@@ -13513,9 +13525,9 @@
             "close": 3399.8,
             "sma20": 3350.425,
             "sma60": null,
-            "ema20": 3348.8651,
-            "atr14": 54.575,
-            "rsi14": 58.4314,
+            "ema20": 3349.1458,
+            "atr14": 55.5779,
+            "rsi14": 57.7158,
             "volume": 229954.0
           },
           {
@@ -13526,9 +13538,9 @@
             "close": 3426.3999,
             "sma20": 3354.605,
             "sma60": null,
-            "ema20": 3356.2494,
-            "atr14": 53.6482,
-            "rsi14": 61.0893,
+            "ema20": 3356.5033,
+            "atr14": 54.5795,
+            "rsi14": 60.463,
             "volume": 138229.0
           },
           {
@@ -13539,9 +13551,9 @@
             "close": 3434.7,
             "sma20": 3360.495,
             "sma60": null,
-            "ema20": 3363.7209,
-            "atr14": 52.7876,
-            "rsi14": 61.9078,
+            "ema20": 3363.9506,
+            "atr14": 53.6524,
+            "rsi14": 61.3078,
             "volume": 154163.0
           },
           {
@@ -13552,9 +13564,9 @@
             "close": 3433.3999,
             "sma20": 3366.115,
             "sma60": null,
-            "ema20": 3370.357,
-            "atr14": 51.0742,
-            "rsi14": 61.6889,
+            "ema20": 3370.5648,
+            "atr14": 51.8772,
+            "rsi14": 61.0876,
             "volume": 151580.0
           },
           {
@@ -13565,9 +13577,9 @@
             "close": 3453.7,
             "sma20": 3372.515,
             "sma60": null,
-            "ema20": 3378.2944,
-            "atr14": 51.2689,
-            "rsi14": 63.8389,
+            "ema20": 3378.4825,
+            "atr14": 52.0145,
+            "rsi14": 63.3036,
             "volume": 249091.0
           },
           {
@@ -13578,9 +13590,9 @@
             "close": 3491.3,
             "sma20": 3378.88,
             "sma60": null,
-            "ema20": 3389.0568,
-            "atr14": 53.9711,
-            "rsi14": 67.4792,
+            "ema20": 3389.227,
+            "atr14": 54.6635,
+            "rsi14": 67.0469,
             "volume": 321346.0
           },
           {
@@ -13591,9 +13603,9 @@
             "close": 3404.7,
             "sma20": 3381.16,
             "sma60": null,
-            "ema20": 3390.5467,
-            "atr14": 57.1375,
-            "rsi14": 53.9965,
+            "ema20": 3390.7006,
+            "atr14": 57.7804,
+            "rsi14": 53.5085,
             "volume": 224513.0
           },
           {
@@ -13603,10 +13615,10 @@
             "low": 3379.1001,
             "close": 3399.0,
             "sma20": 3384.275,
-            "sma60": 3359.5,
-            "ema20": 3391.3517,
-            "atr14": 55.3205,
-            "rsi14": 53.2424,
+            "sma60": null,
+            "ema20": 3391.491,
+            "atr14": 55.9175,
+            "rsi14": 52.7534,
             "volume": 193820.0
           },
           {
@@ -13617,9 +13629,9 @@
             "close": 3408.3,
             "sma20": 3386.735,
             "sma60": 3362.4133,
-            "ema20": 3392.9659,
-            "atr14": 53.5048,
-            "rsi14": 54.3623,
+            "ema20": 3393.0919,
+            "atr14": 54.0591,
+            "rsi14": 53.8965,
             "volume": 135846.0
           },
           {
@@ -13630,9 +13642,9 @@
             "close": 3383.2,
             "sma20": 3388.63,
             "sma60": 3364.0567,
-            "ema20": 3392.0358,
-            "atr14": 53.133,
-            "rsi14": 50.8243,
+            "ema20": 3392.1498,
+            "atr14": 53.6478,
+            "rsi14": 50.3554,
             "volume": 165697.0
           },
           {
@@ -13643,9 +13655,9 @@
             "close": 3382.6001,
             "sma20": 3389.845,
             "sma60": 3365.2083,
-            "ema20": 3391.1371,
-            "atr14": 50.5592,
-            "rsi14": 50.7393,
+            "ema20": 3391.2403,
+            "atr14": 51.0372,
+            "rsi14": 50.2704,
             "volume": 118486.0
           },
           {
@@ -13656,9 +13668,9 @@
             "close": 3378.0,
             "sma20": 3388.425,
             "sma60": 3366.5917,
-            "ema20": 3389.886,
-            "atr14": 49.4907,
-            "rsi14": 50.0482,
+            "ema20": 3389.9793,
+            "atr14": 49.9346,
+            "rsi14": 49.5792,
             "volume": 119141.0
           },
           {
@@ -13669,9 +13681,9 @@
             "close": 3358.7,
             "sma20": 3384.175,
             "sma60": 3366.4733,
-            "ema20": 3386.9159,
-            "atr14": 48.2128,
-            "rsi14": 47.1464,
+            "ema20": 3387.0003,
+            "atr14": 48.6249,
+            "rsi14": 46.6793,
             "volume": 133497.0
           },
           {
@@ -13682,9 +13694,9 @@
             "close": 3388.5,
             "sma20": 3383.72,
             "sma60": 3367.9417,
-            "ema20": 3387.0668,
-            "atr14": 47.6905,
-            "rsi14": 51.7939,
+            "ema20": 3387.1432,
+            "atr14": 48.0732,
+            "rsi14": 51.4056,
             "volume": 135521.0
           },
           {
@@ -13695,9 +13707,9 @@
             "close": 3381.6001,
             "sma20": 3384.125,
             "sma60": 3369.3867,
-            "ema20": 3386.5461,
-            "atr14": 46.2126,
-            "rsi14": 50.6826,
+            "ema20": 3386.6153,
+            "atr14": 46.5679,
+            "rsi14": 50.294,
             "volume": 123500.0
           },
           {
@@ -13708,9 +13720,9 @@
             "close": 3418.5,
             "sma20": 3388.27,
             "sma60": 3371.0767,
-            "ema20": 3389.5893,
-            "atr14": 47.2402,
-            "rsi14": 56.1064,
+            "ema20": 3389.6519,
+            "atr14": 47.5702,
+            "rsi14": 55.7988,
             "volume": 186037.0
           },
           {
@@ -13721,9 +13733,9 @@
             "close": 3417.5,
             "sma20": 3393.645,
             "sma60": 3373.22,
-            "ema20": 3392.2475,
-            "atr14": 45.0088,
-            "rsi14": 55.9269,
+            "ema20": 3392.3041,
+            "atr14": 45.3152,
+            "rsi14": 55.619,
             "volume": 97780.0
           },
           {
@@ -13734,9 +13746,9 @@
             "close": 3433.0,
             "sma20": 3399.095,
             "sma60": 3373.8167,
-            "ema20": 3396.1287,
-            "atr14": 45.1653,
-            "rsi14": 58.1613,
+            "ema20": 3396.1799,
+            "atr14": 45.4498,
+            "rsi14": 57.884,
             "volume": 176297.0
           },
           {
@@ -13747,9 +13759,9 @@
             "close": 3448.6001,
             "sma20": 3406.735,
             "sma60": 3375.0083,
-            "ema20": 3401.126,
-            "atr14": 44.1035,
-            "rsi14": 60.3406,
+            "ema20": 3401.1723,
+            "atr14": 44.3677,
+            "rsi14": 60.0915,
             "volume": 153806.0
           },
           {
@@ -13760,9 +13772,9 @@
             "close": 3474.3,
             "sma20": 3415.79,
             "sma60": 3376.26,
-            "ema20": 3408.0949,
-            "atr14": 43.539,
-            "rsi14": 63.6956,
+            "ema20": 3408.1368,
+            "atr14": 43.7843,
+            "rsi14": 63.4869,
             "volume": 156602.0
           },
           {
@@ -13773,9 +13785,9 @@
             "close": 3516.1001,
             "sma20": 3421.605,
             "sma60": 3378.61,
-            "ema20": 3418.3811,
-            "atr14": 44.3933,
-            "rsi14": 68.3807,
+            "ema20": 3418.4191,
+            "atr14": 44.6211,
+            "rsi14": 68.2226,
             "volume": 0.0
           },
           {
@@ -13786,9 +13798,9 @@
             "close": 3592.2,
             "sma20": 3429.895,
             "sma60": 3382.7033,
-            "ema20": 3434.9353,
-            "atr14": 48.1081,
-            "rsi14": 74.7655,
+            "ema20": 3434.9696,
+            "atr14": 48.3196,
+            "rsi14": 74.6649,
             "volume": 374141.0
           },
           {
@@ -13799,9 +13811,9 @@
             "close": 3635.5,
             "sma20": 3439.935,
             "sma60": 3387.38,
-            "ema20": 3454.0367,
-            "atr14": 48.0932,
-            "rsi14": 77.5441,
+            "ema20": 3454.0678,
+            "atr14": 48.2897,
+            "rsi14": 77.4644,
             "volume": 220786.0
           },
           {
@@ -13812,9 +13824,9 @@
             "close": 3606.7,
             "sma20": 3448.6,
             "sma60": 3391.7683,
-            "ema20": 3468.5761,
-            "atr14": 49.0723,
-            "rsi14": 71.8753,
+            "ema20": 3468.6042,
+            "atr14": 49.2547,
+            "rsi14": 71.7828,
             "volume": 232579.0
           },
           {
@@ -13825,9 +13837,9 @@
             "close": 3653.3,
             "sma20": 3458.58,
             "sma60": 3396.9283,
-            "ema20": 3486.1688,
-            "atr14": 49.86,
-            "rsi14": 75.0531,
+            "ema20": 3486.1942,
+            "atr14": 50.0294,
+            "rsi14": 74.9804,
             "volume": 237651.0
           },
           {
@@ -13838,9 +13850,9 @@
             "close": 3677.3999,
             "sma20": 3467.885,
             "sma60": 3401.5117,
-            "ema20": 3504.3813,
-            "atr14": 50.87,
-            "rsi14": 76.5301,
+            "ema20": 3504.4043,
+            "atr14": 51.0273,
+            "rsi14": 76.4658,
             "volume": 227640.0
           },
           {
@@ -13851,9 +13863,9 @@
             "close": 3682.2,
             "sma20": 3481.76,
             "sma60": 3405.335,
-            "ema20": 3521.3164,
-            "atr14": 50.915,
-            "rsi14": 76.8244,
+            "ema20": 3521.3372,
+            "atr14": 51.061,
+            "rsi14": 76.7617,
             "volume": 262656.0
           },
           {
@@ -13864,9 +13876,9 @@
             "close": 3682.0,
             "sma20": 3495.91,
             "sma60": 3409.7467,
-            "ema20": 3536.6196,
-            "atr14": 50.5711,
-            "rsi14": 76.7812,
+            "ema20": 3536.6384,
+            "atr14": 50.7067,
+            "rsi14": 76.7184,
             "volume": 182028.0
           },
           {
@@ -13877,9 +13889,9 @@
             "close": 3673.6001,
             "sma20": 3509.175,
             "sma60": 3414.1917,
-            "ema20": 3549.6654,
-            "atr14": 49.566,
-            "rsi14": 74.8767,
+            "ema20": 3549.6824,
+            "atr14": 49.6919,
+            "rsi14": 74.8104,
             "volume": 214612.0
           },
           {
@@ -13890,9 +13902,9 @@
             "close": 3686.3999,
             "sma20": 3524.335,
             "sma60": 3418.83,
-            "ema20": 3562.6877,
-            "atr14": 48.0398,
-            "rsi14": 75.8593,
+            "ema20": 3562.7031,
+            "atr14": 48.1568,
+            "rsi14": 75.7981,
             "volume": 154559.0
           },
           {
@@ -13903,9 +13915,9 @@
             "close": 3719.0,
             "sma20": 3541.155,
             "sma60": 3424.385,
-            "ema20": 3577.5746,
-            "atr14": 49.0441,
-            "rsi14": 78.1983,
+            "ema20": 3577.5885,
+            "atr14": 49.1527,
+            "rsi14": 78.1484,
             "volume": 189452.0
           },
           {
@@ -13916,9 +13928,9 @@
             "close": 3725.1001,
             "sma20": 3558.51,
             "sma60": 3429.8867,
-            "ema20": 3591.6246,
-            "atr14": 47.5481,
-            "rsi14": 78.6158,
+            "ema20": 3591.6373,
+            "atr14": 47.6489,
+            "rsi14": 78.5678,
             "volume": 192295.0
           },
           {
@@ -13929,9 +13941,9 @@
             "close": 3717.8,
             "sma20": 3576.465,
             "sma60": 3436.285,
-            "ema20": 3603.6413,
-            "atr14": 48.759,
-            "rsi14": 76.7223,
+            "ema20": 3603.6528,
+            "atr14": 48.8526,
+            "rsi14": 76.6713,
             "volume": 256047.0
           },
           {
@@ -13942,9 +13954,9 @@
             "close": 3678.3,
             "sma20": 3590.955,
             "sma60": 3441.8717,
-            "ema20": 3610.7517,
-            "atr14": 49.369,
-            "rsi14": 67.2796,
+            "ema20": 3610.762,
+            "atr14": 49.456,
+            "rsi14": 67.2167,
             "volume": 224128.0
           },
           {
@@ -13955,9 +13967,9 @@
             "close": 3705.8,
             "sma20": 3607.165,
             "sma60": 3447.835,
-            "ema20": 3619.8039,
-            "atr14": 49.7855,
-            "rsi14": 70.0438,
+            "ema20": 3619.8133,
+            "atr14": 49.8663,
+            "rsi14": 69.9912,
             "volume": 186954.0
           },
           {
@@ -13968,9 +13980,9 @@
             "close": 3775.1001,
             "sma20": 3624.995,
             "sma60": 3455.96,
-            "ema20": 3634.594,
-            "atr14": 51.7652,
-            "rsi14": 75.6309,
+            "ema20": 3634.6025,
+            "atr14": 51.8401,
+            "rsi14": 75.5961,
             "volume": 219170.0
           },
           {
@@ -13981,9 +13993,9 @@
             "close": 3815.7,
             "sma20": 3644.905,
             "sma60": 3464.4267,
-            "ema20": 3651.8422,
-            "atr14": 51.7962,
-            "rsi14": 78.1966,
+            "ema20": 3651.8499,
+            "atr14": 51.8658,
+            "rsi14": 78.1687,
             "volume": 291564.0
           },
           {
@@ -13994,9 +14006,9 @@
             "close": 3768.1001,
             "sma20": 3661.66,
             "sma60": 3471.3983,
-            "ema20": 3662.9144,
-            "atr14": 52.8108,
-            "rsi14": 69.0215,
+            "ema20": 3662.9213,
+            "atr14": 52.8754,
+            "rsi14": 68.9865,
             "volume": 236560.0
           },
           {
@@ -14007,9 +14019,9 @@
             "close": 3771.1001,
             "sma20": 3677.785,
             "sma60": 3478.255,
-            "ema20": 3673.2178,
-            "atr14": 51.9243,
-            "rsi14": 69.2663,
+            "ema20": 3673.2241,
+            "atr14": 51.9843,
+            "rsi14": 69.2318,
             "volume": 262183.0
           },
           {
@@ -14020,9 +14032,9 @@
             "close": 3809.0,
             "sma20": 3694.52,
             "sma60": 3486.0233,
-            "ema20": 3686.1494,
-            "atr14": 51.8154,
-            "rsi14": 72.2493,
+            "ema20": 3686.1551,
+            "atr14": 51.8711,
+            "rsi14": 72.2212,
             "volume": 214083.0
           },
           {
@@ -14033,9 +14045,9 @@
             "close": 3855.2,
             "sma20": 3711.475,
             "sma60": 3494.5017,
-            "ema20": 3702.2495,
-            "atr14": 53.7,
-            "rsi14": 75.3856,
+            "ema20": 3702.2546,
+            "atr14": 53.7518,
+            "rsi14": 75.3635,
             "volume": 258145.0
           },
           {
@@ -14046,9 +14058,9 @@
             "close": 3873.2,
             "sma20": 3725.525,
             "sma60": 3503.3417,
-            "ema20": 3718.5305,
-            "atr14": 55.4786,
-            "rsi14": 76.4999,
+            "ema20": 3718.5351,
+            "atr14": 55.5266,
+            "rsi14": 76.4798,
             "volume": 312257.0
           },
           {
@@ -14059,9 +14071,9 @@
             "close": 3897.5,
             "sma20": 3738.625,
             "sma60": 3513.0183,
-            "ema20": 3735.5752,
-            "atr14": 55.0515,
-            "rsi14": 77.9512,
+            "ema20": 3735.5794,
+            "atr14": 55.0962,
+            "rsi14": 77.9335,
             "volume": 290470.0
           },
           {
@@ -14072,9 +14084,9 @@
             "close": 3868.1001,
             "sma20": 3751.695,
             "sma60": 3522.1367,
-            "ema20": 3748.1966,
-            "atr14": 56.8693,
-            "rsi14": 72.1461,
+            "ema20": 3748.2004,
+            "atr14": 56.9107,
+            "rsi14": 72.1254,
             "volume": 284217.0
           },
           {
@@ -14085,9 +14097,9 @@
             "close": 3908.8999,
             "sma20": 3764.475,
             "sma60": 3531.8567,
-            "ema20": 3763.5017,
-            "atr14": 56.7858,
-            "rsi14": 74.9357,
+            "ema20": 3763.5051,
+            "atr14": 56.8242,
+            "rsi14": 74.9189,
             "volume": 218284.0
           },
           {
@@ -14098,9 +14110,9 @@
             "close": 3976.3,
             "sma20": 3779.42,
             "sma60": 3542.0617,
-            "ema20": 3783.7682,
-            "atr14": 58.8439,
-            "rsi14": 78.7261,
+            "ema20": 3783.7713,
+            "atr14": 58.8797,
+            "rsi14": 78.714,
             "volume": 278143.0
           },
           {
@@ -14111,9 +14123,9 @@
             "close": 4004.3999,
             "sma20": 3795.53,
             "sma60": 3552.8167,
-            "ema20": 3804.7807,
-            "atr14": 58.298,
-            "rsi14": 80.0787,
+            "ema20": 3804.7836,
+            "atr14": 58.3311,
+            "rsi14": 80.0681,
             "volume": 297512.0
           },
           {
@@ -14124,9 +14136,9 @@
             "close": 4070.5,
             "sma20": 3814.955,
             "sma60": 3565.0467,
-            "ema20": 3830.0873,
-            "atr14": 59.6053,
-            "rsi14": 82.8423,
+            "ema20": 3830.0899,
+            "atr14": 59.6361,
+            "rsi14": 82.8344,
             "volume": 348778.0
           },
           {
@@ -14137,9 +14149,9 @@
             "close": 3972.6001,
             "sma20": 3829.905,
             "sma60": 3575.2717,
-            "ema20": 3843.66,
-            "atr14": 63.9192,
-            "rsi14": 67.833,
+            "ema20": 3843.6623,
+            "atr14": 63.9478,
+            "rsi14": 67.8209,
             "volume": 461023.0
           },
           {
@@ -14150,9 +14162,9 @@
             "close": 4000.3999,
             "sma20": 3845.605,
             "sma60": 3586.19,
-            "ema20": 3858.5876,
-            "atr14": 64.8821,
-            "rsi14": 69.5217,
+            "ema20": 3858.5897,
+            "atr14": 64.9086,
+            "rsi14": 69.5108,
             "volume": 357542.0
           },
           {
@@ -14163,9 +14175,9 @@
             "close": 4133.0,
             "sma20": 3866.305,
             "sma60": 3599.1017,
-            "ema20": 3884.7221,
-            "atr14": 70.0191,
-            "rsi14": 75.9949,
+            "ema20": 3884.724,
+            "atr14": 70.0438,
+            "rsi14": 75.9882,
             "volume": 357542.0
           },
           {
@@ -14176,9 +14188,9 @@
             "close": 4163.3999,
             "sma20": 3888.22,
             "sma60": 3611.7183,
-            "ema20": 3911.2629,
-            "atr14": 71.1534,
-            "rsi14": 77.191,
+            "ema20": 3911.2646,
+            "atr14": 71.1763,
+            "rsi14": 77.1849,
             "volume": 405991.0
           },
           {
@@ -14189,9 +14201,9 @@
             "close": 4201.6001,
             "sma20": 3912.41,
             "sma60": 3624.35,
-            "ema20": 3938.914,
-            "atr14": 71.6782,
-            "rsi14": 78.6318,
+            "ema20": 3938.9156,
+            "atr14": 71.6995,
+            "rsi14": 78.6264,
             "volume": 309914.0
           },
           {
@@ -14202,9 +14214,9 @@
             "close": 4304.6001,
             "sma20": 3943.725,
             "sma60": 3639.4667,
-            "ema20": 3973.7413,
-            "atr14": 76.9226,
-            "rsi14": 81.9436,
+            "ema20": 3973.7427,
+            "atr14": 76.9424,
+            "rsi14": 81.9398,
             "volume": 375196.0
           },
           {
@@ -14215,9 +14227,9 @@
             "close": 4213.2998,
             "sma20": 3969.1,
             "sma60": 3653.4633,
-            "ema20": 3996.5564,
-            "atr14": 85.4281,
-            "rsi14": 71.3824,
+            "ema20": 3996.5576,
+            "atr14": 85.4465,
+            "rsi14": 71.3771,
             "volume": 569847.0
           },
           {
@@ -14228,9 +14240,9 @@
             "close": 4359.3999,
             "sma20": 3998.315,
             "sma60": 3670.5267,
-            "ema20": 4031.1129,
-            "atr14": 92.519,
-            "rsi14": 76.5834,
+            "ema20": 4031.114,
+            "atr14": 92.536,
+            "rsi14": 76.5799,
             "volume": 338235.0
           },
           {
@@ -14241,9 +14253,9 @@
             "close": 4109.1001,
             "sma20": 4012.985,
             "sma60": 3683.845,
-            "ema20": 4038.5402,
-            "atr14": 107.3819,
-            "rsi14": 57.3524,
+            "ema20": 4038.5413,
+            "atr14": 107.3978,
+            "rsi14": 57.3476,
             "volume": 535325.0
           },
           {
@@ -14254,9 +14266,9 @@
             "close": 4065.3999,
             "sma20": 4027.85,
             "sma60": 3696.2017,
-            "ema20": 4041.0983,
-            "atr14": 110.6975,
-            "rsi14": 54.7666,
+            "ema20": 4041.0992,
+            "atr14": 110.7122,
+            "rsi14": 54.7618,
             "volume": 468711.0
           },
           {
@@ -14267,9 +14279,9 @@
             "close": 4145.6001,
             "sma20": 4046.575,
             "sma60": 3710.365,
-            "ema20": 4051.0509,
-            "atr14": 110.3691,
-            "rsi14": 58.4675,
+            "ema20": 4051.0517,
+            "atr14": 110.3828,
+            "rsi14": 58.4634,
             "volume": 271973.0
           },
           {
@@ -14280,9 +14292,9 @@
             "close": 4137.7998,
             "sma20": 4063.015,
             "sma60": 3724.4417,
-            "ema20": 4059.3127,
-            "atr14": 109.8642,
-            "rsi14": 57.9707,
+            "ema20": 4059.3134,
+            "atr14": 109.8769,
+            "rsi14": 57.9666,
             "volume": 297599.0
           },
           {
@@ -14293,9 +14305,9 @@
             "close": 4019.7,
             "sma20": 4071.24,
             "sma60": 3734.7733,
-            "ema20": 4055.54,
-            "atr14": 112.8668,
-            "rsi14": 50.9166,
+            "ema20": 4055.5407,
+            "atr14": 112.8785,
+            "rsi14": 50.9124,
             "volume": 330749.0
           },
           {
@@ -14306,9 +14318,9 @@
             "close": 3983.1001,
             "sma20": 4076.735,
             "sma60": 3744.0517,
-            "ema20": 4048.641,
-            "atr14": 114.2977,
-            "rsi14": 48.9295,
+            "ema20": 4048.6416,
+            "atr14": 114.3086,
+            "rsi14": 48.9253,
             "volume": 338428.0
           },
           {
@@ -14319,9 +14331,9 @@
             "close": 4000.7,
             "sma20": 4081.895,
             "sma60": 3753.485,
-            "ema20": 4044.0752,
-            "atr14": 114.4336,
-            "rsi14": 49.9412,
+            "ema20": 4044.0757,
+            "atr14": 114.4437,
+            "rsi14": 49.9372,
             "volume": 288266.0
           },
           {
@@ -14332,9 +14344,9 @@
             "close": 4015.8999,
             "sma20": 4089.285,
             "sma60": 3763.1933,
-            "ema20": 4041.3918,
-            "atr14": 114.574,
-            "rsi14": 50.8469,
+            "ema20": 4041.3923,
+            "atr14": 114.5834,
+            "rsi14": 50.843,
             "volume": 246321.0
           },
           {
@@ -14345,9 +14357,9 @@
             "close": 3996.5,
             "sma20": 4093.665,
             "sma60": 3772.24,
-            "ema20": 4037.1164,
-            "atr14": 111.933,
-            "rsi14": 49.6131,
+            "ema20": 4037.1169,
+            "atr14": 111.9417,
+            "rsi14": 49.6093,
             "volume": 237172.0
           },
           {
@@ -14358,9 +14370,9 @@
             "close": 4014.0,
             "sma20": 4095.55,
             "sma60": 3780.9517,
-            "ema20": 4034.9148,
-            "atr14": 109.0664,
-            "rsi14": 50.7734,
+            "ema20": 4034.9153,
+            "atr14": 109.0745,
+            "rsi14": 50.7697,
             "volume": 0.0
           },
           {
@@ -14371,9 +14383,9 @@
             "close": 3960.5,
             "sma20": 4093.355,
             "sma60": 3790.215,
-            "ema20": 4027.8277,
-            "atr14": 107.0545,
-            "rsi14": 47.1954,
+            "ema20": 4027.8281,
+            "atr14": 107.062,
+            "rsi14": 47.1916,
             "volume": 250259.0
           },
           {
@@ -14384,9 +14396,9 @@
             "close": 3992.8999,
             "sma20": 4089.475,
             "sma60": 3800.1133,
-            "ema20": 4024.5013,
-            "atr14": 104.0506,
-            "rsi14": 49.5157,
+            "ema20": 4024.5016,
+            "atr14": 104.0576,
+            "rsi14": 49.5123,
             "volume": 175161.0
           },
           {
@@ -14397,9 +14409,9 @@
             "close": 3991.0,
             "sma20": 4090.395,
             "sma60": 3809.825,
-            "ema20": 4021.3107,
-            "atr14": 100.5827,
-            "rsi14": 49.3786,
+            "ema20": 4021.311,
+            "atr14": 100.5892,
+            "rsi14": 49.3753,
             "volume": 188688.0
           },
           {
@@ -14410,9 +14422,9 @@
             "close": 4009.8,
             "sma20": 4090.865,
             "sma60": 3820.2683,
-            "ema20": 4020.2144,
-            "atr14": 97.2696,
-            "rsi14": 50.8286,
+            "ema20": 4020.2147,
+            "atr14": 97.2757,
+            "rsi14": 50.8254,
             "volume": 208649.0
           },
           {
@@ -14423,9 +14435,9 @@
             "close": 4122.0,
             "sma20": 4090.315,
             "sma60": 3832.5917,
-            "ema20": 4029.9083,
-            "atr14": 98.8789,
-            "rsi14": 58.4736,
+            "ema20": 4029.9085,
+            "atr14": 98.8846,
+            "rsi14": 58.4713,
             "volume": 253812.0
           },
           {
@@ -14436,9 +14448,9 @@
             "close": 4116.2998,
             "sma20": 4087.96,
             "sma60": 3844.8967,
-            "ema20": 4038.136,
-            "atr14": 95.5448,
-            "rsi14": 57.9804,
+            "ema20": 4038.1363,
+            "atr14": 95.55,
+            "rsi14": 57.9781,
             "volume": 252249.0
           },
           {
@@ -14449,9 +14461,9 @@
             "close": 4213.6001,
             "sma20": 4088.56,
             "sma60": 3859.145,
-            "ema20": 4054.8469,
-            "atr14": 96.8701,
-            "rsi14": 63.621,
+            "ema20": 4054.8471,
+            "atr14": 96.875,
+            "rsi14": 63.6193,
             "volume": 296796.0
           },
           {
@@ -14462,9 +14474,9 @@
             "close": 4194.5,
             "sma20": 4083.055,
             "sma60": 3872.5783,
-            "ema20": 4068.1472,
-            "atr14": 97.2008,
-            "rsi14": 61.8654,
+            "ema20": 4068.1474,
+            "atr14": 97.2053,
+            "rsi14": 61.8637,
             "volume": 319216.0
           },
           {
@@ -14475,9 +14487,9 @@
             "close": 4094.2,
             "sma20": 4077.1,
             "sma60": 3884.455,
-            "ema20": 4070.6284,
-            "atr14": 103.2936,
-            "rsi14": 53.5142,
+            "ema20": 4070.6286,
+            "atr14": 103.2978,
+            "rsi14": 53.5124,
             "volume": 342176.0
           },
           {
@@ -14488,9 +14500,9 @@
             "close": 4074.5,
             "sma20": 4062.855,
             "sma60": 3895.3883,
-            "ema20": 4070.9971,
-            "atr14": 103.1155,
-            "rsi14": 52.0287,
+            "ema20": 4070.9973,
+            "atr14": 103.1194,
+            "rsi14": 52.0268,
             "volume": 235352.0
           },
           {
@@ -14501,9 +14513,9 @@
             "close": 4066.5,
             "sma20": 4060.725,
             "sma60": 3906.205,
-            "ema20": 4070.5688,
-            "atr14": 101.9144,
-            "rsi14": 51.4046,
+            "ema20": 4070.569,
+            "atr14": 101.918,
+            "rsi14": 51.4028,
             "volume": 233302.0
           },
           {
@@ -14514,9 +14526,9 @@
             "close": 4082.8,
             "sma20": 4061.595,
             "sma60": 3917.035,
-            "ema20": 4071.7337,
-            "atr14": 100.2562,
-            "rsi14": 52.6508,
+            "ema20": 4071.7338,
+            "atr14": 100.2596,
+            "rsi14": 52.649,
             "volume": 233696.0
           },
           {
@@ -14527,9 +14539,9 @@
             "close": 4060.0,
             "sma20": 4057.315,
             "sma60": 3927.225,
-            "ema20": 4070.6162,
-            "atr14": 98.4951,
-            "rsi14": 50.6926,
+            "ema20": 4070.6163,
+            "atr14": 98.4982,
+            "rsi14": 50.6908,
             "volume": 272355.0
           },
           {
@@ -14540,9 +14552,9 @@
             "close": 4079.5,
             "sma20": 4054.4,
             "sma60": 3937.3117,
-            "ema20": 4071.4623,
-            "atr14": 97.3811,
-            "rsi14": 52.3257,
+            "ema20": 4071.4624,
+            "atr14": 97.384,
+            "rsi14": 52.3241,
             "volume": 257813.0
           },
           {
@@ -14553,9 +14565,9 @@
             "close": 4094.2,
             "sma20": 4058.125,
             "sma60": 3946.9467,
-            "ema20": 4073.6278,
-            "atr14": 97.6968,
-            "rsi14": 53.5741,
+            "ema20": 4073.6279,
+            "atr14": 97.6995,
+            "rsi14": 53.5725,
             "volume": 223055.0
           },
           {
@@ -14566,9 +14578,9 @@
             "close": 4140.0,
             "sma20": 4065.97,
             "sma60": 3956.0767,
-            "ema20": 4079.9489,
-            "atr14": 95.1541,
-            "rsi14": 57.3237,
+            "ema20": 4079.949,
+            "atr14": 95.1566,
+            "rsi14": 57.3224,
             "volume": 132704.0
           },
           {
@@ -14579,9 +14591,9 @@
             "close": 4165.2002,
             "sma20": 4074.195,
             "sma60": 3964.905,
-            "ema20": 4088.0681,
-            "atr14": 91.4646,
-            "rsi14": 59.2727,
+            "ema20": 4088.0682,
+            "atr14": 91.4669,
+            "rsi14": 59.2715,
             "volume": 25088.0
           },
           {
@@ -14593,8 +14605,8 @@
             "sma20": 4086.145,
             "sma60": 3975.7083,
             "ema20": 4103.9569,
-            "atr14": 91.9242,
-            "rsi14": 65.3406,
+            "atr14": 91.9264,
+            "rsi14": 65.3397,
             "volume": 154806.0
           },
           {
@@ -14605,9 +14617,9 @@
             "close": 4274.7998,
             "sma20": 4100.06,
             "sma60": 3986.0667,
-            "ema20": 4120.2276,
-            "atr14": 89.5368,
-            "rsi14": 66.5319,
+            "ema20": 4120.2277,
+            "atr14": 89.5388,
+            "rsi14": 66.5311,
             "volume": 227572.0
           },
           {
@@ -14618,9 +14630,9 @@
             "close": 4220.7998,
             "sma20": 4110.4,
             "sma60": 3995.1233,
-            "ema20": 4129.8059,
-            "atr14": 88.9127,
-            "rsi14": 60.4591,
+            "ema20": 4129.806,
+            "atr14": 88.9146,
+            "rsi14": 60.4582,
             "volume": 215921.0
           },
           {
@@ -14631,9 +14643,9 @@
             "close": 4232.5,
             "sma20": 4124.0,
             "sma60": 4004.295,
-            "ema20": 4139.5863,
-            "atr14": 86.3118,
-            "rsi14": 61.2837,
+            "ema20": 4139.5864,
+            "atr14": 86.3135,
+            "rsi14": 61.2828,
             "volume": 176443.0
           },
           {
@@ -14644,9 +14656,9 @@
             "close": 4243.0,
             "sma20": 4136.505,
             "sma60": 4013.645,
-            "ema20": 4149.4352,
-            "atr14": 83.561,
-            "rsi14": 62.0485,
+            "ema20": 4149.4353,
+            "atr14": 83.5626,
+            "rsi14": 62.0477,
             "volume": 161251.0
           },
           {
@@ -14658,8 +14670,8 @@
             "sma20": 4149.105,
             "sma60": 4023.135,
             "ema20": 4158.3462,
-            "atr14": 82.5281,
-            "rsi14": 62.0485,
+            "atr14": 82.5295,
+            "rsi14": 62.0477,
             "volume": 193599.0
           },
           {
@@ -14670,9 +14682,9 @@
             "close": 4217.7002,
             "sma20": 4159.5,
             "sma60": 4031.99,
-            "ema20": 4163.9989,
-            "atr14": 79.7689,
-            "rsi14": 58.8022,
+            "ema20": 4163.999,
+            "atr14": 79.7703,
+            "rsi14": 58.8013,
             "volume": 149813.0
           },
           {
@@ -14683,9 +14695,9 @@
             "close": 4236.2002,
             "sma20": 4165.21,
             "sma60": 4040.61,
-            "ema20": 4170.8752,
-            "atr14": 77.9212,
-            "rsi14": 60.4324,
+            "ema20": 4170.8753,
+            "atr14": 77.9224,
+            "rsi14": 60.4316,
             "volume": 177366.0
           },
           {
@@ -14696,9 +14708,9 @@
             "close": 4224.7002,
             "sma20": 4170.63,
             "sma60": 4048.9367,
-            "ema20": 4176.0014,
-            "atr14": 76.7125,
-            "rsi14": 58.8728,
+            "ema20": 4176.0015,
+            "atr14": 76.7137,
+            "rsi14": 58.8721,
             "volume": 186178.0
           },
           {
@@ -14710,8 +14722,8 @@
             "sma20": 4175.6,
             "sma60": 4058.8567,
             "ema20": 4189.0489,
-            "atr14": 77.8473,
-            "rsi14": 66.1056,
+            "atr14": 77.8484,
+            "rsi14": 66.1051,
             "volume": 228282.0
           },
           {
@@ -14723,8 +14735,8 @@
             "sma20": 4182.29,
             "sma60": 4069.69,
             "ema20": 4202.3109,
-            "atr14": 79.5582,
-            "rsi14": 67.1825,
+            "atr14": 79.5592,
+            "rsi14": 67.182,
             "volume": 292175.0
           },
           {
@@ -14736,8 +14748,8 @@
             "sma20": 4194.34,
             "sma60": 4080.18,
             "ema20": 4214.967,
-            "atr14": 78.7612,
-            "rsi14": 67.6813,
+            "atr14": 78.7621,
+            "rsi14": 67.6808,
             "volume": 207700.0
           },
           {
@@ -14749,8 +14761,8 @@
             "sma20": 4207.23,
             "sma60": 4089.4667,
             "ema20": 4226.1416,
-            "atr14": 78.1711,
-            "rsi14": 67.2189,
+            "atr14": 78.172,
+            "rsi14": 67.2184,
             "volume": 212277.0
           },
           {
@@ -14762,8 +14774,8 @@
             "sma20": 4222.6,
             "sma60": 4098.77,
             "ema20": 4240.2138,
-            "atr14": 76.366,
-            "rsi14": 70.3482,
+            "atr14": 76.3668,
+            "rsi14": 70.3478,
             "volume": 212413.0
           },
           {
@@ -14775,8 +14787,8 @@
             "sma20": 4236.685,
             "sma60": 4108.71,
             "ema20": 4252.0506,
-            "atr14": 76.0184,
-            "rsi14": 68.7511,
+            "atr14": 76.0192,
+            "rsi14": 68.7507,
             "volume": 234460.0
           },
           {
@@ -14788,8 +14800,8 @@
             "sma20": 4253.05,
             "sma60": 4118.98,
             "ema20": 4264.9315,
-            "atr14": 74.3528,
-            "rsi14": 70.5005,
+            "atr14": 74.3535,
+            "rsi14": 70.5001,
             "volume": 165214.0
           },
           {
@@ -14800,9 +14812,9 @@
             "close": 4469.3999,
             "sma20": 4272.545,
             "sma60": 4129.9866,
-            "ema20": 4284.4046,
-            "atr14": 77.3705,
-            "rsi14": 75.7622,
+            "ema20": 4284.4047,
+            "atr14": 77.3712,
+            "rsi14": 75.762,
             "volume": 203043.0
           },
           {
@@ -14814,8 +14826,8 @@
             "sma20": 4293.12,
             "sma60": 4140.8283,
             "ema20": 4305.4804,
-            "atr14": 77.0654,
-            "rsi14": 77.6596,
+            "atr14": 77.066,
+            "rsi14": 77.6594,
             "volume": 248418.0
           },
           {
@@ -14827,8 +14839,8 @@
             "sma20": 4311.26,
             "sma60": 4151.3217,
             "ema20": 4324.2727,
-            "atr14": 77.3322,
-            "rsi14": 77.14,
+            "atr14": 77.3328,
+            "rsi14": 77.1398,
             "volume": 151576.0
           },
           {
@@ -14840,8 +14852,8 @@
             "sma20": 4330.635,
             "sma60": 4162.2417,
             "ema20": 4346.0277,
-            "atr14": 77.6085,
-            "rsi14": 79.6613,
+            "atr14": 77.609,
+            "rsi14": 79.6612,
             "volume": 181246.0
           },
           {
@@ -14853,8 +14865,8 @@
             "sma20": 4335.07,
             "sma60": 4170.1667,
             "ema20": 4345.7965,
-            "atr14": 91.015,
-            "rsi14": 53.1881,
+            "atr14": 91.0155,
+            "rsi14": 53.1879,
             "volume": 316961.0
           },
           {
@@ -14866,8 +14878,8 @@
             "sma20": 4340.645,
             "sma60": 4178.1233,
             "ema20": 4349.654,
-            "atr14": 90.3497,
-            "rsi14": 56.3763,
+            "atr14": 90.3501,
+            "rsi14": 56.3761,
             "volume": 189751.0
           },
           {
@@ -14879,8 +14891,8 @@
             "sma20": 4346.66,
             "sma60": 4184.2033,
             "ema20": 4348.8393,
-            "atr14": 91.1818,
-            "rsi14": 52.3147,
+            "atr14": 91.1823,
+            "rsi14": 52.3144,
             "volume": 161782.0
           },
           {
@@ -14892,8 +14904,8 @@
             "sma20": 4351.515,
             "sma60": 4189.6233,
             "ema20": 4347.007,
-            "atr14": 91.4617,
-            "rsi14": 51.3019,
+            "atr14": 91.4621,
+            "rsi14": 51.3017,
             "volume": 154807.0
           },
           {
@@ -14905,8 +14917,8 @@
             "sma20": 4361.94,
             "sma60": 4195.9733,
             "ema20": 4356.9587,
-            "atr14": 94.7858,
-            "rsi14": 60.1156,
+            "atr14": 94.7862,
+            "rsi14": 60.1154,
             "volume": 211711.0
           },
           {
@@ -14918,8 +14930,8 @@
             "sma20": 4374.595,
             "sma60": 4204.6983,
             "ema20": 4370.2103,
-            "atr14": 93.044,
-            "rsi14": 62.7705,
+            "atr14": 93.0443,
+            "rsi14": 62.7703,
             "volume": 176584.0
           },
           {
@@ -14931,8 +14943,8 @@
             "sma20": 4386.835,
             "sma60": 4212.4,
             "ema20": 4378.9998,
-            "atr14": 92.0766,
-            "rsi14": 59.5542,
+            "atr14": 92.0769,
+            "rsi14": 59.5541,
             "volume": 202783.0
           },
           {
@@ -14944,8 +14956,8 @@
             "sma20": 4398.06,
             "sma60": 4217.8617,
             "ema20": 4386.7808,
-            "atr14": 90.8068,
-            "rsi14": 59.3787,
+            "atr14": 90.8071,
+            "rsi14": 59.3786,
             "volume": 208958.0
           },
           {
@@ -14957,8 +14969,8 @@
             "sma20": 4411.87,
             "sma60": 4223.4867,
             "ema20": 4397.6493,
-            "atr14": 89.0563,
-            "rsi14": 62.0676,
+            "atr14": 89.0566,
+            "rsi14": 62.0675,
             "volume": 217946.0
           },
           {
@@ -14970,7 +14982,7 @@
             "sma20": 4426.955,
             "sma60": 4230.3717,
             "ema20": 4418.3208,
-            "atr14": 92.6666,
+            "atr14": 92.6668,
             "rsi14": 68.437,
             "volume": 307991.0
           },
@@ -14983,8 +14995,8 @@
             "sma20": 4440.495,
             "sma60": 4235.28,
             "ema20": 4435.5379,
-            "atr14": 90.8547,
-            "rsi14": 66.7816,
+            "atr14": 90.8549,
+            "rsi14": 66.7815,
             "volume": 267451.0
           },
           {
@@ -14996,8 +15008,8 @@
             "sma20": 4455.52,
             "sma60": 4242.32,
             "ema20": 4454.6009,
-            "atr14": 88.3793,
-            "rsi14": 68.6949,
+            "atr14": 88.3796,
+            "rsi14": 68.6948,
             "volume": 306299.0
           },
           {
@@ -15009,8 +15021,8 @@
             "sma20": 4470.09,
             "sma60": 4246.725,
             "ema20": 4470.7056,
-            "atr14": 85.8665,
-            "rsi14": 67.3257,
+            "atr14": 85.8667,
+            "rsi14": 67.3256,
             "volume": 226481.0
           },
           {
@@ -15022,8 +15034,8 @@
             "sma20": 4481.165,
             "sma60": 4254.83,
             "ema20": 4482.5813,
-            "atr14": 85.9046,
-            "rsi14": 64.0818,
+            "atr14": 85.9048,
+            "rsi14": 64.0817,
             "volume": 246155.0
           },
           {
@@ -15035,8 +15047,8 @@
             "sma20": 4501.23,
             "sma60": 4266.5033,
             "ema20": 4509.5545,
-            "atr14": 92.3472,
-            "rsi14": 72.6323,
+            "atr14": 92.3473,
+            "rsi14": 72.6322,
             "volume": 414495.0
           },
           {
@@ -15048,7 +15060,7 @@
             "sma20": 4523.74,
             "sma60": 4278.035,
             "ema20": 4540.7874,
-            "atr14": 95.3224,
+            "atr14": 95.3225,
             "rsi14": 75.297,
             "volume": 400518.0
           },
@@ -15061,7 +15073,7 @@
             "sma20": 4545.94,
             "sma60": 4290.9617,
             "ema20": 4576.2743,
-            "atr14": 100.7707,
+            "atr14": 100.7709,
             "rsi14": 77.7651,
             "volume": 265088.0
           },
@@ -15074,7 +15086,7 @@
             "sma20": 4569.64,
             "sma60": 4306.9617,
             "ema20": 4614.6958,
-            "atr14": 100.0157,
+            "atr14": 100.0158,
             "rsi14": 79.6754,
             "volume": 276594.0
           },
@@ -15087,7 +15099,7 @@
             "sma20": 4598.625,
             "sma60": 4325.285,
             "ema20": 4659.2486,
-            "atr14": 102.0288,
+            "atr14": 102.0289,
             "rsi14": 82.2253,
             "volume": 433111.0
           },
@@ -15100,7 +15112,7 @@
             "sma20": 4625.12,
             "sma60": 4343.3167,
             "ema20": 4699.5678,
-            "atr14": 108.0482,
+            "atr14": 108.0483,
             "rsi14": 82.2276,
             "volume": 325759.0
           },
@@ -15113,7 +15125,7 @@
             "sma20": 4673.12,
             "sma60": 4364.7783,
             "ema20": 4757.0947,
-            "atr14": 124.0876,
+            "atr14": 124.0877,
             "rsi14": 86.4618,
             "volume": 112054.0
           },
@@ -15126,7 +15138,7 @@
             "sma20": 4719.725,
             "sma60": 4386.81,
             "ema20": 4810.5523,
-            "atr14": 150.1314,
+            "atr14": 150.1315,
             "rsi14": 86.6905,
             "volume": 570055.0
           },
@@ -15139,7 +15151,7 @@
             "sma20": 4739.925,
             "sma60": 4398.995,
             "ema20": 4804.3188,
-            "atr14": 195.1077,
+            "atr14": 195.1078,
             "rsi14": 50.8546,
             "volume": 508003.0
           },
@@ -15152,8 +15164,8 @@
             "sma20": 4756.075,
             "sma60": 4410.53,
             "ema20": 4789.8694,
-            "atr14": 215.6286,
-            "rsi14": 47.4467,
+            "atr14": 215.6287,
+            "rsi14": 47.4466,
             "volume": 385977.0
           },
           {
@@ -15165,7 +15177,7 @@
             "sma20": 4780.25,
             "sma60": 4426.2317,
             "ema20": 4803.6913,
-            "atr14": 226.3337,
+            "atr14": 226.3338,
             "rsi14": 56.9351,
             "volume": 260114.0
           },
@@ -15178,7 +15190,7 @@
             "sma20": 4802.985,
             "sma60": 4442.2283,
             "ema20": 4817.7017,
-            "atr14": 227.7527,
+            "atr14": 227.7528,
             "rsi14": 57.3986,
             "volume": 245957.0
           },
@@ -15204,7 +15216,7 @@
             "sma20": 4850.29,
             "sma60": 4471.1867,
             "ema20": 4839.3263,
-            "atr14": 237.2388,
+            "atr14": 237.2389,
             "rsi14": 57.8088,
             "volume": 177809.0
           },
@@ -15230,7 +15242,7 @@
             "sma20": 4900.03,
             "sma60": 4500.8617,
             "ema20": 4878.2675,
-            "atr14": 219.8166,
+            "atr14": 219.8167,
             "rsi14": 58.621,
             "volume": 105658.0
           },
@@ -15243,8 +15255,8 @@
             "sma20": 4925.0,
             "sma60": 4515.9283,
             "ema20": 4899.2421,
-            "atr14": 212.2226,
-            "rsi14": 60.7215,
+            "atr14": 212.2227,
+            "rsi14": 60.7214,
             "volume": 129968.0
           },
           {
@@ -15256,7 +15268,7 @@
             "sma20": 4940.635,
             "sma60": 4530.165,
             "ema20": 4903.9238,
-            "atr14": 212.9781,
+            "atr14": 212.9782,
             "rsi14": 54.1402,
             "volume": 161618.0
           },
@@ -15269,7 +15281,7 @@
             "sma20": 4961.765,
             "sma60": 4546.3617,
             "ema20": 4917.4834,
-            "atr14": 209.3368,
+            "atr14": 209.3369,
             "rsi14": 57.3845,
             "volume": 123016.0
           },
@@ -15282,7 +15294,7 @@
             "sma20": 4977.29,
             "sma60": 4560.3517,
             "ema20": 4916.3802,
-            "atr14": 210.1127,
+            "atr14": 210.1128,
             "rsi14": 51.7323,
             "volume": 166706.0
           },
@@ -15308,7 +15320,7 @@
             "sma20": 4997.47,
             "sma60": 4591.42,
             "ema20": 4932.1203,
-            "atr14": 197.0992,
+            "atr14": 197.0993,
             "rsi14": 54.7363,
             "volume": 87026.0
           },
@@ -15334,7 +15346,7 @@
             "sma20": 5018.14,
             "sma60": 4626.9667,
             "ema20": 4972.8908,
-            "atr14": 191.409,
+            "atr14": 191.4091,
             "rsi14": 62.0501,
             "volume": 140957.0
           },
@@ -15413,7 +15425,7 @@
             "sma60": 4726.8283,
             "ema20": 5081.4007,
             "atr14": 187.9283,
-            "rsi14": 54.2257,
+            "rsi14": 54.2256,
             "volume": 273216.0
           },
           {
@@ -15464,7 +15476,7 @@
             "sma20": 5108.93,
             "sma60": 4785.76,
             "ema20": 5093.7342,
-            "atr14": 176.9261,
+            "atr14": 176.9262,
             "rsi14": 52.6379,
             "volume": 181749.0
           },
@@ -15516,7 +15528,7 @@
             "sma20": 5131.5,
             "sma60": 4842.5517,
             "ema20": 5110.5668,
-            "atr14": 162.8492,
+            "atr14": 162.8493,
             "rsi14": 49.4329,
             "volume": 160333.0
           },
@@ -15660,7 +15672,7 @@
             "sma60": 4880.6184,
             "ema20": 4750.4179,
             "atr14": 195.6339,
-            "rsi14": 38.7775,
+            "rsi14": 38.7774,
             "volume": 10816.0
           },
           {
@@ -17767,7 +17779,20 @@
             "ema20": 3980.9045,
             "atr14": 91.504,
             "rsi14": 29.312,
-            "volume": 160399.0
+            "volume": 244253.0
+          },
+          {
+            "date": "2026-11-19",
+            "open": 3730.3,
+            "high": 3759.5,
+            "low": 3620.6001,
+            "close": 3685.5,
+            "sma20": 3966.78,
+            "sma60": 4187.4417,
+            "ema20": 3952.7707,
+            "atr14": 94.8894,
+            "rsi14": 27.0291,
+            "volume": 244253.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -17777,15 +17802,15 @@
           "No bid/ask, spread, actual fill or slippage."
         ],
         "latest_session": {
-          "open": 3855.2,
-          "high": 3859.3,
-          "low": 3721.8,
-          "close": 3741.8999,
-          "sma20": 3985.525,
-          "sma60": 4203.5716,
-          "ema20": 3980.9045,
-          "atr14": 91.504,
-          "rsi14": 29.312
+          "open": 3730.3,
+          "high": 3759.5,
+          "low": 3620.6001,
+          "close": 3685.5,
+          "sma20": 3966.78,
+          "sma60": 4187.4417,
+          "ema20": 3952.7707,
+          "atr14": 94.8894,
+          "rsi14": 27.0291
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -17798,24 +17823,11 @@
         "unit": "JPY per USD",
         "source": "Alpha Vantage FX_DAILY",
         "source_grade": "B_PUBLIC_API",
-        "as_of": "2026-11-18",
+        "as_of": "2026-11-19",
         "observations": 5000,
-        "coverage_start": "2007-09-19",
-        "coverage_end": "2026-11-18",
+        "coverage_start": "2007-09-20",
+        "coverage_end": "2026-11-19",
         "chart_points": [
-          {
-            "date": "2025-05-08",
-            "open": 143.762,
-            "high": 146.177,
-            "low": 143.44,
-            "close": 145.91,
-            "sma20": 143.0984,
-            "sma60": 147.0627,
-            "ema20": 144.1194,
-            "atr14": 1.8489,
-            "rsi14": 54.6995,
-            "volume": 0.0
-          },
           {
             "date": "2025-05-09",
             "open": 145.917,
@@ -17952,7 +17964,7 @@
             "high": 144.07,
             "low": 142.418,
             "close": 142.55,
-            "sma20": 144.5875,
+            "sma20": 144.5876,
             "sma60": 146.1335,
             "ema20": 144.6257,
             "atr14": 1.6671,
@@ -18083,7 +18095,7 @@
             "low": 143.3,
             "close": 144.85,
             "sma20": 144.5396,
-            "sma60": 145.3683,
+            "sma60": 145.3684,
             "ema20": 144.0875,
             "atr14": 1.6404,
             "rsi14": 52.3581,
@@ -18096,7 +18108,7 @@
             "low": 143.96,
             "close": 144.58,
             "sma20": 144.3511,
-            "sma60": 145.2924,
+            "sma60": 145.2925,
             "ema20": 144.1344,
             "atr14": 1.5932,
             "rsi14": 51.2458,
@@ -18121,7 +18133,7 @@
             "high": 145.46,
             "low": 144.31,
             "close": 144.54,
-            "sma20": 144.1155,
+            "sma20": 144.1154,
             "sma60": 145.1481,
             "ema20": 144.233,
             "atr14": 1.5162,
@@ -18200,7 +18212,7 @@
             "low": 144.73,
             "close": 145.45,
             "sma20": 144.1105,
-            "sma60": 144.6147,
+            "sma60": 144.6146,
             "ema20": 144.4841,
             "atr14": 1.411,
             "rsi14": 55.1565,
@@ -18251,7 +18263,7 @@
             "high": 145.94,
             "low": 144.58,
             "close": 145.25,
-            "sma20": 144.5118,
+            "sma20": 144.5119,
             "sma60": 144.3531,
             "ema20": 144.8347,
             "atr14": 1.4536,
@@ -18434,7 +18446,7 @@
             "low": 147.53,
             "close": 148.86,
             "sma20": 145.5805,
-            "sma60": 144.6982,
+            "sma60": 144.6983,
             "ema20": 145.8724,
             "atr14": 1.3135,
             "rsi14": 68.7337,
@@ -23002,6 +23014,19 @@
             "atr14": 0.8757,
             "rsi14": 58.0438,
             "volume": 0.0
+          },
+          {
+            "date": "2026-11-19",
+            "open": 159.33,
+            "high": 159.96,
+            "low": 159.26,
+            "close": 159.67,
+            "sma20": 158.507,
+            "sma60": 157.6518,
+            "ema20": 158.7796,
+            "atr14": 0.8632,
+            "rsi14": 60.6713,
+            "volume": 0.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -23011,18 +23036,18 @@
           "No bid/ask, spread, actual fill or slippage."
         ],
         "latest_session": {
-          "open": 159.36,
-          "high": 159.65,
-          "low": 159.11,
-          "close": 159.33,
-          "sma20": 158.3615,
-          "sma60": 157.6472,
-          "ema20": 158.6858,
-          "atr14": 0.8757,
-          "rsi14": 58.0438
+          "open": 159.33,
+          "high": 159.96,
+          "low": 159.26,
+          "close": 159.67,
+          "sma20": 158.507,
+          "sma60": 157.6518,
+          "ema20": 158.7796,
+          "atr14": 0.8632,
+          "rsi14": 60.6713
         },
         "fallback_provider": "Yahoo Finance public reference via yfinance",
-        "cross_source_deviation_pct": -0.1091,
+        "cross_source_deviation_pct": 0.1813,
         "retrieval_status": "CURRENT_FETCH"
       },
       "dxy": {
@@ -23034,24 +23059,11 @@
         "unit": "index",
         "source": "Yahoo Finance public reference via yfinance",
         "source_grade": "B_PUBLIC_REFERENCE",
-        "as_of": "2026-11-18",
+        "as_of": "2026-11-19",
         "observations": 380,
-        "coverage_start": "2025-05-19",
-        "coverage_end": "2026-11-18",
+        "coverage_start": "2025-05-20",
+        "coverage_end": "2026-11-19",
         "chart_points": [
-          {
-            "date": "2025-05-19",
-            "open": 100.91,
-            "high": 100.91,
-            "low": 100.06,
-            "close": 100.43,
-            "sma20": null,
-            "sma60": null,
-            "ema20": null,
-            "atr14": null,
-            "rsi14": null,
-            "volume": 0.0
-          },
           {
             "date": "2025-05-20",
             "open": 100.43,
@@ -23217,7 +23229,7 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 0.7765,
+            "atr14": null,
             "rsi14": null,
             "volume": 0.0
           },
@@ -23230,8 +23242,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 0.7711,
-            "rsi14": 30.8584,
+            "atr14": 0.6718,
+            "rsi14": null,
             "volume": 0.0
           },
           {
@@ -23243,8 +23255,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 0.7453,
-            "rsi14": 29.3725,
+            "atr14": 0.6531,
+            "rsi14": 23.7091,
             "volume": 0.0
           },
           {
@@ -23256,8 +23268,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 0.7299,
-            "rsi14": 30.948,
+            "atr14": 0.6443,
+            "rsi14": 25.0887,
             "volume": 0.0
           },
           {
@@ -23269,8 +23281,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 0.727,
-            "rsi14": 28.3478,
+            "atr14": 0.6476,
+            "rsi14": 23.3523,
             "volume": 0.0
           },
           {
@@ -23282,8 +23294,8 @@
             "sma20": null,
             "sma60": null,
             "ema20": null,
-            "atr14": 0.7487,
-            "rsi14": 24.587,
+            "atr14": 0.6749,
+            "rsi14": 20.7391,
             "volume": 0.0
           },
           {
@@ -23292,11 +23304,11 @@
             "high": 98.59,
             "low": 97.62,
             "close": 98.18,
-            "sma20": 99.1755,
+            "sma20": null,
             "sma60": null,
-            "ema20": 99.1054,
-            "atr14": 0.7645,
-            "rsi14": 28.3364,
+            "ema20": null,
+            "atr14": 0.696,
+            "rsi14": 24.0891,
             "volume": 0.0
           },
           {
@@ -23307,9 +23319,9 @@
             "close": 98.0,
             "sma20": 99.054,
             "sma60": null,
-            "ema20": 99.0001,
-            "atr14": 0.7585,
-            "rsi14": 27.3236,
+            "ema20": 98.9582,
+            "atr14": 0.6948,
+            "rsi14": 23.3532,
             "volume": 0.0
           },
           {
@@ -23320,9 +23332,9 @@
             "close": 98.82,
             "sma20": 98.989,
             "sma60": null,
-            "ema20": 98.9829,
-            "atr14": 0.7664,
-            "rsi14": 38.1663,
+            "ema20": 98.945,
+            "atr14": 0.7074,
+            "rsi14": 33.3432,
             "volume": 0.0
           },
           {
@@ -23333,9 +23345,9 @@
             "close": 98.91,
             "sma20": 98.9565,
             "sma60": null,
-            "ema20": 98.976,
-            "atr14": 0.7495,
-            "rsi14": 39.2378,
+            "ema20": 98.9417,
+            "atr14": 0.6947,
+            "rsi14": 34.3545,
             "volume": 0.0
           },
           {
@@ -23346,9 +23358,9 @@
             "close": 98.71,
             "sma20": 98.894,
             "sma60": null,
-            "ema20": 98.9507,
-            "atr14": 0.7224,
-            "rsi14": 37.6754,
+            "ema20": 98.9196,
+            "atr14": 0.6715,
+            "rsi14": 33.1508,
             "volume": 0.0
           },
           {
@@ -23359,9 +23371,9 @@
             "close": 98.42,
             "sma20": 98.8595,
             "sma60": null,
-            "ema20": 98.9001,
-            "atr14": 0.7473,
-            "rsi14": 35.4699,
+            "ema20": 98.8721,
+            "atr14": 0.7,
+            "rsi14": 31.4312,
             "volume": 0.0
           },
           {
@@ -23372,9 +23384,9 @@
             "close": 97.86,
             "sma20": 98.806,
             "sma60": null,
-            "ema20": 98.8011,
-            "atr14": 0.7446,
-            "rsi14": 31.6205,
+            "ema20": 98.7757,
+            "atr14": 0.7007,
+            "rsi14": 28.3707,
             "volume": 0.0
           },
           {
@@ -23385,9 +23397,9 @@
             "close": 97.68,
             "sma20": 98.714,
             "sma60": null,
-            "ema20": 98.6943,
-            "atr14": 0.7307,
-            "rsi14": 30.4757,
+            "ema20": 98.6713,
+            "atr14": 0.6899,
+            "rsi14": 27.4457,
             "volume": 0.0
           },
           {
@@ -23398,9 +23410,9 @@
             "close": 97.15,
             "sma20": 98.5775,
             "sma60": null,
-            "ema20": 98.5472,
-            "atr14": 0.7271,
-            "rsi14": 27.3372,
+            "ema20": 98.5264,
+            "atr14": 0.6892,
+            "rsi14": 24.8739,
             "volume": 0.0
           },
           {
@@ -23411,9 +23423,9 @@
             "close": 97.4,
             "sma20": 98.4835,
             "sma60": null,
-            "ema20": 98.438,
-            "atr14": 0.7108,
-            "rsi14": 30.9495,
+            "ema20": 98.4192,
+            "atr14": 0.6757,
+            "rsi14": 28.2874,
             "volume": 0.0
           },
           {
@@ -23424,9 +23436,9 @@
             "close": 96.88,
             "sma20": 98.361,
             "sma60": null,
-            "ema20": 98.2896,
-            "atr14": 0.7051,
-            "rsi14": 27.8483,
+            "ema20": 98.2726,
+            "atr14": 0.6724,
+            "rsi14": 25.6743,
             "volume": 0.0
           },
           {
@@ -23437,9 +23449,9 @@
             "close": 96.82,
             "sma20": 98.267,
             "sma60": null,
-            "ema20": 98.1496,
-            "atr14": 0.6954,
-            "rsi14": 27.5059,
+            "ema20": 98.1342,
+            "atr14": 0.6651,
+            "rsi14": 25.3829,
             "volume": 0.0
           },
           {
@@ -23450,9 +23462,9 @@
             "close": 96.78,
             "sma20": 98.1435,
             "sma60": null,
-            "ema20": 98.0192,
-            "atr14": 0.6836,
-            "rsi14": 27.2651,
+            "ema20": 98.0053,
+            "atr14": 0.6555,
+            "rsi14": 25.1778,
             "volume": 0.0
           },
           {
@@ -23463,9 +23475,9 @@
             "close": 97.18,
             "sma20": 98.063,
             "sma60": null,
-            "ema20": 97.9393,
-            "atr14": 0.6869,
-            "rsi14": 33.53,
+            "ema20": 97.9267,
+            "atr14": 0.6608,
+            "rsi14": 31.1686,
             "volume": 0.0
           },
           {
@@ -23476,9 +23488,9 @@
             "close": 97.48,
             "sma20": 98.0,
             "sma60": null,
-            "ema20": 97.8955,
-            "atr14": 0.6936,
-            "rsi14": 37.8535,
+            "ema20": 97.8841,
+            "atr14": 0.6693,
+            "rsi14": 35.3495,
             "volume": 0.0
           },
           {
@@ -23489,9 +23501,9 @@
             "close": 97.51,
             "sma20": 97.916,
             "sma60": null,
-            "ema20": 97.8588,
-            "atr14": 0.6912,
-            "rsi14": 38.2858,
+            "ema20": 97.8485,
+            "atr14": 0.6686,
+            "rsi14": 35.7696,
             "volume": 0.0
           },
           {
@@ -23502,9 +23514,9 @@
             "close": 97.47,
             "sma20": 97.8425,
             "sma60": null,
-            "ema20": 97.8218,
-            "atr14": 0.6625,
-            "rsi14": 37.9072,
+            "ema20": 97.8124,
+            "atr14": 0.6416,
+            "rsi14": 35.4389,
             "volume": 0.0
           },
           {
@@ -23515,9 +23527,9 @@
             "close": 97.65,
             "sma20": 97.7725,
             "sma60": null,
-            "ema20": 97.8054,
-            "atr14": 0.6616,
-            "rsi14": 40.7469,
+            "ema20": 97.797,
+            "atr14": 0.6422,
+            "rsi14": 38.2075,
             "volume": 0.0
           },
           {
@@ -23528,9 +23540,9 @@
             "close": 97.85,
             "sma20": 97.7335,
             "sma60": null,
-            "ema20": 97.8097,
-            "atr14": 0.6429,
-            "rsi14": 43.8212,
+            "ema20": 97.802,
+            "atr14": 0.6249,
+            "rsi14": 41.2235,
             "volume": 0.0
           },
           {
@@ -23541,9 +23553,9 @@
             "close": 98.08,
             "sma20": 97.7415,
             "sma60": null,
-            "ema20": 97.8354,
-            "atr14": 0.6234,
-            "rsi14": 47.2131,
+            "ema20": 97.8285,
+            "atr14": 0.6067,
+            "rsi14": 44.5739,
             "volume": 0.0
           },
           {
@@ -23554,9 +23566,9 @@
             "close": 98.62,
             "sma20": 97.7635,
             "sma60": null,
-            "ema20": 97.9101,
-            "atr14": 0.6339,
-            "rsi14": 54.2043,
+            "ema20": 97.9039,
+            "atr14": 0.6184,
+            "rsi14": 51.556,
             "volume": 0.0
           },
           {
@@ -23567,9 +23579,9 @@
             "close": 98.39,
             "sma20": 97.783,
             "sma60": null,
-            "ema20": 97.9558,
-            "atr14": 0.6743,
-            "rsi14": 51.1,
+            "ema20": 97.9502,
+            "atr14": 0.6599,
+            "rsi14": 48.7397,
             "volume": 0.0
           },
           {
@@ -23580,9 +23592,9 @@
             "close": 98.73,
             "sma20": 97.7785,
             "sma60": null,
-            "ema20": 98.0296,
-            "atr14": 0.6697,
-            "rsi14": 55.1858,
+            "ema20": 98.0244,
+            "atr14": 0.6563,
+            "rsi14": 52.8408,
             "volume": 0.0
           },
           {
@@ -23593,9 +23605,9 @@
             "close": 98.48,
             "sma20": 97.757,
             "sma60": null,
-            "ema20": 98.0725,
-            "atr14": 0.6669,
-            "rsi14": 51.7612,
+            "ema20": 98.0678,
+            "atr14": 0.6545,
+            "rsi14": 49.6927,
             "volume": 0.0
           },
           {
@@ -23606,9 +23618,9 @@
             "close": 97.85,
             "sma20": 97.714,
             "sma60": null,
-            "ema20": 98.0513,
-            "atr14": 0.6771,
-            "rsi14": 44.3003,
+            "ema20": 98.0471,
+            "atr14": 0.6656,
+            "rsi14": 42.7764,
             "volume": 0.0
           },
           {
@@ -23619,9 +23631,9 @@
             "close": 97.39,
             "sma20": 97.6625,
             "sma60": null,
-            "ema20": 97.9883,
-            "atr14": 0.6773,
-            "rsi14": 39.7905,
+            "ema20": 97.9845,
+            "atr14": 0.6666,
+            "rsi14": 38.5567,
             "volume": 0.0
           },
           {
@@ -23632,9 +23644,9 @@
             "close": 97.21,
             "sma20": 97.63,
             "sma60": null,
-            "ema20": 97.9142,
-            "atr14": 0.659,
-            "rsi14": 38.1537,
+            "ema20": 97.9107,
+            "atr14": 0.649,
+            "rsi14": 37.0179,
             "volume": 0.0
           },
           {
@@ -23645,9 +23657,9 @@
             "close": 97.38,
             "sma20": 97.615,
             "sma60": null,
-            "ema20": 97.8633,
-            "atr14": 0.6433,
-            "rsi14": 40.6373,
+            "ema20": 97.8602,
+            "atr14": 0.6341,
+            "rsi14": 39.4747,
             "volume": 0.0
           },
           {
@@ -23658,9 +23670,9 @@
             "close": 97.65,
             "sma20": 97.64,
             "sma60": null,
-            "ema20": 97.843,
-            "atr14": 0.6352,
-            "rsi14": 44.4527,
+            "ema20": 97.8402,
+            "atr14": 0.6266,
+            "rsi14": 43.2605,
             "volume": 0.0
           },
           {
@@ -23671,9 +23683,9 @@
             "close": 98.66,
             "sma20": 97.703,
             "sma60": null,
-            "ema20": 97.9208,
-            "atr14": 0.6756,
-            "rsi14": 55.877,
+            "ema20": 97.9183,
+            "atr14": 0.6676,
+            "rsi14": 54.6801,
             "volume": 0.0
           },
           {
@@ -23684,9 +23696,9 @@
             "close": 98.91,
             "sma20": 97.8045,
             "sma60": null,
-            "ema20": 98.015,
-            "atr14": 0.6673,
-            "rsi14": 58.1703,
+            "ema20": 98.0127,
+            "atr14": 0.6599,
+            "rsi14": 56.9876,
             "volume": 0.0
           },
           {
@@ -23697,9 +23709,9 @@
             "close": 99.94,
             "sma20": 97.9605,
             "sma60": null,
-            "ema20": 98.1983,
-            "atr14": 0.7111,
-            "rsi14": 66.0088,
+            "ema20": 98.1963,
+            "atr14": 0.7042,
+            "rsi14": 64.9142,
             "volume": 0.0
           },
           {
@@ -23710,9 +23722,9 @@
             "close": 100.03,
             "sma20": 98.123,
             "sma60": null,
-            "ema20": 98.3728,
-            "atr14": 0.7017,
-            "rsi14": 66.5978,
+            "ema20": 98.3709,
+            "atr14": 0.6953,
+            "rsi14": 65.5122,
             "volume": 0.0
           },
           {
@@ -23723,9 +23735,9 @@
             "close": 98.69,
             "sma20": 98.1985,
             "sma60": null,
-            "ema20": 98.403,
-            "atr14": 0.7694,
-            "rsi14": 52.1174,
+            "ema20": 98.4013,
+            "atr14": 0.7635,
+            "rsi14": 51.4502,
             "volume": 0.0
           },
           {
@@ -23736,9 +23748,9 @@
             "close": 98.78,
             "sma20": 98.2635,
             "sma60": null,
-            "ema20": 98.4389,
-            "atr14": 0.7423,
-            "rsi14": 52.8588,
+            "ema20": 98.4374,
+            "atr14": 0.7368,
+            "rsi14": 52.1924,
             "volume": 0.0
           },
           {
@@ -23749,9 +23761,9 @@
             "close": 98.78,
             "sma20": 98.327,
             "sma60": null,
-            "ema20": 98.4714,
-            "atr14": 0.7236,
-            "rsi14": 52.8588,
+            "ema20": 98.47,
+            "atr14": 0.7185,
+            "rsi14": 52.1924,
             "volume": 0.0
           },
           {
@@ -23762,9 +23774,9 @@
             "close": 98.18,
             "sma20": 98.3625,
             "sma60": null,
-            "ema20": 98.4436,
-            "atr14": 0.7226,
-            "rsi14": 47.2074,
+            "ema20": 98.4424,
+            "atr14": 0.7179,
+            "rsi14": 46.6752,
             "volume": 0.0
           },
           {
@@ -23775,9 +23787,9 @@
             "close": 98.4,
             "sma20": 98.4,
             "sma60": null,
-            "ema20": 98.4395,
-            "atr14": 0.7082,
-            "rsi14": 49.3459,
+            "ema20": 98.4383,
+            "atr14": 0.7037,
+            "rsi14": 48.8119,
             "volume": 0.0
           },
           {
@@ -23788,9 +23800,9 @@
             "close": 98.18,
             "sma20": 98.4165,
             "sma60": null,
-            "ema20": 98.4148,
-            "atr14": 0.689,
-            "rsi14": 47.2833,
+            "ema20": 98.4137,
+            "atr14": 0.6849,
+            "rsi14": 46.7927,
             "volume": 0.0
           },
           {
@@ -23801,9 +23813,9 @@
             "close": 98.52,
             "sma20": 98.4385,
             "sma60": null,
-            "ema20": 98.4248,
-            "atr14": 0.7319,
-            "rsi14": 50.7121,
+            "ema20": 98.4239,
+            "atr14": 0.7281,
+            "rsi14": 50.2199,
             "volume": 0.0
           },
           {
@@ -23813,10 +23825,10 @@
             "low": 97.9,
             "close": 98.1,
             "sma20": 98.4125,
-            "sma60": 98.4505,
-            "ema20": 98.3939,
-            "atr14": 0.7311,
-            "rsi14": 46.6735,
+            "sma60": null,
+            "ema20": 98.393,
+            "atr14": 0.7275,
+            "rsi14": 46.2563,
             "volume": 0.0
           },
           {
@@ -23827,9 +23839,9 @@
             "close": 97.84,
             "sma20": 98.385,
             "sma60": 98.4073,
-            "ema20": 98.3411,
-            "atr14": 0.7146,
-            "rsi14": 44.3204,
+            "ema20": 98.3403,
+            "atr14": 0.7113,
+            "rsi14": 43.944,
             "volume": 0.0
           },
           {
@@ -23840,9 +23852,9 @@
             "close": 98.25,
             "sma20": 98.361,
             "sma60": 98.3762,
-            "ema20": 98.3324,
-            "atr14": 0.7128,
-            "rsi14": 48.7116,
+            "ema20": 98.3317,
+            "atr14": 0.7098,
+            "rsi14": 48.3303,
             "volume": 0.0
           },
           {
@@ -23853,9 +23865,9 @@
             "close": 97.85,
             "sma20": 98.3295,
             "sma60": 98.3477,
-            "ema20": 98.2865,
-            "atr14": 0.699,
-            "rsi14": 44.9842,
+            "ema20": 98.2859,
+            "atr14": 0.6962,
+            "rsi14": 44.6588,
             "volume": 0.0
           },
           {
@@ -23866,9 +23878,9 @@
             "close": 98.17,
             "sma20": 98.3455,
             "sma60": 98.3178,
-            "ema20": 98.2754,
-            "atr14": 0.6784,
-            "rsi14": 48.3868,
+            "ema20": 98.2748,
+            "atr14": 0.6758,
+            "rsi14": 48.0583,
             "volume": 0.0
           },
           {
@@ -23879,9 +23891,9 @@
             "close": 98.27,
             "sma20": 98.3895,
             "sma60": 98.3038,
-            "ema20": 98.2749,
-            "atr14": 0.6571,
-            "rsi14": 49.4392,
+            "ema20": 98.2744,
+            "atr14": 0.6546,
+            "rsi14": 49.1103,
             "volume": 0.0
           },
           {
@@ -23892,9 +23904,9 @@
             "close": 98.22,
             "sma20": 98.44,
             "sma60": 98.292,
-            "ema20": 98.2697,
-            "atr14": 0.6359,
-            "rsi14": 48.9023,
+            "ema20": 98.2692,
+            "atr14": 0.6336,
+            "rsi14": 48.5805,
             "volume": 0.0
           },
           {
@@ -23905,9 +23917,9 @@
             "close": 98.62,
             "sma20": 98.502,
             "sma60": 98.277,
-            "ema20": 98.303,
-            "atr14": 0.6262,
-            "rsi14": 53.274,
+            "ema20": 98.3026,
+            "atr14": 0.6241,
+            "rsi14": 52.9533,
             "volume": 0.0
           },
           {
@@ -23918,9 +23930,9 @@
             "close": 97.72,
             "sma20": 98.5055,
             "sma60": 98.241,
-            "ema20": 98.2475,
-            "atr14": 0.6722,
-            "rsi14": 44.1262,
+            "ema20": 98.2471,
+            "atr14": 0.6702,
+            "rsi14": 43.906,
             "volume": 0.0
           },
           {
@@ -23931,9 +23943,9 @@
             "close": 98.43,
             "sma20": 98.494,
             "sma60": 98.2268,
-            "ema20": 98.2649,
-            "atr14": 0.6834,
-            "rsi14": 51.2395,
+            "ema20": 98.2645,
+            "atr14": 0.6816,
+            "rsi14": 51.0161,
             "volume": 0.0
           },
           {
@@ -23944,9 +23956,9 @@
             "close": 98.23,
             "sma20": 98.46,
             "sma60": 98.2085,
-            "ema20": 98.2616,
-            "atr14": 0.6682,
-            "rsi14": 49.3342,
+            "ema20": 98.2612,
+            "atr14": 0.6665,
+            "rsi14": 49.1271,
             "volume": 0.0
           },
           {
@@ -23957,9 +23969,9 @@
             "close": 98.23,
             "sma20": 98.3745,
             "sma60": 98.2007,
-            "ema20": 98.2585,
-            "atr14": 0.6612,
-            "rsi14": 49.3342,
+            "ema20": 98.2583,
+            "atr14": 0.6596,
+            "rsi14": 49.1271,
             "volume": 0.0
           },
           {
@@ -23970,9 +23982,9 @@
             "close": 97.81,
             "sma20": 98.2635,
             "sma60": 98.1767,
-            "ema20": 98.2158,
-            "atr14": 0.6489,
-            "rsi14": 45.2373,
+            "ema20": 98.2156,
+            "atr14": 0.6475,
+            "rsi14": 45.0632,
             "volume": 0.0
           },
           {
@@ -23983,9 +23995,9 @@
             "close": 97.77,
             "sma20": 98.2175,
             "sma60": 98.1597,
-            "ema20": 98.1734,
-            "atr14": 0.634,
-            "rsi14": 44.8553,
+            "ema20": 98.1731,
+            "atr14": 0.6327,
+            "rsi14": 44.684,
             "volume": 0.0
           },
           {
@@ -23996,9 +24008,9 @@
             "close": 98.4,
             "sma20": 98.1985,
             "sma60": 98.154,
-            "ema20": 98.195,
-            "atr14": 0.6587,
-            "rsi14": 51.7647,
+            "ema20": 98.1947,
+            "atr14": 0.6575,
+            "rsi14": 51.5918,
             "volume": 0.0
           },
           {
@@ -24009,9 +24021,9 @@
             "close": 98.14,
             "sma20": 98.1665,
             "sma60": 98.1365,
-            "ema20": 98.1897,
-            "atr14": 0.6567,
-            "rsi14": 49.0342,
+            "ema20": 98.1895,
+            "atr14": 0.6555,
+            "rsi14": 48.8789,
             "volume": 0.0
           },
           {
@@ -24022,9 +24034,9 @@
             "close": 98.35,
             "sma20": 98.175,
             "sma60": 98.1267,
-            "ema20": 98.205,
-            "atr14": 0.6355,
-            "rsi14": 51.27,
+            "ema20": 98.2048,
+            "atr14": 0.6344,
+            "rsi14": 51.1148,
             "volume": 0.0
           },
           {
@@ -24035,9 +24047,9 @@
             "close": 97.77,
             "sma20": 98.1435,
             "sma60": 98.1053,
-            "ema20": 98.1636,
-            "atr14": 0.6558,
-            "rsi14": 45.3522,
+            "ema20": 98.1634,
+            "atr14": 0.6548,
+            "rsi14": 45.2307,
             "volume": 0.0
           },
           {
@@ -24048,9 +24060,9 @@
             "close": 97.45,
             "sma20": 98.107,
             "sma60": 98.0857,
-            "ema20": 98.0956,
-            "atr14": 0.6461,
-            "rsi14": 42.4416,
+            "ema20": 98.0955,
+            "atr14": 0.6452,
+            "rsi14": 42.3351,
             "volume": 0.0
           },
           {
@@ -24061,9 +24073,9 @@
             "close": 97.79,
             "sma20": 98.0705,
             "sma60": 98.0835,
-            "ema20": 98.0665,
-            "atr14": 0.6407,
-            "rsi14": 46.3793,
+            "ema20": 98.0664,
+            "atr14": 0.6398,
+            "rsi14": 46.2709,
             "volume": 0.0
           },
           {
@@ -24074,9 +24086,9 @@
             "close": 97.78,
             "sma20": 98.0545,
             "sma60": 98.0768,
-            "ema20": 98.0392,
-            "atr14": 0.6185,
-            "rsi14": 46.279,
+            "ema20": 98.0391,
+            "atr14": 0.6177,
+            "rsi14": 46.1711,
             "volume": 0.0
           },
           {
@@ -24087,9 +24099,9 @@
             "close": 97.54,
             "sma20": 98.0395,
             "sma60": 98.0692,
-            "ema20": 97.9917,
-            "atr14": 0.6186,
-            "rsi14": 43.8296,
+            "ema20": 97.9916,
+            "atr14": 0.6178,
+            "rsi14": 43.7328,
             "volume": 0.0
           },
           {
@@ -24100,9 +24112,9 @@
             "close": 97.55,
             "sma20": 98.0045,
             "sma60": 98.048,
-            "ema20": 97.9496,
-            "atr14": 0.6008,
-            "rsi14": 43.9627,
+            "ema20": 97.9495,
+            "atr14": 0.6001,
+            "rsi14": 43.8659,
             "volume": 0.0
           },
           {
@@ -24114,8 +24126,8 @@
             "sma20": 97.977,
             "sma60": 98.0212,
             "ema20": 97.8877,
-            "atr14": 0.5886,
-            "rsi14": 41.3265,
+            "atr14": 0.588,
+            "rsi14": 41.241,
             "volume": 0.0
           },
           {
@@ -24126,9 +24138,9 @@
             "close": 96.63,
             "sma20": 97.9,
             "sma60": 97.9865,
-            "ema20": 97.768,
-            "atr14": 0.6059,
-            "rsi14": 35.2295,
+            "ema20": 97.7679,
+            "atr14": 0.6053,
+            "rsi14": 35.1673,
             "volume": 0.0
           },
           {
@@ -24140,8 +24152,8 @@
             "sma20": 97.83,
             "sma60": 97.9607,
             "ema20": 97.6824,
-            "atr14": 0.6233,
-            "rsi14": 38.7173,
+            "atr14": 0.6228,
+            "rsi14": 38.6526,
             "volume": 0.0
           },
           {
@@ -24152,9 +24164,9 @@
             "close": 97.35,
             "sma20": 97.7865,
             "sma60": 97.9522,
-            "ema20": 97.6508,
-            "atr14": 0.6331,
-            "rsi14": 45.0862,
+            "ema20": 97.6507,
+            "atr14": 0.6326,
+            "rsi14": 45.0186,
             "volume": 0.0
           },
           {
@@ -24166,8 +24178,8 @@
             "sma20": 97.7375,
             "sma60": 97.9515,
             "ema20": 97.6497,
-            "atr14": 0.6264,
-            "rsi14": 48.5642,
+            "atr14": 0.6259,
+            "rsi14": 48.4961,
             "volume": 0.0
           },
           {
@@ -24178,9 +24190,9 @@
             "close": 97.33,
             "sma20": 97.718,
             "sma60": 97.9545,
-            "ema20": 97.6193,
-            "atr14": 0.6181,
-            "rsi14": 45.2639,
+            "ema20": 97.6192,
+            "atr14": 0.6177,
+            "rsi14": 45.2048,
             "volume": 0.0
           },
           {
@@ -24191,9 +24203,9 @@
             "close": 97.26,
             "sma20": 97.6595,
             "sma60": 97.9522,
-            "ema20": 97.5851,
-            "atr14": 0.5925,
-            "rsi14": 44.5281,
+            "ema20": 97.585,
+            "atr14": 0.5921,
+            "rsi14": 44.4708,
             "volume": 0.0
           },
           {
@@ -24205,8 +24217,8 @@
             "sma20": 97.6415,
             "sma60": 97.9687,
             "ema20": 97.6122,
-            "atr14": 0.6002,
-            "rsi14": 51.8709,
+            "atr14": 0.5998,
+            "rsi14": 51.813,
             "volume": 0.0
           },
           {
@@ -24218,8 +24230,8 @@
             "sma20": 97.6575,
             "sma60": 97.9975,
             "ema20": 97.7015,
-            "atr14": 0.6195,
-            "rsi14": 58.4704,
+            "atr14": 0.6191,
+            "rsi14": 58.4141,
             "volume": 0.0
           },
           {
@@ -24231,8 +24243,8 @@
             "sma20": 97.6745,
             "sma60": 98.0203,
             "ema20": 97.7442,
-            "atr14": 0.6052,
-            "rsi14": 53.7974,
+            "atr14": 0.6049,
+            "rsi14": 53.7497,
             "volume": 0.0
           },
           {
@@ -24244,8 +24256,8 @@
             "sma20": 97.6815,
             "sma60": 98.0325,
             "ema20": 97.76,
-            "atr14": 0.5913,
-            "rsi14": 51.1556,
+            "atr14": 0.591,
+            "rsi14": 51.1125,
             "volume": 0.0
           },
           {
@@ -24256,9 +24268,9 @@
             "close": 97.77,
             "sma20": 97.65,
             "sma60": 98.0373,
-            "ema20": 97.761,
-            "atr14": 0.5791,
-            "rsi14": 49.6247,
+            "ema20": 97.7609,
+            "atr14": 0.5788,
+            "rsi14": 49.5841,
             "volume": 0.0
           },
           {
@@ -24270,8 +24282,8 @@
             "sma20": 97.6285,
             "sma60": 98.0407,
             "ema20": 97.7561,
-            "atr14": 0.5677,
-            "rsi14": 48.9487,
+            "atr14": 0.5674,
+            "rsi14": 48.9092,
             "volume": 0.0
           },
           {
@@ -24282,9 +24294,9 @@
             "close": 97.85,
             "sma20": 97.6035,
             "sma60": 98.047,
-            "ema20": 97.7651,
-            "atr14": 0.5707,
-            "rsi14": 50.6385,
+            "ema20": 97.765,
+            "atr14": 0.5705,
+            "rsi14": 50.599,
             "volume": 0.0
           },
           {
@@ -24295,9 +24307,9 @@
             "close": 97.72,
             "sma20": 97.601,
             "sma60": 98.0482,
-            "ema20": 97.7608,
-            "atr14": 0.5549,
-            "rsi14": 49.0161,
+            "ema20": 97.7607,
+            "atr14": 0.5547,
+            "rsi14": 48.979,
             "volume": 0.0
           },
           {
@@ -24309,8 +24321,8 @@
             "sma20": 97.634,
             "sma60": 98.0525,
             "ema20": 97.794,
-            "atr14": 0.571,
-            "rsi14": 53.7985,
+            "atr14": 0.5708,
+            "rsi14": 53.7617,
             "volume": 0.0
           },
           {
@@ -24322,8 +24334,8 @@
             "sma20": 97.6735,
             "sma60": 98.0608,
             "ema20": 97.8689,
-            "atr14": 0.5709,
-            "rsi14": 58.8127,
+            "atr14": 0.5708,
+            "rsi14": 58.7768,
             "volume": 0.0
           },
           {
@@ -24335,8 +24347,8 @@
             "sma20": 97.727,
             "sma60": 98.0647,
             "ema20": 97.9623,
-            "atr14": 0.5645,
-            "rsi14": 61.4041,
+            "atr14": 0.5643,
+            "rsi14": 61.369,
             "volume": 0.0
           },
           {
@@ -24348,8 +24360,8 @@
             "sma20": 97.827,
             "sma60": 98.0838,
             "ema20": 98.1126,
-            "atr14": 0.5856,
-            "rsi14": 67.1008,
+            "atr14": 0.5854,
+            "rsi14": 67.0681,
             "volume": 0.0
           },
           {
@@ -24361,8 +24373,8 @@
             "sma20": 97.8985,
             "sma60": 98.088,
             "ema20": 98.1952,
-            "atr14": 0.5959,
-            "rsi14": 59.4336,
+            "atr14": 0.5957,
+            "rsi14": 59.4079,
             "volume": 0.0
           },
           {
@@ -24373,9 +24385,9 @@
             "close": 99.27,
             "sma20": 97.997,
             "sma60": 98.1012,
-            "ema20": 98.2976,
-            "atr14": 0.5905,
-            "rsi14": 61.8638,
+            "ema20": 98.2975,
+            "atr14": 0.5903,
+            "rsi14": 61.8387,
             "volume": 0.0
           },
           {
@@ -24387,8 +24399,8 @@
             "sma20": 98.118,
             "sma60": 98.1212,
             "ema20": 98.3692,
-            "atr14": 0.5833,
-            "rsi14": 58.9773,
+            "atr14": 0.5831,
+            "rsi14": 58.9545,
             "volume": 0.0
           },
           {
@@ -24400,8 +24412,8 @@
             "sma20": 98.214,
             "sma60": 98.1445,
             "ema20": 98.4093,
-            "atr14": 0.5716,
-            "rsi14": 55.6713,
+            "atr14": 0.5715,
+            "rsi14": 55.651,
             "volume": 0.0
           },
           {
@@ -24412,9 +24424,9 @@
             "close": 98.39,
             "sma20": 98.266,
             "sma60": 98.1642,
-            "ema20": 98.4075,
-            "atr14": 0.5658,
-            "rsi14": 50.9403,
+            "ema20": 98.4074,
+            "atr14": 0.5657,
+            "rsi14": 50.9233,
             "volume": 0.0
           },
           {
@@ -24426,8 +24438,8 @@
             "sma20": 98.3055,
             "sma60": 98.1817,
             "ema20": 98.4096,
-            "atr14": 0.5625,
-            "rsi14": 51.3852,
+            "atr14": 0.5624,
+            "rsi14": 51.3682,
             "volume": 0.0
           },
           {
@@ -24439,8 +24451,8 @@
             "sma20": 98.3685,
             "sma60": 98.1973,
             "ema20": 98.4268,
-            "atr14": 0.5423,
-            "rsi14": 53.2129,
+            "atr14": 0.5422,
+            "rsi14": 53.196,
             "volume": 0.0
           },
           {
@@ -24452,8 +24464,8 @@
             "sma20": 98.452,
             "sma60": 98.2018,
             "ema20": 98.4747,
-            "atr14": 0.5372,
-            "rsi14": 56.9196,
+            "atr14": 0.5371,
+            "rsi14": 56.9029,
             "volume": 0.0
           },
           {
@@ -24465,8 +24477,8 @@
             "sma20": 98.5035,
             "sma60": 98.2017,
             "ema20": 98.5152,
-            "atr14": 0.5238,
-            "rsi14": 56.4943,
+            "atr14": 0.5237,
+            "rsi14": 56.4778,
             "volume": 0.0
           },
           {
@@ -24479,7 +24491,7 @@
             "sma60": 98.185,
             "ema20": 98.5557,
             "atr14": 0.5035,
-            "rsi14": 56.9561,
+            "rsi14": 56.9397,
             "volume": 0.0
           },
           {
@@ -24491,8 +24503,8 @@
             "sma20": 98.563,
             "sma60": 98.167,
             "ema20": 98.5932,
-            "atr14": 0.494,
-            "rsi14": 57.0787,
+            "atr14": 0.4939,
+            "rsi14": 57.0623,
             "volume": 0.0
           },
           {
@@ -24504,8 +24516,8 @@
             "sma20": 98.6065,
             "sma60": 98.1685,
             "ema20": 98.611,
-            "atr14": 0.478,
-            "rsi14": 54.2485,
+            "atr14": 0.4779,
+            "rsi14": 54.2337,
             "volume": 0.0
           },
           {
@@ -24517,8 +24529,8 @@
             "sma20": 98.6525,
             "sma60": 98.167,
             "ema20": 98.6185,
-            "atr14": 0.471,
-            "rsi14": 52.7572,
+            "atr14": 0.4709,
+            "rsi14": 52.7432,
             "volume": 0.0
           },
           {
@@ -24530,8 +24542,8 @@
             "sma20": 98.728,
             "sma60": 98.1743,
             "ema20": 98.6758,
-            "atr14": 0.4902,
-            "rsi14": 59.7712,
+            "atr14": 0.4901,
+            "rsi14": 59.7577,
             "volume": 0.0
           },
           {
@@ -24544,7 +24556,7 @@
             "sma60": 98.1968,
             "ema20": 98.7572,
             "atr14": 0.5123,
-            "rsi14": 63.2116,
+            "rsi14": 63.1985,
             "volume": 0.0
           },
           {
@@ -24557,7 +24569,7 @@
             "sma60": 98.2202,
             "ema20": 98.8565,
             "atr14": 0.5057,
-            "rsi14": 65.9435,
+            "rsi14": 65.9309,
             "volume": 0.0
           },
           {
@@ -24570,7 +24582,7 @@
             "sma60": 98.2483,
             "ema20": 98.953,
             "atr14": 0.4896,
-            "rsi14": 66.6353,
+            "rsi14": 66.6228,
             "volume": 0.0
           },
           {
@@ -24582,8 +24594,8 @@
             "sma20": 99.086,
             "sma60": 98.2767,
             "ema20": 99.0737,
-            "atr14": 0.4918,
-            "rsi14": 69.9247,
+            "atr14": 0.4917,
+            "rsi14": 69.9129,
             "volume": 0.0
           },
           {
@@ -24595,8 +24607,8 @@
             "sma20": 99.1535,
             "sma60": 98.3117,
             "ema20": 99.1809,
-            "atr14": 0.4781,
-            "rsi14": 69.503,
+            "atr14": 0.478,
+            "rsi14": 69.4913,
             "volume": 0.0
           },
           {
@@ -24609,7 +24621,7 @@
             "sma60": 98.3432,
             "ema20": 99.2332,
             "atr14": 0.4818,
-            "rsi14": 60.3002,
+            "rsi14": 60.2914,
             "volume": 0.0
           },
           {
@@ -24621,8 +24633,8 @@
             "sma20": 99.194,
             "sma60": 98.3657,
             "ema20": 99.2682,
-            "atr14": 0.481,
-            "rsi14": 58.012,
+            "atr14": 0.4809,
+            "rsi14": 58.0039,
             "volume": 0.0
           },
           {
@@ -24635,7 +24647,7 @@
             "sma60": 98.3952,
             "ema20": 99.3017,
             "atr14": 0.4666,
-            "rsi14": 58.2744,
+            "rsi14": 58.2662,
             "volume": 0.0
           },
           {
@@ -24648,7 +24660,7 @@
             "sma60": 98.4167,
             "ema20": 99.3168,
             "atr14": 0.4654,
-            "rsi14": 55.298,
+            "rsi14": 55.2906,
             "volume": 0.0
           },
           {
@@ -24661,7 +24673,7 @@
             "sma60": 98.4368,
             "ema20": 99.3323,
             "atr14": 0.4529,
-            "rsi14": 55.6033,
+            "rsi14": 55.596,
             "volume": 0.0
           },
           {
@@ -24674,7 +24686,7 @@
             "sma60": 98.4528,
             "ema20": 99.3178,
             "atr14": 0.4634,
-            "rsi14": 50.0791,
+            "rsi14": 50.0732,
             "volume": 0.0
           },
           {
@@ -24687,7 +24699,7 @@
             "sma60": 98.4637,
             "ema20": 99.3132,
             "atr14": 0.4596,
-            "rsi14": 51.6316,
+            "rsi14": 51.6256,
             "volume": 0.0
           },
           {
@@ -24699,8 +24711,8 @@
             "sma20": 99.398,
             "sma60": 98.4948,
             "ema20": 99.3396,
-            "atr14": 0.4518,
-            "rsi14": 56.7784,
+            "atr14": 0.4517,
+            "rsi14": 56.7725,
             "volume": 0.0
           },
           {
@@ -24712,8 +24724,8 @@
             "sma20": 99.429,
             "sma60": 98.5135,
             "ema20": 99.3596,
-            "atr14": 0.4381,
-            "rsi14": 55.9767,
+            "atr14": 0.438,
+            "rsi14": 55.971,
             "volume": 0.0
           },
           {
@@ -24726,7 +24738,7 @@
             "sma60": 98.5468,
             "ema20": 99.4425,
             "atr14": 0.4603,
-            "rsi14": 65.0203,
+            "rsi14": 65.0151,
             "volume": 0.0
           },
           {
@@ -24739,7 +24751,7 @@
             "sma60": 98.579,
             "ema20": 99.5109,
             "atr14": 0.451,
-            "rsi14": 63.5725,
+            "rsi14": 63.5676,
             "volume": 0.0
           },
           {
@@ -24752,7 +24764,7 @@
             "sma60": 98.6185,
             "ema20": 99.5746,
             "atr14": 0.4481,
-            "rsi14": 63.8204,
+            "rsi14": 63.8154,
             "volume": 0.0
           },
           {
@@ -24765,7 +24777,7 @@
             "sma60": 98.658,
             "ema20": 99.6284,
             "atr14": 0.4368,
-            "rsi14": 62.8985,
+            "rsi14": 62.8937,
             "volume": 0.0
           },
           {
@@ -24778,7 +24790,7 @@
             "sma60": 98.679,
             "ema20": 99.6314,
             "atr14": 0.4492,
-            "rsi14": 53.0044,
+            "rsi14": 53.001,
             "volume": 0.0
           },
           {
@@ -24790,8 +24802,8 @@
             "sma20": 99.7535,
             "sma60": 98.7033,
             "ema20": 99.6284,
-            "atr14": 0.4457,
-            "rsi14": 51.9052,
+            "atr14": 0.4456,
+            "rsi14": 51.9019,
             "volume": 0.0
           },
           {
@@ -24803,8 +24815,8 @@
             "sma20": 99.75,
             "sma60": 98.7218,
             "ema20": 99.6124,
-            "atr14": 0.4453,
-            "rsi14": 49.3345,
+            "atr14": 0.4452,
+            "rsi14": 49.3316,
             "volume": 0.0
           },
           {
@@ -24817,7 +24829,7 @@
             "sma60": 98.7492,
             "ema20": 99.5931,
             "atr14": 0.4492,
-            "rsi14": 48.4124,
+            "rsi14": 48.4096,
             "volume": 0.0
           },
           {
@@ -24830,7 +24842,7 @@
             "sma60": 98.781,
             "ema20": 99.5709,
             "atr14": 0.4349,
-            "rsi14": 47.457,
+            "rsi14": 47.4543,
             "volume": 0.0
           },
           {
@@ -24843,7 +24855,7 @@
             "sma60": 98.7987,
             "ema20": 99.5023,
             "atr14": 0.4424,
-            "rsi14": 39.0027,
+            "rsi14": 39.0009,
             "volume": 0.0
           },
           {
@@ -24856,7 +24868,7 @@
             "sma60": 98.8188,
             "ema20": 99.4535,
             "atr14": 0.433,
-            "rsi14": 42.0544,
+            "rsi14": 42.0525,
             "volume": 0.0
           },
           {
@@ -24869,7 +24881,7 @@
             "sma60": 98.843,
             "ema20": 99.4093,
             "atr14": 0.4249,
-            "rsi14": 42.0544,
+            "rsi14": 42.0525,
             "volume": 0.0
           },
           {
@@ -24882,7 +24894,7 @@
             "sma60": 98.8687,
             "ema20": 99.3789,
             "atr14": 0.426,
-            "rsi14": 44.3603,
+            "rsi14": 44.3584,
             "volume": 0.0
           },
           {
@@ -24895,7 +24907,7 @@
             "sma60": 98.9007,
             "ema20": 99.3638,
             "atr14": 0.4213,
-            "rsi14": 47.2967,
+            "rsi14": 47.2948,
             "volume": 0.0
           },
           {
@@ -24908,7 +24920,7 @@
             "sma60": 98.9367,
             "ema20": 99.3091,
             "atr14": 0.439,
-            "rsi14": 39.8125,
+            "rsi14": 39.8112,
             "volume": 0.0
           },
           {
@@ -24921,7 +24933,7 @@
             "sma60": 98.9613,
             "ema20": 99.2178,
             "atr14": 0.4548,
-            "rsi14": 33.9011,
+            "rsi14": 33.9001,
             "volume": 0.0
           },
           {
@@ -24934,7 +24946,7 @@
             "sma60": 98.9788,
             "ema20": 99.1399,
             "atr14": 0.4388,
-            "rsi14": 35.0808,
+            "rsi14": 35.0797,
             "volume": 0.0
           },
           {
@@ -24947,7 +24959,7 @@
             "sma60": 98.9873,
             "ema20": 99.0456,
             "atr14": 0.4317,
-            "rsi14": 32.0052,
+            "rsi14": 32.0043,
             "volume": 0.0
           },
           {
@@ -24960,7 +24972,7 @@
             "sma60": 99.001,
             "ema20": 98.9603,
             "atr14": 0.433,
-            "rsi14": 32.0052,
+            "rsi14": 32.0043,
             "volume": 0.0
           },
           {
@@ -24973,7 +24985,7 @@
             "sma60": 99.0195,
             "ema20": 98.9041,
             "atr14": 0.4371,
-            "rsi14": 37.5895,
+            "rsi14": 37.5886,
             "volume": 0.0
           },
           {
@@ -24986,7 +24998,7 @@
             "sma60": 99.0288,
             "ema20": 98.859,
             "atr14": 0.4337,
-            "rsi14": 39.0595,
+            "rsi14": 39.0585,
             "volume": 0.0
           },
           {
@@ -24999,7 +25011,7 @@
             "sma60": 99.0297,
             "ema20": 98.8343,
             "atr14": 0.4263,
-            "rsi14": 43.1455,
+            "rsi14": 43.1445,
             "volume": 0.0
           },
           {
@@ -25012,7 +25024,7 @@
             "sma60": 99.032,
             "ema20": 98.7825,
             "atr14": 0.4337,
-            "rsi14": 38.1254,
+            "rsi14": 38.1247,
             "volume": 0.0
           },
           {
@@ -25025,7 +25037,7 @@
             "sma60": 99.0325,
             "ema20": 98.7022,
             "atr14": 0.4342,
-            "rsi14": 33.4003,
+            "rsi14": 33.3997,
             "volume": 0.0
           },
           {
@@ -25038,7 +25050,7 @@
             "sma60": 99.036,
             "ema20": 98.6334,
             "atr14": 0.4217,
-            "rsi14": 34.4009,
+            "rsi14": 34.4004,
             "volume": 0.0
           },
           {
@@ -25051,7 +25063,7 @@
             "sma60": 99.0412,
             "ema20": 98.575,
             "atr14": 0.4109,
-            "rsi14": 35.4453,
+            "rsi14": 35.4447,
             "volume": 0.0
           },
           {
@@ -25064,7 +25076,7 @@
             "sma60": 99.0443,
             "ema20": 98.5241,
             "atr14": 0.4001,
-            "rsi14": 35.9942,
+            "rsi14": 35.9936,
             "volume": 0.0
           },
           {
@@ -25077,7 +25089,7 @@
             "sma60": 99.053,
             "ema20": 98.497,
             "atr14": 0.3951,
-            "rsi14": 41.3623,
+            "rsi14": 41.3617,
             "volume": 0.0
           },
           {
@@ -25090,7 +25102,7 @@
             "sma60": 99.0558,
             "ema20": 98.4763,
             "atr14": 0.3897,
-            "rsi14": 42.4028,
+            "rsi14": 42.4021,
             "volume": 0.0
           },
           {
@@ -25103,7 +25115,7 @@
             "sma60": 99.0532,
             "ema20": 98.471,
             "atr14": 0.3862,
-            "rsi14": 46.0134,
+            "rsi14": 46.0128,
             "volume": 0.0
           },
           {
@@ -25116,7 +25128,7 @@
             "sma60": 99.0435,
             "ema20": 98.4518,
             "atr14": 0.4022,
-            "rsi14": 42.9096,
+            "rsi14": 42.9091,
             "volume": 0.0
           },
           {
@@ -25129,7 +25141,7 @@
             "sma60": 99.0275,
             "ema20": 98.464,
             "atr14": 0.407,
-            "rsi14": 50.3618,
+            "rsi14": 50.3612,
             "volume": 0.0
           },
           {
@@ -25142,7 +25154,7 @@
             "sma60": 99.0225,
             "ema20": 98.4846,
             "atr14": 0.3958,
-            "rsi14": 52.5149,
+            "rsi14": 52.5144,
             "volume": 0.0
           },
           {
@@ -25155,7 +25167,7 @@
             "sma60": 99.0168,
             "ema20": 98.527,
             "atr14": 0.389,
-            "rsi14": 57.4807,
+            "rsi14": 57.4801,
             "volume": 0.0
           },
           {
@@ -25168,7 +25180,7 @@
             "sma60": 99.0182,
             "ema20": 98.5845,
             "atr14": 0.3869,
-            "rsi14": 60.9948,
+            "rsi14": 60.9943,
             "volume": 0.0
           },
           {
@@ -25181,7 +25193,7 @@
             "sma60": 99.0193,
             "ema20": 98.6107,
             "atr14": 0.4007,
-            "rsi14": 54.452,
+            "rsi14": 54.4516,
             "volume": 0.0
           },
           {
@@ -25194,7 +25206,7 @@
             "sma60": 99.0317,
             "ema20": 98.6602,
             "atr14": 0.3992,
-            "rsi14": 59.1688,
+            "rsi14": 59.1684,
             "volume": 0.0
           },
           {
@@ -25206,8 +25218,8 @@
             "sma20": 98.4735,
             "sma60": 99.0433,
             "ema20": 98.7049,
-            "atr14": 0.3936,
-            "rsi14": 59.1688,
+            "atr14": 0.3935,
+            "rsi14": 59.1684,
             "volume": 0.0
           },
           {
@@ -25220,7 +25232,7 @@
             "sma60": 99.0555,
             "ema20": 98.7635,
             "atr14": 0.394,
-            "rsi14": 62.3509,
+            "rsi14": 62.3504,
             "volume": 0.0
           },
           {
@@ -25233,7 +25245,7 @@
             "sma60": 99.0632,
             "ema20": 98.8231,
             "atr14": 0.3887,
-            "rsi14": 63.48,
+            "rsi14": 63.4796,
             "volume": 0.0
           },
           {
@@ -25246,7 +25258,7 @@
             "sma60": 99.0588,
             "ema20": 98.8057,
             "atr14": 0.4424,
-            "rsi14": 47.1597,
+            "rsi14": 47.1594,
             "volume": 0.0
           },
           {
@@ -25259,7 +25271,7 @@
             "sma60": 99.0558,
             "ema20": 98.8014,
             "atr14": 0.4458,
-            "rsi14": 49.4012,
+            "rsi14": 49.401,
             "volume": 0.0
           },
           {
@@ -25272,7 +25284,7 @@
             "sma60": 99.046,
             "ema20": 98.7593,
             "atr14": 0.4532,
-            "rsi14": 42.8726,
+            "rsi14": 42.8725,
             "volume": 0.0
           },
           {
@@ -25285,7 +25297,7 @@
             "sma60": 99.0263,
             "ema20": 98.6489,
             "atr14": 0.4959,
-            "rsi14": 33.7472,
+            "rsi14": 33.7471,
             "volume": 0.0
           },
           {
@@ -25298,7 +25310,7 @@
             "sma60": 98.9988,
             "ema20": 98.4957,
             "atr14": 0.5169,
-            "rsi14": 28.8709,
+            "rsi14": 28.8708,
             "volume": 0.0
           },
           {
@@ -25311,7 +25323,7 @@
             "sma60": 98.9488,
             "ema20": 98.2789,
             "atr14": 0.6042,
-            "rsi14": 23.5132,
+            "rsi14": 23.5131,
             "volume": 0.0
           },
           {
@@ -25337,7 +25349,7 @@
             "sma60": 98.8388,
             "ema20": 97.931,
             "atr14": 0.6284,
-            "rsi14": 26.4553,
+            "rsi14": 26.4552,
             "volume": 0.0
           },
           {
@@ -25350,7 +25362,7 @@
             "sma60": 98.7908,
             "ema20": 97.8414,
             "atr14": 0.6457,
-            "rsi14": 37.7968,
+            "rsi14": 37.7967,
             "volume": 0.0
           },
           {
@@ -25363,7 +25375,7 @@
             "sma60": 98.7473,
             "ema20": 97.8193,
             "atr14": 0.6524,
-            "rsi14": 45.6752,
+            "rsi14": 45.6751,
             "volume": 0.0
           },
           {
@@ -25389,7 +25401,7 @@
             "sma60": 98.6662,
             "ema20": 97.7677,
             "atr14": 0.6184,
-            "rsi14": 46.2386,
+            "rsi14": 46.2385,
             "volume": 0.0
           },
           {
@@ -25402,7 +25414,7 @@
             "sma60": 98.6365,
             "ema20": 97.7726,
             "atr14": 0.6014,
-            "rsi14": 48.664,
+            "rsi14": 48.6639,
             "volume": 0.0
           },
           {
@@ -25441,7 +25453,7 @@
             "sma60": 98.5147,
             "ema20": 97.5868,
             "atr14": 0.5984,
-            "rsi14": 38.5092,
+            "rsi14": 38.5091,
             "volume": 0.0
           },
           {
@@ -25558,7 +25570,7 @@
             "sma60": 98.1622,
             "ema20": 97.5476,
             "atr14": 0.5464,
-            "rsi14": 53.7625,
+            "rsi14": 53.7624,
             "volume": 0.0
           },
           {
@@ -25584,7 +25596,7 @@
             "sma60": 98.1027,
             "ema20": 97.5838,
             "atr14": 0.5313,
-            "rsi14": 52.3176,
+            "rsi14": 52.3175,
             "volume": 0.0
           },
           {
@@ -25688,7 +25700,7 @@
             "sma60": 98.0598,
             "ema20": 98.2753,
             "atr14": 0.6493,
-            "rsi14": 58.1109,
+            "rsi14": 58.1108,
             "volume": 0.0
           },
           {
@@ -25740,7 +25752,7 @@
             "sma60": 98.1597,
             "ema20": 98.7731,
             "atr14": 0.6713,
-            "rsi14": 61.5847,
+            "rsi14": 61.5846,
             "volume": 0.0
           },
           {
@@ -25766,7 +25778,7 @@
             "sma60": 98.2075,
             "ema20": 98.9681,
             "atr14": 0.68,
-            "rsi14": 63.9485,
+            "rsi14": 63.9484,
             "volume": 0.0
           },
           {
@@ -26338,7 +26350,7 @@
             "sma60": 98.9075,
             "ema20": 98.6817,
             "atr14": 0.5245,
-            "rsi14": 55.8927,
+            "rsi14": 55.8926,
             "volume": 0.0
           },
           {
@@ -27978,6 +27990,19 @@
             "atr14": 0.5164,
             "rsi14": 69.847,
             "volume": 0.0
+          },
+          {
+            "date": "2026-11-19",
+            "open": 103.81,
+            "high": 103.97,
+            "low": 103.59,
+            "close": 103.9,
+            "sma20": 102.4675,
+            "sma60": 101.3665,
+            "ema20": 102.6981,
+            "atr14": 0.5066,
+            "rsi14": 70.1618,
+            "volume": 0.0
           }
         ],
         "series_type": "FULL_OHLC",
@@ -27987,15 +28012,15 @@
           "No bid/ask, spread, actual fill or slippage."
         ],
         "latest_session": {
-          "open": 103.66,
-          "high": 103.91,
+          "open": 103.81,
+          "high": 103.97,
           "low": 103.59,
-          "close": 103.86,
-          "sma20": 102.353,
-          "sma60": 101.2877,
-          "ema20": 102.5716,
-          "atr14": 0.5164,
-          "rsi14": 69.847
+          "close": 103.9,
+          "sma20": 102.4675,
+          "sma60": 101.3665,
+          "ema20": 102.6981,
+          "atr14": 0.5066,
+          "rsi14": 70.1618
         },
         "retrieval_status": "CURRENT_FETCH"
       },
@@ -28049,7 +28074,7 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CURRENT_FETCH",
+        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
         "as_of": "2026-11-18",
         "observations": 470,
         "history": [
@@ -29935,11 +29960,11 @@
           }
         ],
         "value": 4.8,
-        "age_days": 1,
+        "age_days": 2,
         "change_1d_bp": 0.0,
         "change_5d_bp": 7.0,
         "largest_gap_days": 4,
-        "current_provider_error": null
+        "current_provider_error": "ReadTimeout"
       },
       "us10y": {
         "status": "AVAILABLE",
@@ -29949,7 +29974,7 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CURRENT_FETCH",
+        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
         "as_of": "2026-11-18",
         "observations": 470,
         "history": [
@@ -31835,11 +31860,11 @@
           }
         ],
         "value": 5.07,
-        "age_days": 1,
+        "age_days": 2,
         "change_1d_bp": -3.0,
         "change_5d_bp": 9.0,
         "largest_gap_days": 4,
-        "current_provider_error": null
+        "current_provider_error": "ReadTimeout"
       },
       "us30y": {
         "status": "AVAILABLE",
@@ -31849,7 +31874,7 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CURRENT_FETCH",
+        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
         "as_of": "2026-11-18",
         "observations": 470,
         "history": [
@@ -33735,11 +33760,11 @@
           }
         ],
         "value": 5.41,
-        "age_days": 1,
+        "age_days": 2,
         "change_1d_bp": -5.0,
         "change_5d_bp": 6.0,
         "largest_gap_days": 4,
-        "current_provider_error": null
+        "current_provider_error": "ReadTimeout"
       },
       "real10y": {
         "status": "AVAILABLE",
@@ -33749,7 +33774,7 @@
         "source_grade": "A_OFFICIAL",
         "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_real_yield_curve&field_tdr_date_value=2026",
         "expected_update": "US business-day daily",
-        "retrieval_status": "CURRENT_FETCH",
+        "retrieval_status": "CARRY_FORWARD_LAST_VERIFIED",
         "as_of": "2026-11-18",
         "observations": 470,
         "history": [
@@ -35635,19 +35660,19 @@
           }
         ],
         "value": 2.88,
-        "age_days": 1,
+        "age_days": 2,
         "change_1d_bp": -1.0,
         "change_5d_bp": 10.0,
         "largest_gap_days": 4,
-        "current_provider_error": null
+        "current_provider_error": "ReadTimeout"
       }
     },
     "events": {
-      "checked_at": "2026-11-19T18:31:45.932310+00:00",
+      "checked_at": "2026-11-20T10:18:59.555729+00:00",
       "sources": {
         "BLS": {
           "status": "UNAVAILABLE",
-          "checked_at": "2026-11-19T18:31:45.932310+00:00",
+          "checked_at": "2026-11-20T10:18:59.555729+00:00",
           "url": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
           "method": "OFFICIAL_MONTHLY_HTML_FALLBACK",
           "attempts": [
@@ -35671,17 +35696,17 @@
         },
         "Fed": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-11-19T18:31:45.932310+00:00",
+          "checked_at": "2026-11-20T10:18:59.555729+00:00",
           "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
         },
         "BoJ": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-11-19T18:31:45.932310+00:00",
+          "checked_at": "2026-11-20T10:18:59.555729+00:00",
           "url": "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm"
         },
         "NBS": {
           "status": "VERIFIED_FETCH",
-          "checked_at": "2026-11-19T18:31:45.932310+00:00",
+          "checked_at": "2026-11-20T10:18:59.555729+00:00",
           "url": "https://www.stats.gov.cn/english/PressRelease/ReleaseCalendar/202512/t20251226_1962154.html"
         }
       },
@@ -35757,7 +35782,7 @@
     "markets": {
       "lme_zinc": {
         "market": "LME Zinc Cash primary / 3M technical reference",
-        "as_of": "2026-11-18",
+        "as_of": "2026-11-19",
         "decision": "WAIT_FOR_TRIGGER",
         "direction": "STRONG_BEAR",
         "evidence_alignment": "PARTIAL_CLOSE_AND_FUNDAMENTAL",
@@ -35769,29 +35794,29 @@
         "daily_plan": {
           "plan_basis": "LME_3M_CLOSE_ONLY_RESEARCH",
           "setup_zone": [
-            3600.0,
-            3741.49
+            3536.0,
+            3721.92
           ],
-          "trigger_price": 3597.1,
-          "maximum_entry": 3597.1,
+          "trigger_price": 3533.1,
+          "maximum_entry": 3533.1,
           "hard_stop": 3892.9,
-          "close_invalidation": 3756.67,
-          "t1": 3005.5,
-          "t2": 2709.7,
+          "close_invalidation": 3749.97,
+          "t1": 2813.5,
+          "t2": 2453.7,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
           "conditional_order": "DAILY_CLOSE_CONFIRMATION_RESEARCH_ONLY"
         },
         "reference": {
-          "cash": 3732.0,
-          "three_month": 3600.0,
-          "cash_3m": 132.0,
-          "close": 3600.0,
+          "cash": 3714.5,
+          "three_month": 3536.0,
+          "cash_3m": 178.5,
+          "close": 3536.0,
           "price_basis": "Cash headline; 3M close-only technical levels",
-          "sma14": 3756.07,
-          "sma30": 3756.67,
-          "ema20": 3741.49,
-          "rsi14": 31.97
+          "sma14": 3730.79,
+          "sma30": 3749.97,
+          "ema20": 3721.92,
+          "rsi14": 27.78
         },
         "execution_check": {
           "status": "PRIVATE_INPUT_REQUIRED",
@@ -35813,55 +35838,55 @@
           {
             "factor": "Cash headline",
             "status": "AVAILABLE",
-            "value": 3732.0
+            "value": 3714.5
           },
           {
             "factor": "3M technical reference",
             "status": "AVAILABLE",
-            "value": 3600.0
+            "value": 3536.0
           },
           {
             "factor": "Cash−3M curve",
             "status": "BACKWARDATION",
-            "value": 132.0
+            "value": 178.5
           },
           {
             "factor": "Inventory",
             "status": "AVAILABLE",
-            "value": 146775.0
+            "value": 146200.0
           },
           {
             "factor": "Cancelled warrants",
             "status": "AVAILABLE",
-            "value": 6.182933060807358
+            "value": 5.694254445964432
           },
           {
             "factor": "TC",
             "status": "AVAILABLE",
-            "value": -168.23
+            "value": -173.57
           }
         ],
         "decision_audit": {
           "1_market_direction": "STRONG_BEAR",
           "2_evidence_consistency": "PARTIAL_CLOSE_AND_FUNDAMENTAL",
           "3_risk_location": [
-            3600.0,
-            3741.49
+            3536.0,
+            3721.92
           ],
           "4_entry_permission": {
-            "trigger": 3597.1,
-            "maximum_entry": 3597.1,
+            "trigger": 3533.1,
+            "maximum_entry": 3533.1,
             "condition": "DAILY_CLOSE_CONFIRMATION_RESEARCH_ONLY",
             "execution_check": "PENDING_PRIVATE_EXECUTION_CHECK"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 295.8,
+            "price_units_per_contract_unit": 359.8,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 3005.5,
-            "t2": 2709.7,
-            "close_invalidation": 3756.67
+            "t1": 2813.5,
+            "t2": 2453.7,
+            "close_invalidation": 3749.97
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -35876,78 +35901,40 @@
       },
       "shfe_zinc": {
         "market": "SHFE Zinc",
-        "symbol": "zn2701",
-        "as_of": "2026-11-18",
-        "decision": "WAIT_FOR_TRIGGER",
+        "decision": "NO_TRADE",
         "direction": "BEAR",
-        "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
+        "evidence_alignment": "TREND_ALIGNED_RISK_INEFFICIENT",
         "data_gate": "PASS",
-        "regime_gate": "BEAR",
-        "strategy_gate": "BREAKDOWN_OR_RALLY_SHORT",
-        "trigger_gate": "NOT_TRIGGERED",
-        "execution_gate": "PENDING_LIVE_QUOTE",
-        "daily_plan": {
-          "setup_zone": [
-            24630.0,
-            25331.24
-          ],
-          "trigger_price": 24520.839,
-          "maximum_entry": 24444.195,
-          "hard_stop": 25388.723,
-          "close_invalidation": 25331.24,
-          "t1": 22785.071,
-          "t2": 21917.187,
-          "planned_rr_t1": 2.0,
-          "planned_rr_t2": 3.0,
-          "risk_distance_atr": 2.26,
-          "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
-        },
+        "strategy_gate": "BLOCKED_RISK_DISTANCE",
+        "trigger_gate": "BLOCKED",
+        "execution_gate": "BLOCKED",
+        "daily_plan": {},
         "execution_check": {
-          "status": "REQUIRED_AT_ORDER_TIME",
-          "required": [
-            "bid",
-            "ask",
-            "spread",
-            "actual_fill",
-            "slippage",
-            "actual_rr",
-            "contract_quantity"
-          ]
-        },
-        "reference": {
-          "close": 24630.0,
-          "ema20": 25331.24,
-          "sma60": 26004.92,
-          "rsi14": 34.04,
-          "atr14": 383.22,
-          "support20": 24540.0,
-          "resistance20": 26045.0
+          "status": "NOT_AVAILABLE"
         },
         "no_trade_reasons": [
-          "Trigger has not been confirmed.",
-          "Live bid/ask and acceptable spread are unavailable.",
-          "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
+          "Structural stop distance 3.57 ATR exceeds the 3.00 ATR limit."
         ],
         "evidence": [
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 24630.0; EMA20 25331.24; SMA60 26004.92"
+            "value": "Close 23985.0; EMA20 25203.03; SMA60 25982.58"
           },
           {
             "factor": "Momentum",
             "status": "CAUTION",
-            "value": "RSI14 34.04"
+            "value": "RSI14 27.19"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 383.22"
+            "value": "ATR14 414.78"
           },
           {
             "factor": "20-session range",
             "status": "AVAILABLE",
-            "value": "Support 24540.0; resistance 26045.0"
+            "value": "Support 23805.0; resistance 26045.0"
           },
           {
             "factor": "cross-market FX-adjusted parity",
@@ -35962,35 +35949,28 @@
         ],
         "decision_audit": {
           "1_market_direction": "BEAR",
-          "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
-          "3_risk_location": [
-            24630.0,
-            25331.24
-          ],
-          "4_entry_permission": {
-            "trigger": 24520.839,
-            "maximum_entry": 24444.195,
-            "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
-            "execution_check": "PENDING_LIVE_QUOTE"
-          },
-          "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 944.528,
-            "note": "Account loss requires live fill, multiplier, fees and quantity."
-          },
-          "6_exit_plan": {
-            "t1": 22785.071,
-            "t2": 21917.187,
-            "close_invalidation": 25331.24
-          },
-          "7_planned_rr": {
-            "t1": 2.0,
-            "t2": 3.0
-          },
+          "2_evidence_consistency": "TREND_ALIGNED_RISK_INEFFICIENT",
+          "3_risk_location": "NO_VALIDATED_SETUP_ZONE",
+          "4_entry_permission": "ENTRY_NOT_PERMITTED",
+          "5_loss_if_wrong": "NOT_COMPUTABLE",
+          "6_exit_plan": "NOT_AVAILABLE",
+          "7_planned_rr": "NOT_AVAILABLE",
           "8_no_trade_reason": [
-            "Trigger has not been confirmed.",
-            "Live bid/ask and acceptable spread are unavailable.",
-            "Asset-specific institutional evidence is incomplete; treat levels as technical research, not execution approval."
+            "Structural stop distance 3.57 ATR exceeds the 3.00 ATR limit."
           ]
+        },
+        "symbol": "zn2701",
+        "as_of": "2026-11-19",
+        "regime_gate": "BEAR",
+        "reference": {
+          "close": 23985.0,
+          "ema20": 25203.03,
+          "sma60": 25982.58,
+          "rsi14": 27.19,
+          "atr14": 414.78,
+          "support20": 23805.0,
+          "resistance20": 26045.0,
+          "candidate_risk_atr": 3.57
         },
         "evidence_completeness": 66.7
       },
@@ -36008,28 +35988,28 @@
           "status": "NOT_AVAILABLE"
         },
         "no_trade_reasons": [
-          "Structural stop distance 3.03 ATR exceeds the 3.00 ATR limit."
+          "Structural stop distance 3.70 ATR exceeds the 3.00 ATR limit."
         ],
         "evidence": [
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 3741.8999; EMA20 3980.9045; SMA60 4203.5716"
+            "value": "Close 3685.5; EMA20 3952.7707; SMA60 4187.4417"
           },
           {
             "factor": "Momentum",
             "status": "CAUTION",
-            "value": "RSI14 29.312"
+            "value": "RSI14 27.0291"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 91.504"
+            "value": "ATR14 94.8894"
           },
           {
             "factor": "20-session range",
             "status": "AVAILABLE",
-            "value": "Support 3721.8; resistance 4164.2998"
+            "value": "Support 3620.6001; resistance 4157.7002"
           },
           {
             "factor": "COMEX contract-specific OI",
@@ -36061,28 +36041,28 @@
           "6_exit_plan": "NOT_AVAILABLE",
           "7_planned_rr": "NOT_AVAILABLE",
           "8_no_trade_reason": [
-            "Structural stop distance 3.03 ATR exceeds the 3.00 ATR limit."
+            "Structural stop distance 3.70 ATR exceeds the 3.00 ATR limit."
           ]
         },
         "symbol": "GC=F",
-        "as_of": "2026-11-18",
+        "as_of": "2026-11-19",
         "regime_gate": "BEAR",
         "reference": {
-          "close": 3741.8999,
-          "ema20": 3980.9045,
-          "sma60": 4203.5716,
-          "rsi14": 29.312,
-          "atr14": 91.504,
-          "support20": 3721.8,
-          "resistance20": 4164.2998,
-          "candidate_risk_atr": 3.03
+          "close": 3685.5,
+          "ema20": 3952.7707,
+          "sma60": 4187.4417,
+          "rsi14": 27.0291,
+          "atr14": 94.8894,
+          "support20": 3620.6001,
+          "resistance20": 4157.7002,
+          "candidate_risk_atr": 3.7
         },
         "evidence_completeness": 50.0
       },
       "usdjpy": {
         "market": "USD/JPY",
         "symbol": "USDJPY",
-        "as_of": "2026-11-18",
+        "as_of": "2026-11-19",
         "decision": "WAIT_FOR_TRIGGER",
         "direction": "BULL",
         "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
@@ -36093,18 +36073,18 @@
         "execution_gate": "PENDING_LIVE_QUOTE",
         "daily_plan": {
           "setup_zone": [
-            158.6858,
-            159.33
+            158.7796,
+            159.67
           ],
-          "trigger_price": 160.2238,
-          "maximum_entry": 160.3989,
-          "hard_stop": 158.5544,
-          "close_invalidation": 158.6858,
-          "t1": 163.5625,
-          "t2": 165.2318,
+          "trigger_price": 160.2232,
+          "maximum_entry": 160.3958,
+          "hard_stop": 158.6501,
+          "close_invalidation": 158.7796,
+          "t1": 163.3692,
+          "t2": 164.9423,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
-          "risk_distance_atr": 1.91,
+          "risk_distance_atr": 1.82,
           "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
         },
         "execution_check": {
@@ -36120,11 +36100,11 @@
           ]
         },
         "reference": {
-          "close": 159.33,
-          "ema20": 158.6858,
-          "sma60": 157.6472,
-          "rsi14": 58.0438,
-          "atr14": 0.8757,
+          "close": 159.67,
+          "ema20": 158.7796,
+          "sma60": 157.6518,
+          "rsi14": 60.6713,
+          "atr14": 0.8632,
           "support20": 156.06,
           "resistance20": 160.18
         },
@@ -36137,17 +36117,17 @@
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 159.33; EMA20 158.6858; SMA60 157.6472"
+            "value": "Close 159.67; EMA20 158.7796; SMA60 157.6518"
           },
           {
             "factor": "Momentum",
             "status": "SUPPORTS",
-            "value": "RSI14 58.0438"
+            "value": "RSI14 60.6713"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 0.8757"
+            "value": "ATR14 0.8632"
           },
           {
             "factor": "20-session range",
@@ -36174,23 +36154,23 @@
           "1_market_direction": "BULL",
           "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
           "3_risk_location": [
-            158.6858,
-            159.33
+            158.7796,
+            159.67
           ],
           "4_entry_permission": {
-            "trigger": 160.2238,
-            "maximum_entry": 160.3989,
+            "trigger": 160.2232,
+            "maximum_entry": 160.3958,
             "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 1.8445,
+            "price_units_per_contract_unit": 1.7457,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 163.5625,
-            "t2": 165.2318,
-            "close_invalidation": 158.6858
+            "t1": 163.3692,
+            "t2": 164.9423,
+            "close_invalidation": 158.7796
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -36207,7 +36187,7 @@
       "dxy": {
         "market": "US Dollar Index",
         "symbol": "DX-Y.NYB",
-        "as_of": "2026-11-18",
+        "as_of": "2026-11-19",
         "decision": "WAIT_FOR_TRIGGER",
         "direction": "BULL",
         "evidence_alignment": "PARTIAL_TECHNICAL_ONLY",
@@ -36218,18 +36198,18 @@
         "execution_gate": "PENDING_LIVE_QUOTE",
         "daily_plan": {
           "setup_zone": [
-            102.5716,
-            103.86
+            102.6981,
+            103.9
           ],
-          "trigger_price": 103.9358,
-          "maximum_entry": 104.0391,
-          "hard_stop": 102.4941,
-          "close_invalidation": 102.5716,
-          "t1": 106.8192,
-          "t2": 108.2609,
+          "trigger_price": 103.9953,
+          "maximum_entry": 104.0966,
+          "hard_stop": 102.6221,
+          "close_invalidation": 102.6981,
+          "t1": 106.7418,
+          "t2": 108.115,
           "planned_rr_t1": 2.0,
           "planned_rr_t2": 3.0,
-          "risk_distance_atr": 2.79,
+          "risk_distance_atr": 2.71,
           "conditional_order": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION"
         },
         "execution_check": {
@@ -36245,13 +36225,13 @@
           ]
         },
         "reference": {
-          "close": 103.86,
-          "ema20": 102.5716,
-          "sma60": 101.2877,
-          "rsi14": 69.847,
-          "atr14": 0.5164,
+          "close": 103.9,
+          "ema20": 102.6981,
+          "sma60": 101.3665,
+          "rsi14": 70.1618,
+          "atr14": 0.5066,
           "support20": 101.1,
-          "resistance20": 103.91
+          "resistance20": 103.97
         },
         "no_trade_reasons": [
           "Trigger has not been confirmed.",
@@ -36262,22 +36242,22 @@
           {
             "factor": "Trend structure",
             "status": "SUPPORTS",
-            "value": "Close 103.86; EMA20 102.5716; SMA60 101.2877"
+            "value": "Close 103.9; EMA20 102.6981; SMA60 101.3665"
           },
           {
             "factor": "Momentum",
-            "status": "SUPPORTS",
-            "value": "RSI14 69.847"
+            "status": "CAUTION",
+            "value": "RSI14 70.1618"
           },
           {
             "factor": "Observed volatility",
             "status": "AVAILABLE",
-            "value": "ATR14 0.5164"
+            "value": "ATR14 0.5066"
           },
           {
             "factor": "20-session range",
             "status": "AVAILABLE",
-            "value": "Support 101.1; resistance 103.91"
+            "value": "Support 101.1; resistance 103.97"
           },
           {
             "factor": "Fed rate path",
@@ -36299,23 +36279,23 @@
           "1_market_direction": "BULL",
           "2_evidence_consistency": "PARTIAL_TECHNICAL_ONLY",
           "3_risk_location": [
-            102.5716,
-            103.86
+            102.6981,
+            103.9
           ],
           "4_entry_permission": {
-            "trigger": 103.9358,
-            "maximum_entry": 104.0391,
+            "trigger": 103.9953,
+            "maximum_entry": 104.0966,
             "condition": "STOP_LIMIT_AFTER_DAILY_CONFIRMATION",
             "execution_check": "PENDING_LIVE_QUOTE"
           },
           "5_loss_if_wrong": {
-            "price_units_per_contract_unit": 1.545,
+            "price_units_per_contract_unit": 1.4745,
             "note": "Account loss requires live fill, multiplier, fees and quantity."
           },
           "6_exit_plan": {
-            "t1": 106.8192,
-            "t2": 108.2609,
-            "close_invalidation": 102.5716
+            "t1": 106.7418,
+            "t2": 108.115,
+            "close_invalidation": 102.6981
           },
           "7_planned_rr": {
             "t1": 2.0,
@@ -36393,34 +36373,34 @@
       }
     }
   },
-  "free_close_history_points": 477,
+  "free_close_history_points": 478,
   "indicators": {
-    "Close": 3600.0,
-    "EMA20": 3741.4900635740037,
-    "EMA50": 3764.9753459605363,
-    "EMA200": 3581.1785081124003,
-    "RSI14": 31.967307411399773,
+    "Close": 3536.0,
+    "EMA20": 3721.91958132886,
+    "EMA50": 3755.9959206287504,
+    "EMA200": 3580.728970718247,
+    "RSI14": 27.784491508855382,
     "ATR14": null,
-    "ROC20": -3.329752953813103,
-    "ROC60": -6.566311964702831,
-    "BB_UPPER": 3926.6971781611796,
-    "BB_LOWER": 3611.3028218388204
+    "ROC20": -4.225352112676061,
+    "ROC60": -10.094075769132981,
+    "BB_UPPER": 3946.394600353246,
+    "BB_LOWER": 3576.0053996467536
   },
   "components": {
-    "market_structure": 57.310632096868716,
+    "market_structure": 56.72811897946126,
     "supply_demand": null,
-    "smelter_economics": 99.99993086171537,
+    "smelter_economics": 99.99994904382504,
     "physical_market": 98.78715650157258,
-    "macro": 45.8085587131146,
-    "technical": 36.60530590111495
+    "macro": 42.74600561511204,
+    "technical": 32.06232284542919
   },
   "component_coverage": 0.8,
-  "market_score": 67.84751450399527,
+  "market_score": 66.43085524014147,
   "market_regime": "BULL",
   "horizons": {
-    "5D": 45.97796848197905,
-    "20D": 53.78852063269913,
-    "60D": 60.036962353275186
+    "5D": 42.37288256384288,
+    "20D": 50.96501566252095,
+    "60D": 57.83872214146341
   },
   "market_quality": {
     "confidence": 93.0,
@@ -36448,7 +36428,7 @@
   "procurement_quality": {
     "confidence": 35,
     "status": "REVIEW_REQUIRED",
-    "max_age_days": 28.711937642627312
+    "max_age_days": 29.369744422592593
   },
   "procurement": {
     "status": "OK",
