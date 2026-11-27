@@ -5236,5 +5236,34 @@
     "market_confidence": 93.0,
     "procurement_confidence": 35,
     "core_data_gate": "HEALTHY"
+  },
+  {
+    "run_time": "2026-11-27T11:10:35.473463+00:00",
+    "run_date": "2026-11-27",
+    "model_version": "2.7.0",
+    "market_score": 67.93875275989664,
+    "market_regime": "BULL",
+    "horizons": {
+      "5D": 40.27718913280714,
+      "20D": 50.15631899962483,
+      "60D": 58.05962289307896
+    },
+    "lme_cash": 3646.0,
+    "lme_3m": 3523.0,
+    "inventory_t": 143425.0,
+    "cancelled_warrants_t": 6775.0,
+    "tc_usd_t": -178.26,
+    "china_import_tc_usd_dmt": -178.26,
+    "china_domestic_tc": -312.74,
+    "china_domestic_tc_unit": "USD/tonne",
+    "annual_benchmark_tc_usd_dmt": 85.0,
+    "premium_usd_t": 80.0,
+    "current_inventory_t": 200.0,
+    "demand_60d_t": 170.0,
+    "coverage_days": 70.58823529411764,
+    "procurement_action": "WAIT",
+    "market_confidence": 93.0,
+    "procurement_confidence": 35,
+    "core_data_gate": "HEALTHY"
   }
 ]
